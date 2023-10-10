@@ -1,8 +1,15 @@
+"use client"
+
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from '@/components/mode-toggle'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
+  router.prefetch("/dashboard");
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -10,7 +17,8 @@ export default function Home() {
           Get started by editing&nbsp;
           <code className="font-mono font-bold">src/app/page.tsx</code>
         </p>
-        <Button>Click me</Button>
+        <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
+        <Button onClick={() => router.push("/authentication")}>Authentication</Button>
         <ModeToggle />
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
           <a
