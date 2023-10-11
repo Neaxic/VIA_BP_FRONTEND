@@ -1,8 +1,9 @@
 "use client"
 
+import { CustomTooltip } from "../../../components/custom-tooltip";
 import { Card } from "../../../components/ui/card";
 import { Label } from "../../../components/ui/label";
-import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 const data = [
     {
@@ -55,6 +56,47 @@ const data = [
     },
 ]
 
+const dataRadar = [
+    {
+        subject: 'Math',
+        A: 120,
+        B: 110,
+        fullMark: 150,
+    },
+    {
+        subject: 'Chinese',
+        A: 98,
+        B: 130,
+        fullMark: 150,
+    },
+    {
+        subject: 'English',
+        A: 86,
+        B: 130,
+        fullMark: 150,
+    },
+    {
+        subject: 'Geography',
+        A: 99,
+        B: 100,
+        fullMark: 150,
+    },
+    {
+        subject: 'Physics',
+        A: 85,
+        B: 90,
+        fullMark: 150,
+    },
+    {
+        subject: 'History',
+        A: 65,
+        B: 85,
+        fullMark: 150,
+    },
+];
+
+
+
 export default function Page() {
 
     return (
@@ -71,6 +113,20 @@ export default function Page() {
                 </Card>
                 <Card className="w-full p-3 flex flex-col">
                     <Label>Produced in last 24hr</Label>
+                </Card>
+
+            </div>
+
+            <div>
+                <Card className="w-full p-2">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={dataRadar}>
+                            <PolarGrid />
+                            <PolarAngleAxis dataKey="subject" />
+                            <PolarRadiusAxis />
+                            <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                        </RadarChart>
+                    </ResponsiveContainer>
                 </Card>
             </div>
 
@@ -93,7 +149,7 @@ export default function Page() {
                                 axisLine={false}
                                 tickFormatter={(value) => `$${value}`}
                             />
-                            <Tooltip label={"name"} active={true} />
+                            <Tooltip />
                             <Bar dataKey="total" className="fill-primary" radius={[4, 4, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
@@ -118,7 +174,7 @@ export default function Page() {
                             />
                             <Tooltip />
                             {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                            <Line type="monotone" dataKey="total" className="stroke-primary" />
+                            <Line type="monotone" dataKey="total" stroke="undefined" strokeWidth={3} className="stroke-primary" />
                         </LineChart>
                     </ResponsiveContainer>
                 </Card>
