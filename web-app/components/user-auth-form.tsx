@@ -48,7 +48,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                         </Label>
                         <Input
                             id="email"
-                            placeholder="Gaving@hooli.com"
+                            placeholder="Gavin@hooli.com"
                             type="email"
                             autoCapitalize="none"
                             autoComplete="email"
