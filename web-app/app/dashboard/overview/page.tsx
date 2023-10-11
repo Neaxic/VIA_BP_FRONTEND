@@ -60,8 +60,21 @@ export default function Page() {
     return (
         <>
             <h1>Hello, overview page!</h1>
-            <div className="flex w-full gap-4">
+            <div className="flex gap-4">
+                <Card className="w-full p-4 flex flex-col">
+                    <Label>Current production status</Label>
+                    <Label className="text-xl pt-2">Current production status</Label>
+                    <Label className="pt-2">Current production status</Label>
+                </Card>
+                <Card className="w-full p-3 flex flex-col">
+                    <Label>Production stops in last 24hr</Label>
+                </Card>
+                <Card className="w-full p-3 flex flex-col">
+                    <Label>Produced in last 24hr</Label>
+                </Card>
+            </div>
 
+            <div className="flex w-full gap-4 mt-6">
                 <Card className="w-full p-2">
                     <Label className="mb-2 text-lg ml-2">Revenue</Label>
                     <ResponsiveContainer width="100%" className="mt-4" height={350}>

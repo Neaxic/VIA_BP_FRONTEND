@@ -9,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <div className="hidden md:block ">
+      <div className="hidden md:block">
         <Menu />
         <div className="border-t">
           <div className="bg-background">
