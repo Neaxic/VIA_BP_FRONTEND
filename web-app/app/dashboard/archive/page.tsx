@@ -9,7 +9,7 @@ export default function Page() {
 
     return (
         <>
-            <h1>Hello, overview page!</h1>
+            <h1>Hello, archive page!</h1>
             <Button onClick={getHints}>Get Hints</Button>
         </>);
 }

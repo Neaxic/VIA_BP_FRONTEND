@@ -1,7 +1,4 @@
 "use client"
-
-import { Separator } from '../../components/ui/separator'
-import { Tabs, TabsContent } from '../../components/ui/tabs'
 import { Sidebar } from '../../components/sidebar'
 import { Menu } from '../../components/menu'
 
@@ -12,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <div className="hidden md:block">
+      <div className="hidden md:block ">
         <Menu />
         <div className="border-t">
           <div className="bg-background">
