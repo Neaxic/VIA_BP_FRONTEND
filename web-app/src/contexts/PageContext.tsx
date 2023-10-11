@@ -16,7 +16,7 @@ export default function PageProvider({ children, }: { children: React.ReactNode 
     const [hints, setHints] = React.useState<[]>([])
 
     const getHints = React.useCallback(async () => {
-
+        console.log("getHints")
     }, [])
 
     const closeHint = React.useCallback(async (hintID: string, i: number) => {

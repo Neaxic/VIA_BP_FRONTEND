@@ -3,12 +3,10 @@
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from '@/components/mode-toggle'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const router = useRouter()
-  router.prefetch("/dashboard");
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
