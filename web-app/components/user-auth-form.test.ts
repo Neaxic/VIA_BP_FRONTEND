@@ -1,28 +1,29 @@
 //import React from "react";
-//import { render } from "@testing-library/react";
-//import "@testing-library/jest-dom/extend-expect"; // for the "toHaveTextContent" matcher
-//import { UserAuthForm } from "./path-to-your-UserAuthForm";
+//import { render, screen, fireEvent } from "@testing-library/react";
+//import "@testing-library/jest-dom/extend-expect"; // for the "toBeInTheDocument" function
+//import { UserAuthForm } from "./user-auth-form"; // Adjust the import path
 //
 //describe("UserAuthForm", () => {
-//  // Cleanup after each test
-//  afterEach(() => {
-//    delete window.location;
-//    window.location = new URL("http://test.com");
+//  it("renders without crashing", () => {
+//    render(<UserAuthForm />);
+//    expect(screen.getByPlaceholderText("Gavin@hooli.com")).toBeInTheDocument();
+//    expect(screen.getByPlaceholderText("************")).toBeInTheDocument();
 //  });
 //
-//  it('shows "Create" on the button when on the /authentication/create URL', () => {
-//    window.location = new URL("http://localhost:3000/authentication/create");
+//  it("updates the email and password inputs correctly", () => {
+//    render(<UserAuthForm />);
+//    const emailInput = screen.getByPlaceholderText("Gavin@hooli.com");
+//    const passwordInput = screen.getByPlaceholderText("************");
 //
-//    const { getByRole } = render(<UserAuthForm />);
-//    const button = getByRole("button");
-//    expect(button).toHaveTextContent("Create");
+//    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+//    fireEvent.change(passwordInput, { target: { value: "secret123" } });
+//
+//    expect(emailInput.value).toBe("test@example.com");
+//    expect(passwordInput.value).toBe("secret123");
 //  });
 //
-//  it('shows "Sign In" on the button when on any other URL', () => {
-//    window.location = new URL("http://localhost:3000/authentication/login");
-//
-//    const { getByRole } = render(<UserAuthForm />);
-//    const button = getByRole("button");
-//    expect(button).toHaveTextContent("Sign In");
-//  });
+//  // Add more tests as needed...
 //});
+//function expect(value: any) {
+//  throw new Error("Function not implemented.");
+//}

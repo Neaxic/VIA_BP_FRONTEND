@@ -13,6 +13,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
   const [isAdmin, SetIsAdmin] = React.useState<boolean>(false);
+  const [isCreateURL, setIsCreateURL] = React.useState<boolean>(false); // Initialize with false
+
+  // Use useEffect to update isCreateURL only on the client side
+  React.useEffect(() => {
+    setIsCreateURL(
+      window.location.href === "http://localhost:3000/authentication/create"
+    );
+  }, []);
+
   const login = async () => {
     await fetch("", {
       method: "POST",
@@ -27,28 +36,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   };
 
   async function onSubmit(event: React.SyntheticEvent) {
-    console.log(username);
-    console.log(password);
-    console.log(isAdmin);
-    // const data = await createUserApi(username, password, isAdmin);
     event.preventDefault();
+    console.log(username, password, isAdmin);
     setIsLoading(true);
-
-    login();
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    await login();
+    setIsLoading(false);
   }
 
   const handleAdminCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    SetIsAdmin(e.target.checked); // Box admin true
+    SetIsAdmin(e.target.checked);
   };
 
-  const isCreateURL =
-    window.location.href === "http://localhost:3000/authentication/create";
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -95,9 +95,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <Button disabled={isLoading} className="mt-4">
             {isLoading ? (
-              <>
-                {/* <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> */}
-              </>
+              <> {/* Icons.spinner can be placed here if needed */}</>
             ) : isCreateURL ? (
               "Create"
             ) : (
@@ -106,24 +104,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
-      {/* <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                    </span>
-                </div>
-            </div>
-            <Button variant="outline" type="button" disabled={isLoading}>
-                {isLoading ? (
-                    <Label>loading</Label>
-                ) : (
-                    <Label>not loading</Label>
-                )}{" "}
-                Github
-            </Button> */}
     </div>
   );
 }
