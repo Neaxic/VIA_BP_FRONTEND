@@ -1,7 +1,7 @@
 //import React from "react";
 //import { render, screen, fireEvent } from "@testing-library/react";
-//import "@testing-library/jest-dom/extend-expect"; // for the "toBeInTheDocument" function
-//import { UserAuthForm } from "./user-auth-form"; // Adjust the import path
+//import "@testing-library/jest-dom"; 
+//import { UserAuthForm } from "./user-auth-form"; 
 //
 //describe("UserAuthForm", () => {
 //  it("renders without crashing", () => {

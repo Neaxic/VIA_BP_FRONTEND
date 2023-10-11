@@ -2,16 +2,15 @@ import axios from "axios";
 
 const URL = "NeedThis";
 const URLKAPS = "NeedThis";
-const API_KEY =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmOTMzMjZiMzg4MWQ3NThlMTkzOTI2YjRkOTE4NDcwMSIsInN1YiI6IjY0NjY4ZjI0MzNhMzc2MDBlNjc5NmQ3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RgypCyWe-AyWmk8YCVahkl8J3Iw5HmxT8zZD7C1Czjc";
+const API_KEY = "IFWENEEDTHIS";
 
 export const createUserApi = async (
-  userNo: string,
+  unsername: string,
   password: string,
   isAdmin: boolean
 ) => {
   try {
-    const apiUrl = `${URLKAPS}/createUser?userNo=${userNo}&password=${password}`;
+    const apiUrl = `${URLKAPS}/createUser?unsername=${unsername}&password=${password}`;
     console.log("API URL:", apiUrl); // Bliver brugt til at se hvad den sender da der ikke er en
 
     const response = await axios({
@@ -27,5 +26,22 @@ export const createUserApi = async (
   } catch (e) {
     console.log(e);
     return false;
+  }
+};
+
+export const LoginUserApi = async (username: string, password: string) => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${URLKAPS}/login?username=${username}&password=${password}`,
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    const result = response.data;
+    return result;
+  } catch (e) {
+    console.log(e);
   }
 };
