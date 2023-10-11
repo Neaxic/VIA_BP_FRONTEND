@@ -93,7 +93,7 @@ export default function Page() {
                                 axisLine={false}
                                 tickFormatter={(value) => `$${value}`}
                             />
-                            <Tooltip labelClassName="color-primary" />
+                            <Tooltip label={"name"} active="name" />
                             <Bar dataKey="total" className="fill-primary" radius={[4, 4, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
