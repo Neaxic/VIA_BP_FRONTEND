@@ -11,10 +11,27 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [username, SetUsername] = React.useState<string>("")
+    const [password, SetPassword] = React.useState<string>("")
+
+    const login = async () => {
+        await fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: username,
+                password: password
+            })
+        })
+    }
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
         setIsLoading(true)
+
+        login()
 
         setTimeout(() => {
             setIsLoading(false)
@@ -36,6 +53,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoCapitalize="none"
                             autoComplete="email"
                             autoCorrect="off"
+                            onChange={(e) => SetUsername(e.target.value)}
                             disabled={isLoading}
                         />
                     </div>
@@ -49,6 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             type="password"
                             autoCapitalize="none"
                             autoComplete="password"
+                            onChange={(e) => SetPassword(e.target.value)}
                             autoCorrect="off"
                             disabled={isLoading}
                         />
