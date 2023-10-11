@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
-import { usePageContext } from "@/contexts/PageContext";
+import { Button } from "../../components/ui/button";
+import { usePageContext } from "../../contexts/PageContext";
 
 export default function Page() {
     const { getHints } = usePageContext()

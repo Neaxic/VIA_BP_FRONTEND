@@ -1,9 +1,9 @@
 "use client"
 
 import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from '@/components/mode-toggle'
 import { useRouter } from 'next/navigation'
+import { Button } from '../components/ui/button'
+import { ModeToggle } from '../components/mode-toggle'
 
 export default function Home() {
   const router = useRouter()
