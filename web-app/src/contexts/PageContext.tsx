@@ -12,7 +12,7 @@ export const PageContext = React.createContext<PageContextInterface>({
     getHints: () => { },
 })
 
-export const PageProvider: React.FunctionComponent<{}> = props => {
+export default function PageProvider({ children, }: { children: React.ReactNode }) {
     const [hints, setHints] = React.useState<[]>([])
 
     const getHints = React.useCallback(async () => {
@@ -34,7 +34,7 @@ export const PageProvider: React.FunctionComponent<{}> = props => {
                 getHints,
             }}
         >
-            {props.children}
+            {children}
         </PageContext.Provider>
     )
 }
