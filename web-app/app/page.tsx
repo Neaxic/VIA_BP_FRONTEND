@@ -15,7 +15,7 @@ export default function Home() {
           Get started by editing&nbsp;
           <code className="font-mono font-bold">src/app/page.tsx</code>
         </p>
-        <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
+        <Button onClick={() => router.push("/s/dashboard")}>Dashboard</Button>
         <Button onClick={() => router.push("/authentication/login")}>
           Authentication
         </Button>

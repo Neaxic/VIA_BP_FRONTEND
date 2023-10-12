@@ -1,7 +1,5 @@
 "use client";
 
-import { Card } from "../../../components/ui/card";
-import { Label } from "../../../components/ui/label";
 import {
   Bar,
   BarChart,
@@ -19,6 +17,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Card } from "../../../../components/ui/card";
+import { Label } from "../../../../components/ui/label";
 
 const data = [
   {

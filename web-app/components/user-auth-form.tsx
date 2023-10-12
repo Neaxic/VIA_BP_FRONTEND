@@ -7,16 +7,24 @@ import { Label } from "./ui/label";
 import { createUserApi } from "../app/api/communication";
 import { LoginUserApi } from "../app/api/communication";
 import { usePathname } from "next/navigation";
+import { useUserContext } from "../app/contexts/UserContext";
+import { useRouter } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const { registerUser } = useUserContext();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
   const [isAdmin, SetIsAdmin] = React.useState<boolean>(false);
+  const [isCreateURL, setIsCreateURL] = React.useState<boolean>(false); // Initialize with false
   const pathname = usePathname(); // Get the pathname using the hook
   // Use useEffect to log the third part of the pathname
+
+  const Router = useRouter();
+
+  // Use useEffect to update isCreateURL only on the client side
   React.useEffect(() => {
     console.log("pathname", pathname.split("/")[2]);
   }, [pathname]);
@@ -35,6 +43,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     event.preventDefault();
     console.log(username, password, isAdmin);
     setIsLoading(true);
+
+    ///Det her skal også ske når det virker, men for nu er det fint
+    registerUser(username, isAdmin);
+    Router.push("/s/dashboard/overview");
 
     if (isCreateURL) {
       await create();

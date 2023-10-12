@@ -1,6 +1,7 @@
 "use client"
-import { Sidebar } from '../../components/sidebar'
-import { Menu } from '../../components/menu'
+
+import { Menu } from "../../../components/menu"
+import { Sidebar } from "../../../components/sidebar"
 
 export default function RootLayout({
   children,
