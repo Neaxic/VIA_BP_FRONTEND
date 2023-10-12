@@ -2,10 +2,10 @@
 
 import * as React from "react"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../../../components/ui/button";
-import { Checkbox } from "../../../components/ui/checkbox";
+import { Button } from "../../../../components/ui/button";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
-import { usePageContext } from "../../contexts/PageContext";
+import { usePageContext } from "../../../contexts/PageContext";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -18,8 +18,8 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { Input } from "../../../components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
+import { Input } from "../../../../components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../components/ui/table";
 
 const data: Payment[] = [
     {
@@ -208,7 +208,7 @@ export default function Page() {
                                             key={column.id}
                                             className="capitalize"
                                             checked={column.getIsVisible()}
-                                            onCheckedChange={(value) =>
+                                            onCheckedChange={(value: any) =>
                                                 column.toggleVisibility(!!value)
                                             }
                                         >
