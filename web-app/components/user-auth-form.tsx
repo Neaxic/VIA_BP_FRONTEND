@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import { useUserContext } from "../app/contexts/UserContext";
 import { useRouter } from "next/navigation";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { registerUser } = useUserContext();
@@ -150,17 +150,23 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               "Sign In"
             )}
           </Button>
-          <Button disabled={isLoading} className="mt-4">
-            {isLoading ? (
-              <> {/* Icons.spinner can be placed here if needed */}</>
-            ) : !isCreateURL ? (
-              "Create"
-            ) : (
-              "Sign In"
-            )}
+          <div className="relative mt-6 mb-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or register yourself at
+              </span>
+            </div>
+          </div>
+          <Button variant="outline" type="button" disabled={isLoading}>
+            {" "}
+            Request Access
           </Button>
         </div>
-      </form>
-    </div>
+
+      </form >
+    </div >
   );
 }
