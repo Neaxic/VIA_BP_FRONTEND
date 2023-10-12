@@ -10,7 +10,7 @@ export const UserContext = React.createContext<UserContextInterface>({
 })
 
 export default function UserProvider({ children, }: { children: React.ReactNode }) {
-    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false)
+    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(true)
 
     React.useEffect(() => {
         // eslint-disable-next-line

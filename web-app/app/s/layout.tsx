@@ -28,7 +28,9 @@ export default function RootLayout({
     return (
         <>
             {isLoggedIn ? (
-                { children }
+                <>
+                    {children}
+                </>
             ) : (
                 <div className="">
                     <AlertDialog open={openDialog}>

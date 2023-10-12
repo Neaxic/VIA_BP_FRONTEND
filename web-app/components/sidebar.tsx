@@ -13,7 +13,7 @@ export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname()
 
   useEffect(() => {
-    console.log("pathname", pathname.split("/")[2])
+    console.log("pathname", pathname.split("/")[3])
   }, [pathname])
 
   return (
@@ -24,7 +24,7 @@ export function Sidebar({ className }: SidebarProps) {
             Status rapport
           </h2>
           <div className="space-y-1">
-            <Button variant={pathname.split("/")[2] == "overview" ? "secondary" : "ghost"} onClick={() => router.push("/dashboard/overview")} className="w-full justify-start">
+            <Button variant={pathname.split("/")[3] == "overview" ? "secondary" : "ghost"} onClick={() => router.push("/s/dashboard/overview")} className="w-full justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -40,7 +40,7 @@ export function Sidebar({ className }: SidebarProps) {
               </svg>
               General Overview
             </Button>
-            <Button variant={pathname.split("/")[2] == "archive" ? "secondary" : "ghost"} onClick={() => router.push("/dashboard/archive")} className="w-full justify-start">
+            <Button variant={pathname.split("/")[3] == "archive" ? "secondary" : "ghost"} onClick={() => router.push("/s/dashboard/archive")} className="w-full justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -58,7 +58,7 @@ export function Sidebar({ className }: SidebarProps) {
               </svg>
               General Analytics
             </Button>
-            <Button variant={pathname.split("/")[2] == "archive" ? "secondary" : "ghost"} onClick={() => router.push("/dashboard/archive")} className="w-full justify-start">
+            <Button variant={pathname.split("/")[3] == "livefeed" ? "secondary" : "ghost"} onClick={() => router.push("/s/dashboard/archive")} className="w-full justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
