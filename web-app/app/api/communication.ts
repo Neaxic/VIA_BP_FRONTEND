@@ -10,6 +10,7 @@ export const createUserApi = async (
   isAdmin: boolean
 ) => {
   try {
+    console.log("CreateUserApi Bliver kaldt --> User-auth-Form");
     const apiUrl = `${URLKAPS}/createUser?unsername=${unsername}&password=${password}`;
     console.log("API URL:", apiUrl); // Bliver brugt til at se hvad den sender da der ikke er en
 
@@ -31,6 +32,7 @@ export const createUserApi = async (
 
 export const LoginUserApi = async (username: string, password: string) => {
   try {
+    console.log("LoginUserApi Bliver kaldt --> User-auth-Form");
     const response = await axios({
       method: "GET",
       url: `${URLKAPS}/login?username=${username}&password=${password}`,
