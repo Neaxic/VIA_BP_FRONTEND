@@ -21,8 +21,12 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
         //Den giver os alt data vi skal bruge, og gemme i storen / contexten
     }
 
+
+    //Vi skal have logik her der der indeholder noget gem til localstorage, så sitet gemmer man er logget ind og hvem man er
+    //Vi skal have noget automatisk tjek på login efter man har loaded localstorage, så den selv checker du stadig har adgang
+
     React.useEffect(() => {
-        // eslint-disable-next-line
+        //Vi skal have logik her der tjekke
     }, [])
 
     return (
