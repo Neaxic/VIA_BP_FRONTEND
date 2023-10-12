@@ -1,5 +1,6 @@
 "use client"
 
+import { Label } from "../../components/ui/label";
 import { useUserContext } from "../contexts/UserContext";
 
 export default function RootLayout({
@@ -18,8 +19,8 @@ export default function RootLayout({
             {isLoggedIn ? (
                 { children }
             ) : (
-                <div>
-                    <h1>Not logged in</h1>
+                <div className="">
+                    <Label>Not logged in</Label>
                 </div>
             )}
         </>
