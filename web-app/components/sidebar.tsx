@@ -104,7 +104,7 @@ export function Sidebar({ className }: SidebarProps) {
                   ? "secondary"
                   : "ghost"
               }
-              onClick={() => router.push("/dashboard/machineStatus")}
+              onClick={() => router.push("/s/dashboard/machineStatus")}
               className="w-full justify-start"
             >
               <svg
@@ -123,7 +123,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Statistics
+              Machine Data
             </Button>
             <Button variant="ghost" className="w-full justify-start">
               <svg

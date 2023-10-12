@@ -29,8 +29,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     console.log("pathname", pathname.split("/")[2]);
   }, [pathname]);
 
-  const isCreateURL = pathname.includes("/authentication/create");
-
   const login = async () => {
     const data = await LoginUserApi(username, password);
   };

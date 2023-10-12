@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Card } from "../../../components/ui/card";
-import { Label } from "../../../components/ui/label";
+import { Label } from "../../../../components/ui/label";
+import { Card } from "../../../../components/ui/card";
 
 interface MachineCardProps {
   name: string;
@@ -41,7 +41,7 @@ function MachineCard({
 
   const runningStyle = {
     ...sectionStyle,
-    backgroundColor: isRunning ? "green" : "gray",
+    backgroundColor: isRunning ? "green" : "red",
   };
 
   const availability =
@@ -49,7 +49,7 @@ function MachineCard({
   const performance = (acceptedCount - rejectCount) / totalPossibleCount;
   const quality = (acceptedCount - rejectCount) / acceptedCount;
 
-  const oee = (availability * performance * quality * 100).toFixed(2); // OEE i procet
+  const oee = (availability * performance * quality * 100).toFixed(2); // OEE i procet et eller andet er forkert
 
   return (
     <div style={cardStyle}>
@@ -59,6 +59,9 @@ function MachineCard({
       <div style={runningStyle}></div>
       <div style={sectionStyle}>Errors: {errorCount}</div>
       <div style={sectionStyle}>Accepted: {acceptedCount}</div>
+      <div style={sectionStyle}>Rejected: {rejectCount}</div>
+      <div style={sectionStyle}>Rejected: {rejectCount}</div>
+      <div style={sectionStyle}>Rejected: {rejectCount}</div>
       <div style={sectionStyle}>Rejected: {rejectCount}</div>
     </div>
   );
