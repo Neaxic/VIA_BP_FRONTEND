@@ -1,20 +1,17 @@
+import { Button } from "./ui/button";
+import { cn } from "../lib/utils";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect } from "react";
 
-import { Button } from "./ui/button"
-import { cn } from "../lib/utils"
-import { useRouter, usePathname } from "next/navigation"
-import { useEffect } from "react"
-
-
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Sidebar({ className }: SidebarProps) {
-  const router = useRouter()
-  const pathname = usePathname()
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    console.log("pathname", pathname.split("/")[2])
-  }, [pathname])
+    console.log("pathname", pathname.split("/")[2]);
+  }, [pathname]);
 
   return (
     <div className={cn("pb-12", className)}>
@@ -24,7 +21,13 @@ export function Sidebar({ className }: SidebarProps) {
             Status rapport
           </h2>
           <div className="space-y-1">
-            <Button variant={pathname.split("/")[2] == "overview" ? "secondary" : "ghost"} onClick={() => router.push("/dashboard/overview")} className="w-full justify-start">
+            <Button
+              variant={
+                pathname.split("/")[2] == "overview" ? "secondary" : "ghost"
+              }
+              onClick={() => router.push("/dashboard/overview")}
+              className="w-full justify-start"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -40,7 +43,13 @@ export function Sidebar({ className }: SidebarProps) {
               </svg>
               Overview
             </Button>
-            <Button variant={pathname.split("/")[2] == "archive" ? "secondary" : "ghost"} onClick={() => router.push("/dashboard/archive")} className="w-full justify-start">
+            <Button
+              variant={
+                pathname.split("/")[2] == "archive" ? "secondary" : "ghost"
+              }
+              onClick={() => router.push("/dashboard/archive")}
+              className="w-full justify-start"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -65,7 +74,15 @@ export function Sidebar({ className }: SidebarProps) {
             Production
           </h2>
           <div className="space-y-1">
-            <Button variant="ghost" className="w-full justify-start">
+            <Button
+              variant={
+                pathname.split("/")[2] == "machineStatus"
+                  ? "secondary"
+                  : "ghost"
+              }
+              onClick={() => router.push("/dashboard/machineStatus")}
+              className="w-full justify-start"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -82,7 +99,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Playlists
+              Machine Status
             </Button>
           </div>
         </div>
@@ -108,11 +125,11 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Playlists
+              Playlists1
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

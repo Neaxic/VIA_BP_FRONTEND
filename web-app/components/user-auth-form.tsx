@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { createUserApi } from "../app/api/communication";
 import { LoginUserApi } from "../app/api/communication";
+import { usePathname } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -14,19 +15,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
   const [isAdmin, SetIsAdmin] = React.useState<boolean>(false);
-  const [isCreateURL, setIsCreateURL] = React.useState<boolean>(false); // Initialize with false
-
-  // Use useEffect to update isCreateURL only on the client side
+  const pathname = usePathname(); // Get the pathname using the hook
+  // Use useEffect to log the third part of the pathname
   React.useEffect(() => {
-    setIsCreateURL(
-      window.location.href === "http://localhost:3000/authentication/create"
-      //Kig SIDEBAR
-    );
-  }, []);
+    console.log("pathname", pathname.split("/")[2]);
+  }, [pathname]);
+
+  const isCreateURL = pathname.includes("/authentication/create");
 
   const login = async () => {
     const data = await LoginUserApi(username, password);
   };
+
   const create = async () => {
     const data = await createUserApi(username, password, isAdmin);
   };
@@ -85,6 +85,42 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
             />
           </div>
+
+          {isCreateURL && (
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="password">
+                Name
+              </Label>
+              <Input
+                id="text"
+                placeholder="Insert Firstname"
+                type="Text"
+                autoCapitalize="none"
+                autoComplete="password"
+                onChange={(e) => SetPassword(e.target.value)}
+                autoCorrect="off"
+                disabled={isAdmin}
+              />
+            </div>
+          )}
+
+          {isCreateURL && (
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="password">
+                Lastname
+              </Label>
+              <Input
+                id="text"
+                placeholder="Insert Lastname"
+                type="Text"
+                autoCapitalize="none"
+                autoComplete="password"
+                onChange={(e) => SetPassword(e.target.value)}
+                autoCorrect="off"
+                disabled={isAdmin}
+              />
+            </div>
+          )}
           <div>
             <Input
               type="checkbox"
@@ -99,6 +135,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading ? (
               <> {/* Icons.spinner can be placed here if needed */}</>
             ) : isCreateURL ? (
+              "Create"
+            ) : (
+              "Sign In"
+            )}
+          </Button>
+          <Button disabled={isLoading} className="mt-4">
+            {isLoading ? (
+              <> {/* Icons.spinner can be placed here if needed */}</>
+            ) : !isCreateURL ? (
               "Create"
             ) : (
               "Sign In"
