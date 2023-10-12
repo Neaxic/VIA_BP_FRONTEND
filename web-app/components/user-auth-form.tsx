@@ -20,6 +20,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   React.useEffect(() => {
     setIsCreateURL(
       window.location.href === "http://localhost:3000/authentication/create"
+      //Kig SIDEBAR
     );
   }, []);
 
