@@ -34,7 +34,7 @@ export default function RootLayout({
             ) : (
                 <div className="">
                     <AlertDialog open={openDialog}>
-                        <AlertDialogContent open={true}>
+                        <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>You do not have access</AlertDialogTitle>
                                 <AlertDialogDescription>
