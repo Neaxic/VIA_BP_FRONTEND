@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { createUserApi } from "../app/api/communication";
+import { LoginUserApi } from "../app/api/communication";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,27 +20,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   React.useEffect(() => {
     setIsCreateURL(
       window.location.href === "http://localhost:3000/authentication/create"
+      //Kig SIDEBAR
     );
   }, []);
 
   const login = async () => {
-    await fetch("", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: username,
-        password: password,
-      }),
-    });
+    const data = await LoginUserApi(username, password);
+  };
+  const create = async () => {
+    const data = await createUserApi(username, password, isAdmin);
   };
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     console.log(username, password, isAdmin);
     setIsLoading(true);
-    await login();
+
+    if (isCreateURL) {
+      await create();
+    } else {
+      await login();
+    }
+
     setIsLoading(false);
   }
 
