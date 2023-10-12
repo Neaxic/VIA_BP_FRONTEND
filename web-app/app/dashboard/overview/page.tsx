@@ -1,6 +1,5 @@
 "use client"
 
-import { CustomTooltip } from "../../../components/custom-tooltip";
 import { Card } from "../../../components/ui/card";
 import { Label } from "../../../components/ui/label";
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
@@ -45,14 +44,17 @@ const data = [
     {
         name: "Oct",
         total: Math.floor(Math.random() * 5000) + 1000,
+        total2: Math.floor(Math.random() * 5000) + 5000,
     },
     {
         name: "Nov",
         total: Math.floor(Math.random() * 5000) + 1000,
+        total2: Math.floor(Math.random() * 5000) + 500,
     },
     {
         name: "Dec",
         total: Math.floor(Math.random() * 5000) + 1000,
+        total2: Math.floor(Math.random() * 5000) + 500,
     },
 ]
 
@@ -95,10 +97,7 @@ const dataRadar = [
     },
 ];
 
-
-
 export default function Page() {
-
     return (
         <>
             <h1>Hello, overview page!</h1>
@@ -117,18 +116,17 @@ export default function Page() {
 
             </div>
 
-            <div>
-                <Card className="w-full p-2">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={dataRadar}>
-                            <PolarGrid />
-                            <PolarAngleAxis dataKey="subject" />
-                            <PolarRadiusAxis />
-                            <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-                        </RadarChart>
-                    </ResponsiveContainer>
-                </Card>
-            </div>
+            <Card className="w-full p-2">
+                <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={dataRadar}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="subject" />
+                        <PolarRadiusAxis angle={30} domain={[0, 150]} />
+                        <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                        <Legend />
+                    </RadarChart>
+                </ResponsiveContainer>
+            </Card>
 
             <div className="flex w-full gap-4 mt-6">
                 <Card className="w-full p-2">
@@ -173,8 +171,10 @@ export default function Page() {
                                 tickFormatter={(value) => `$${value}`}
                             />
                             <Tooltip />
+                            <Legend />
                             {/* <CartesianGrid strokeDasharray="3 3" /> */}
                             <Line type="monotone" dataKey="total" stroke="undefined" strokeWidth={3} className="stroke-primary" />
+                            <Line type="monotone" dataKey="total2" stroke="undefined" strokeWidth={3} className="stroke-primary" />
                         </LineChart>
                     </ResponsiveContainer>
                 </Card>
