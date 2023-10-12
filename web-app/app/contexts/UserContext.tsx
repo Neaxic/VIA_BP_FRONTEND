@@ -3,14 +3,23 @@ import * as React from 'react'
 
 interface UserContextInterface {
     isLoggedIn: boolean
+    registerUser: (username: string, isAdmin: boolean) => void
 }
 
 export const UserContext = React.createContext<UserContextInterface>({
     isLoggedIn: false,
+    registerUser: () => { },
 })
 
 export default function UserProvider({ children, }: { children: React.ReactNode }) {
-    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(true)
+    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false)
+
+    const registerUser = async (username: string, isAdmin: boolean) => {
+        setIsLoggedIn(true)
+        //Lav et obj med userdata
+        //Det her er til efter man er logget ind, og siden skal gemme datet fra servern.
+        //Den giver os alt data vi skal bruge, og gemme i storen / contexten
+    }
 
     React.useEffect(() => {
         // eslint-disable-next-line
@@ -20,6 +29,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
         <UserContext.Provider
             value={{
                 isLoggedIn,
+                registerUser,
             }}
         >
             {children}
