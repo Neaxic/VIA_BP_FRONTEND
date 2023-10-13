@@ -36,7 +36,7 @@ function MachineCard({
     alignItems: "center",
     justifyContent: "center",
     height: "100px",
-    border: "1px solid black",
+    border: "2px solid black",
   };
 
   const runningStyle = {
@@ -84,15 +84,15 @@ export default function Page() {
         />
       </Card>
       <Card className="w-full p-2">
-        <Label className="mb-2 text-lg ml-2">Machine 2</Label>
+        <Label className="mb-2 text-lg ml-2"> name={"test2"}</Label>
         <MachineCard
           isRunning={false}
           errorCount={2}
           acceptedCount={150}
           rejectCount={5}
-          name={"test2"}
           plannedProductionTime={100}
           totalPossibleCount={100}
+          name={""}
         />
       </Card>
     </>

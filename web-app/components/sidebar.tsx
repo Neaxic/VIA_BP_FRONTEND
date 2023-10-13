@@ -104,7 +104,7 @@ export function Sidebar({ className }: SidebarProps) {
                   ? "secondary"
                   : "ghost"
               }
-              onClick={() => router.push("/s/dashboard/machineStatus")}
+              onClick={() => router.push("/s/dashboard/timeSchuled")}
               className="w-full justify-start"
             >
               <svg
