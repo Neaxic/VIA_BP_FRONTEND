@@ -104,7 +104,7 @@ export function Sidebar({ className }: SidebarProps) {
                   ? "secondary"
                   : "ghost"
               }
-              onClick={() => router.push("/s/dashboard/timeSchuled")}
+              onClick={() => router.push("/s/dashboard/machineStatus")}
               className="w-full justify-start"
             >
               <svg
@@ -125,7 +125,15 @@ export function Sidebar({ className }: SidebarProps) {
               </svg>
               Machine Data
             </Button>
-            <Button variant="ghost" className="w-full justify-start">
+            <Button
+              variant={
+                pathname.split("/")[2] == "machineStatus"
+                  ? "secondary"
+                  : "ghost"
+              }
+              onClick={() => router.push("/s/dashboard/timeSchuled")}
+              className="w-full justify-start"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -142,7 +150,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Analytics
+              Machine Downtime
             </Button>
           </div>
         </div>
