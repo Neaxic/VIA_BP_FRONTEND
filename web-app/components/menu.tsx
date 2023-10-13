@@ -31,7 +31,7 @@ export function Menu() {
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
-      <MenubarMenu>
+      {/* <MenubarMenu>
         <MenubarTrigger className="relative">File</MenubarTrigger>
         <MenubarContent>
           <MenubarSub>
@@ -170,7 +170,7 @@ export function Menu() {
             Enter Full Screen
           </MenubarItem>
         </MenubarContent>
-      </MenubarMenu>
+      </MenubarMenu> */}
       <MenubarMenu>
         <MenubarTrigger className="hidden md:block">Account</MenubarTrigger>
         <MenubarContent forceMount>
