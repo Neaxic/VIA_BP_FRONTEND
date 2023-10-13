@@ -205,13 +205,6 @@ export default function Page() {
                 strokeWidth={3}
                 className="stroke-primary"
               />
-              <Line
-                type="monotone"
-                dataKey="total2"
-                stroke="undefined"
-                strokeWidth={3}
-                className="stroke-primary"
-              />
             </LineChart>
           </ResponsiveContainer>
         </Card>

@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes"
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -16,6 +17,8 @@ import {
 } from "../components/ui/menubar"
 
 export function Menu() {
+  const { setTheme, theme } = useTheme()
+
   return (
     <Menubar className="rounded-none border-b border-none px-2 lg:px-4">
       <MenubarMenu>
@@ -154,23 +157,20 @@ export function Menu() {
             </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
-      </MenubarMenu>
+      </MenubarMenu>*/}
       <MenubarMenu>
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarCheckboxItem>Show Playing Next</MenubarCheckboxItem>
-          <MenubarCheckboxItem checked>Show Lyrics</MenubarCheckboxItem>
-          <MenubarSeparator />
-          <MenubarItem inset disabled>
-            Show Status Bar
-          </MenubarItem>
+          <MenubarCheckboxItem onClick={() => setTheme("dark")} checked={theme && theme == "dark" ? true : false}>Dark theme</MenubarCheckboxItem>
+          <MenubarCheckboxItem onClick={() => setTheme("light")} checked={theme && theme == "light" ? true : false}>Light theme</MenubarCheckboxItem>
+          <MenubarCheckboxItem onClick={() => setTheme("system")} checked={theme && theme == "system" ? true : false}>System theme</MenubarCheckboxItem>
           <MenubarSeparator />
           <MenubarItem inset>Hide Sidebar</MenubarItem>
           <MenubarItem disabled inset>
             Enter Full Screen
           </MenubarItem>
         </MenubarContent>
-      </MenubarMenu> */}
+      </MenubarMenu>
       <MenubarMenu>
         <MenubarTrigger className="hidden md:block">Account</MenubarTrigger>
         <MenubarContent forceMount>
