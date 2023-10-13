@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  Area,
   Bar,
   BarChart,
   CartesianGrid,
+  ComposedChart,
   Legend,
   Line,
   LineChart,
@@ -14,6 +16,8 @@ import {
   RadarChart,
   ReferenceLine,
   ResponsiveContainer,
+  Scatter,
+  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
@@ -84,6 +88,60 @@ const data = [
   },
 ];
 
+const dataScatter = [
+  { x: 100, y: 200, z: 200 },
+  { x: 120, y: 100, z: 260 },
+  { x: 170, y: 300, z: 400 },
+  { x: 140, y: 250, z: 280 },
+  { x: 150, y: 400, z: 500 },
+  { x: 110, y: 280, z: 200 },
+];
+
+const dataLineBarArea = [
+  {
+    name: 'Page A',
+    uv: 590,
+    pv: 800,
+    amt: 1400,
+    cnt: 490,
+  },
+  {
+    name: 'Page B',
+    uv: 868,
+    pv: 967,
+    amt: 1506,
+    cnt: 590,
+  },
+  {
+    name: 'Page C',
+    uv: 1397,
+    pv: 1098,
+    amt: 989,
+    cnt: 350,
+  },
+  {
+    name: 'Page D',
+    uv: 1480,
+    pv: 1200,
+    amt: 1228,
+    cnt: 480,
+  },
+  {
+    name: 'Page E',
+    uv: 1520,
+    pv: 1108,
+    amt: 1100,
+    cnt: 460,
+  },
+  {
+    name: 'Page F',
+    uv: 1400,
+    pv: 680,
+    amt: 1700,
+    cnt: 380,
+  },
+];
+
 const dataRadar = [
   {
     subject: "Math",
@@ -128,13 +186,36 @@ export default function Page() {
     <>
       <h1>Hello, overview page!</h1>
       <div className="flex gap-4">
-        <Card className="w-full p-4 flex flex-col">
-          <Label>Current production status</Label>
-          <Label className="text-xl pt-2">Current production status</Label>
-          <Label className="pt-2">Current production status</Label>
+        <Card className="w-full p-2">
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <ComposedChart
+              width={500}
+              height={400}
+              data={dataLineBarArea}
+            >
+              <CartesianGrid />
+              <XAxis dataKey="name" scale="band" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
+              <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+              <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+              <Scatter dataKey="cnt" fill="red" />
+            </ComposedChart>
+          </ResponsiveContainer>
         </Card>
-        <Card className="w-full p-3 flex flex-col">
-          <Label>Production stops in last 24hr</Label>
+        <Card className="w-full p-2 ">
+          <ResponsiveContainer width="100%" className="mt-4" height={350} >
+            <ScatterChart>
+              <CartesianGrid />
+              <XAxis type="number" dataKey="x" name="stature" unit="cm" />
+              <YAxis type="number" dataKey="y" name="weight" unit="kg" />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Tooltip />
+              <Scatter name="A school" data={dataScatter} className="fill-primary" />
+            </ScatterChart>
+          </ResponsiveContainer>
         </Card>
         <Card className="w-full p-2">
           <ResponsiveContainer width="100%" className="mt-4" height={350}>
@@ -142,6 +223,7 @@ export default function Page() {
               <PolarGrid />
               <PolarAngleAxis dataKey="subject" />
               <PolarRadiusAxis />
+              <Tooltip />
               <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
             </RadarChart>
           </ResponsiveContainer>
