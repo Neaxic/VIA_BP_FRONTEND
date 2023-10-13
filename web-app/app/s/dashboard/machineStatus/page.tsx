@@ -53,16 +53,17 @@ function MachineCard({
 
   return (
     <div style={cardStyle}>
-      <Label className="mb-2 text-lg ml-2">
-        {name} - OEE: {oee}%
-      </Label>
+      <Label className="mb-2 text-lg ml-2"></Label>
       <div style={runningStyle}></div>
       <div style={sectionStyle}>Errors: {errorCount}</div>
       <div style={sectionStyle}>Accepted: {acceptedCount}</div>
       <div style={sectionStyle}>Rejected: {rejectCount}</div>
-      <div style={sectionStyle}>Rejected: {rejectCount}</div>
-      <div style={sectionStyle}>Rejected: {rejectCount}</div>
-      <div style={sectionStyle}>Rejected: {rejectCount}</div>
+      <div style={sectionStyle}>Machine Name: {name}</div>
+      <div style={sectionStyle}>
+        Planned Time in Houres : {plannedProductionTime}
+      </div>
+      <div style={sectionStyle}>OEE: {oee}%</div>
+      <div style={sectionStyle}>Max antal produkter: {totalPossibleCount}</div>
     </div>
   );
 }
