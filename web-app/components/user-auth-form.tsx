@@ -43,7 +43,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     ///Det her skal også ske når det virker, men for nu er det fint
-    registerUser(username, isAdmin);
+    registerUser({
+      username: username,
+      isAdmin: isAdmin,
+    });
     Router.push("/s/dashboard/overview");
 
     if (isCreateURL) {

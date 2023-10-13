@@ -15,9 +15,11 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "../components/ui/menubar"
+import { useUserContext } from "../app/contexts/UserContext"
 
 export function Menu() {
   const { setTheme, theme } = useTheme()
+  const { signOut, user } = useUserContext()
 
   return (
     <Menubar className="rounded-none border-b border-none px-2 lg:px-4">
@@ -176,13 +178,11 @@ export function Menu() {
         <MenubarContent forceMount>
           <MenubarLabel inset>Switch Account</MenubarLabel>
           <MenubarSeparator />
-          <MenubarRadioGroup value="benoit">
-            <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
-            <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
-            <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
+          <MenubarRadioGroup value="andy">
+            <MenubarRadioItem value="andy">{user?.username}</MenubarRadioItem>
           </MenubarRadioGroup>
           <MenubarSeparator />
-          <MenubarItem inset>Sign out...</MenubarItem>
+          <MenubarItem inset onClick={() => signOut()}>Sign out...</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
