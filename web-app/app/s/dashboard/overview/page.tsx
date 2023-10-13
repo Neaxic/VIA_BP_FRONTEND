@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { Card } from "../../../../components/ui/card";
 import { Label } from "../../../../components/ui/label";
+import { GraphWrapper } from "../../../../components/graph-wrapper";
 
 const data = [
   {
@@ -234,32 +235,33 @@ export default function Page() {
 
       <div className="flex w-full gap-4 mt-6">
         <Card className="w-full p-2">
-          <Label className="mb-2 text-lg ml-2">Revenue</Label>
-          <ResponsiveContainer width="100%" className="mt-4" height={350}>
-            <BarChart data={data}>
-              <XAxis
-                dataKey="name"
-                stroke="#888888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="#888888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `$${value}`}
-              />
-              <Tooltip />
-              <Bar
-                dataKey="total"
-                className="fill-primary"
-                radius={[4, 4, 0, 0]}
-              />
-              {/* <CartesianGrid strokeDasharray="3 3" /> */}
-            </BarChart>
-          </ResponsiveContainer>
+          <GraphWrapper>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <BarChart data={data}>
+                <XAxis
+                  dataKey="name"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip />
+                <Bar
+                  dataKey="total"
+                  className="fill-primary"
+                  radius={[4, 4, 0, 0]}
+                />
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              </BarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
         </Card>
         <Card className="w-full p-2">
           <Label className="mb-2 text-lg ml-2">Revenue</Label>
