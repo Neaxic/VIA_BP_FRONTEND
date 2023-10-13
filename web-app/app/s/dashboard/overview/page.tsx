@@ -12,6 +12,7 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -24,38 +25,47 @@ const data = [
   {
     name: "Jan",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Feb",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Mar",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Apr",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "May",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Jun",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Jul",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Aug",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Sep",
     total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
     name: "Oct",
@@ -126,28 +136,19 @@ export default function Page() {
         <Card className="w-full p-3 flex flex-col">
           <Label>Production stops in last 24hr</Label>
         </Card>
-        <Card className="w-full p-3 flex flex-col">
-          <Label>Produced in last 24hr</Label>
+        <Card className="w-full p-2">
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <RadarChart data={dataRadar}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <PolarRadiusAxis />
+              <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
+            </RadarChart>
+          </ResponsiveContainer>
         </Card>
       </div>
 
-      <Card className="w-full p-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={dataRadar}>
-            <PolarGrid />
-            <PolarAngleAxis dataKey="subject" />
-            <PolarRadiusAxis angle={30} domain={[0, 150]} />
-            <Radar
-              name="Mike"
-              dataKey="A"
-              stroke="#8884d8"
-              fill="#8884d8"
-              fillOpacity={0.6}
-            />
-            <Legend />
-          </RadarChart>
-        </ResponsiveContainer>
-      </Card>
+
 
       <div className="flex w-full gap-4 mt-6">
         <Card className="w-full p-2">
@@ -174,6 +175,7 @@ export default function Page() {
                 className="fill-primary"
                 radius={[4, 4, 0, 0]}
               />
+              {/* <CartesianGrid strokeDasharray="3 3" /> */}
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -197,7 +199,7 @@ export default function Page() {
               />
               <Tooltip />
               <Legend />
-              {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              <CartesianGrid strokeDasharray="3 3" />
               <Line
                 type="monotone"
                 dataKey="total"
@@ -205,6 +207,39 @@ export default function Page() {
                 strokeWidth={3}
                 className="stroke-primary"
               />
+            </LineChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+      <div className="mt-4">
+        <Card className="w-full p-2">
+          <Label className="mb-2 text-lg ml-2">Revenue vs Privous best</Label>
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <LineChart data={data}>
+              <XAxis
+                dataKey="name"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `$${value}`}
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="undefined"
+                strokeWidth={3}
+                className="stroke-primary"
+              />
+              <ReferenceLine y={9800} label="Max" stroke="red" />
               <Line
                 type="monotone"
                 dataKey="total2"

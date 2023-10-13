@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes"
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -14,32 +15,28 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "../components/ui/menubar"
+import { useUserContext } from "../app/contexts/UserContext"
 
 export function Menu() {
+  const { setTheme, theme } = useTheme()
+  const { signOut, user } = useUserContext()
+
   return (
     <Menubar className="rounded-none border-b border-none px-2 lg:px-4">
       <MenubarMenu>
         <MenubarTrigger className="font-bold">VELUX LIVEFEED</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>About Music</MenubarItem>
-          <MenubarSeparator />
           <MenubarItem>
             Preferences... <MenubarShortcut>⌘,</MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem>
-            Hide Music... <MenubarShortcut>⌘H</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem>
-            Hide Others... <MenubarShortcut>⇧⌘H</MenubarShortcut>
-          </MenubarItem>
           <MenubarShortcut />
           <MenubarItem>
-            Quit Music <MenubarShortcut>⌘Q</MenubarShortcut>
+            Quit Dashboard <MenubarShortcut>⌘Q</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
-      <MenubarMenu>
+      {/* <MenubarMenu>
         <MenubarTrigger className="relative">File</MenubarTrigger>
         <MenubarContent>
           <MenubarSub>
@@ -162,16 +159,13 @@ export function Menu() {
             </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
-      </MenubarMenu>
+      </MenubarMenu>*/}
       <MenubarMenu>
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarCheckboxItem>Show Playing Next</MenubarCheckboxItem>
-          <MenubarCheckboxItem checked>Show Lyrics</MenubarCheckboxItem>
-          <MenubarSeparator />
-          <MenubarItem inset disabled>
-            Show Status Bar
-          </MenubarItem>
+          <MenubarCheckboxItem onClick={() => setTheme("dark")} checked={theme && theme == "dark" ? true : false}>Dark theme</MenubarCheckboxItem>
+          <MenubarCheckboxItem onClick={() => setTheme("light")} checked={theme && theme == "light" ? true : false}>Light theme</MenubarCheckboxItem>
+          <MenubarCheckboxItem onClick={() => setTheme("system")} checked={theme && theme == "system" ? true : false}>System theme</MenubarCheckboxItem>
           <MenubarSeparator />
           <MenubarItem inset>Hide Sidebar</MenubarItem>
           <MenubarItem disabled inset>
@@ -184,15 +178,34 @@ export function Menu() {
         <MenubarContent forceMount>
           <MenubarLabel inset>Switch Account</MenubarLabel>
           <MenubarSeparator />
-          <MenubarRadioGroup value="benoit">
-            <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
-            <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
-            <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
+          <MenubarRadioGroup value="andy">
+            <MenubarRadioItem value="andy">{user?.username}</MenubarRadioItem>
           </MenubarRadioGroup>
           <MenubarSeparator />
-          <MenubarItem inset>Manage Famliy...</MenubarItem>
+          <MenubarItem inset onClick={() => signOut()}>Sign out...</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger className="hidden md:block">Notification</MenubarTrigger>
+        <MenubarContent forceMount>
+          <MenubarSub>
+            <MenubarSubTrigger inset>Active</MenubarSubTrigger>
+            <MenubarSubContent className="w-[230px]">
+              <MenubarRadioGroup value="benoit">
+                <MenubarRadioItem value="andy">On</MenubarRadioItem>
+                <MenubarRadioItem value="noti">Off</MenubarRadioItem>
+              </MenubarRadioGroup>
+            </MenubarSubContent>
+          </MenubarSub>
           <MenubarSeparator />
-          <MenubarItem inset>Add Account...</MenubarItem>
+          <MenubarRadioGroup value="benoit">
+            <MenubarRadioItem value="andy">Everything</MenubarRadioItem>
+            <MenubarRadioItem value="benoit">Production</MenubarRadioItem>
+            <MenubarRadioItem value="Luis">Quality control</MenubarRadioItem>
+            <MenubarRadioItem value="Luis">Fatal errors</MenubarRadioItem>
+          </MenubarRadioGroup>
+          <MenubarSeparator />
+          <MenubarItem inset>Revalidate permission</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
