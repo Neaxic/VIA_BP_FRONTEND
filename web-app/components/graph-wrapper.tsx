@@ -39,6 +39,18 @@ export function GraphWrapper({ children, enableSettings = true, ...props }: grap
                                 </SheetDescription>
                             </SheetHeader>
                             <div className="pt-12">
+                                <Label>Last data recived</Label>
+                                <Button variant={"outline"} className="w-[300px] justify-start text-left font-normal">
+                                    {format(new Date(), "y LLL dd, HH:mm:ss")}
+                                </Button>
+                            </div>
+                            <div className="pt-6">
+                                <Label>Oldest data recived</Label>
+                                <Button variant={"outline"} className="w-[300px] justify-start text-left font-normal">
+                                    {format(new Date(), "y LLL dd, HH:mm:ss")}
+                                </Button>
+                            </div>
+                            <div className="pt-6">
                                 <Label className="p-1">Date interval</Label>
                                 <div className={"grid gap-2"}>
                                     <Popover>

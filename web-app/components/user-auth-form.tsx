@@ -9,6 +9,7 @@ import { LoginUserApi } from "../app/api/communication";
 import { usePathname } from "next/navigation";
 import { useUserContext } from "../app/contexts/UserContext";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -146,7 +147,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <Button disabled={isLoading} className="mt-4">
             {isLoading ? (
-              <> {/* Icons.spinner can be placed here if needed */}</>
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              </>
             ) : isCreateURL ? (
               "Create"
             ) : (
