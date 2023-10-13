@@ -21,21 +21,13 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger className="font-bold">VELUX LIVEFEED</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>About Music</MenubarItem>
-          <MenubarSeparator />
           <MenubarItem>
             Preferences... <MenubarShortcut>⌘,</MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem>
-            Hide Music... <MenubarShortcut>⌘H</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem>
-            Hide Others... <MenubarShortcut>⇧⌘H</MenubarShortcut>
-          </MenubarItem>
           <MenubarShortcut />
           <MenubarItem>
-            Quit Music <MenubarShortcut>⌘Q</MenubarShortcut>
+            Quit Dashboard <MenubarShortcut>⌘Q</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
@@ -190,9 +182,30 @@ export function Menu() {
             <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
           </MenubarRadioGroup>
           <MenubarSeparator />
-          <MenubarItem inset>Manage Famliy...</MenubarItem>
+          <MenubarItem inset>Sign out...</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger className="hidden md:block">Notification</MenubarTrigger>
+        <MenubarContent forceMount>
+          <MenubarSub>
+            <MenubarSubTrigger inset>Active</MenubarSubTrigger>
+            <MenubarSubContent className="w-[230px]">
+              <MenubarRadioGroup value="benoit">
+                <MenubarRadioItem value="andy">On</MenubarRadioItem>
+                <MenubarRadioItem value="noti">Off</MenubarRadioItem>
+              </MenubarRadioGroup>
+            </MenubarSubContent>
+          </MenubarSub>
           <MenubarSeparator />
-          <MenubarItem inset>Add Account...</MenubarItem>
+          <MenubarRadioGroup value="benoit">
+            <MenubarRadioItem value="andy">Everything</MenubarRadioItem>
+            <MenubarRadioItem value="benoit">Production</MenubarRadioItem>
+            <MenubarRadioItem value="Luis">Quality control</MenubarRadioItem>
+            <MenubarRadioItem value="Luis">Fatal errors</MenubarRadioItem>
+          </MenubarRadioGroup>
+          <MenubarSeparator />
+          <MenubarItem inset>Revalidate permission</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
