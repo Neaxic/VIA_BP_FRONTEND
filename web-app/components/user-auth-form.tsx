@@ -26,7 +26,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   // Use useEffect to update isCreateURL only on the client side
   React.useEffect(() => {
-    console.log("pathname", pathname.split("/")[2]);
+    if (pathname.includes("/create")) {
+      setIsCreateURL(true);
+    } else {
+      setIsCreateURL(false);
+    }
   }, [pathname]);
 
   const login = async () => {
@@ -175,8 +179,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </span>
             </div>
           </div>
-          <Button variant="outline" type="button" disabled={isLoading}>
-            {" "}
+          <Button
+            variant="outline"
+            type="button"
+            disabled={isLoading}
+            onClick={() => Router.push("create")}
+          >
             Request Access
           </Button>
         </div>
