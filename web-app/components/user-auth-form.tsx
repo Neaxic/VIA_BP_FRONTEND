@@ -10,8 +10,7 @@ import { usePathname } from "next/navigation";
 import { useUserContext } from "../app/contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { registerUser } = useUserContext();
@@ -38,12 +37,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const data = await createUserApi(username, password, isAdmin);
   };
 
+  async function sha256(password: string | undefined) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hash))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
-    console.log(username, password, isAdmin);
     setIsLoading(true);
 
-    ///Det her skal også ske når det virker, men for nu er det fint
+    const hashedPassword = await sha256(password);
+    console.log("Hashed Password:", hashedPassword);
+
     registerUser({
       username: username,
       isAdmin: isAdmin,
@@ -51,9 +60,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     Router.push("/s/dashboard/overview");
 
     if (isCreateURL) {
-      await create();
+      await createUserApi(username, hashedPassword, isAdmin);
     } else {
-      await login();
+      await LoginUserApi(username, hashedPassword);
     }
 
     setIsLoading(false);
@@ -171,8 +180,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             Request Access
           </Button>
         </div>
-
-      </form >
-    </div >
+      </form>
+    </div>
   );
 }

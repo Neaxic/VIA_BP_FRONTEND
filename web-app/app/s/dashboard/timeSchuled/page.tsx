@@ -21,6 +21,7 @@ const PerformanceChart = () => {
 
   return <Line data={data} />;
 };
+
 export default function Page() {
   // Function to format numbers with a leading zero if under 10
   const formatNumber = (num: number) => (num < 10 ? `0${num}` : `${num}`);

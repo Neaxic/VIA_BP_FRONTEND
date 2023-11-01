@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = "NeedThis";
+const URL =
+  "http://localhost:5000/registerUser?username=apiTest9&password=apiTest2&isAdmin=false";
 const URLKAPS = "NeedThis";
 const API_KEY = "IFWENEEDTHIS";
 
@@ -11,7 +12,7 @@ export const createUserApi = async (
 ) => {
   try {
     console.log("CreateUserApi Bliver kaldt --> User-auth-Form");
-    const apiUrl = `${URLKAPS}/createUser?unsername=${unsername}&password=${password}`;
+    const apiUrl = `${URLKAPS}/registerUser?username=${unsername}&password=${password}&isAdmin=${isAdmin}`;
     console.log("API URL:", apiUrl); // Bliver brugt til at se hvad den sender da der ikke er en
 
     const response = await axios({
