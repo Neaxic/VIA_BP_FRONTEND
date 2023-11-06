@@ -204,7 +204,15 @@ export function Sidebar({ className }: SidebarProps) {
             Quality control
           </h2>
           <div className="space-y-1">
-            <Button variant="ghost" className="w-full justify-start">
+            <Button
+              variant={
+                pathname.split("/")[2] == "machineStatus"
+                  ? "secondary"
+                  : "ghost"
+              }
+              onClick={() => router.push("/s/dashboard/admin")}
+              className="w-full justify-start"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -221,7 +229,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Status overview
+              Admin
             </Button>
             <Button variant="ghost" className="w-full justify-start">
               <svg
