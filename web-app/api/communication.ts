@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "https://via-bp-backend-delegator-bb6352f3951c.herokuapp.com";
+const URL = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY = "IFWENEEDTHIS";
 
 export const createUserApi = async (
@@ -28,24 +28,22 @@ export const createUserApi = async (
   }
 };
 
-export const LoginUserApi = async (username: string, password: string) => {
+export const loginApi = async (username: string, password: string) => {
   try {
-    const apiUrl = `${URL}/login?username=${username}&password=${password}`;
-    console.log(apiUrl);
-    console.log("LoginUserApi Bliver kaldt --> User-auth-Form");
     const response = await axios({
-      method: "GET",
-      url: apiUrl,
+      method: "POST",
+      url: `/auth/login`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
       },
+      data: {
+        email: username,
+        password: password
+      }
     });
 
-    const result = response.data;
-    localStorage.setItem("token", JSON.stringify(result));
-    console.log(response);
-    console.log(result);
-    return result;
+    return response.data;
   } catch (e) {
     console.log(e);
   }
