@@ -4,9 +4,9 @@ import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { createUserApi } from "../api/communication";
+import { createUserApi } from "../api/AuthAPI";
 import { usePathname } from "next/navigation";
-import { useUserContext } from "../app/contexts/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }

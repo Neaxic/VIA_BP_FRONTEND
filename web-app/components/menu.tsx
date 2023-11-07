@@ -15,7 +15,7 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "../components/ui/menubar"
-import { useUserContext } from "../app/contexts/UserContext"
+import { useUserContext } from "../contexts/UserContext"
 
 export function Menu() {
   const { setTheme, theme } = useTheme()

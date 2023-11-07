@@ -1,6 +1,6 @@
 "use client"
 import * as React from 'react'
-import { loginApi } from '../../api/communication'
+import { loginApi } from '../api/AuthAPI'
 
 export interface IUser {
     username: string
