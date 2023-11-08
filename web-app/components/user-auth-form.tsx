@@ -4,16 +4,15 @@ import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { createUserApi } from "../app/api/communication";
-import { LoginUserApi } from "../app/api/communication";
+import { createUserApi } from "../api/AuthAPI";
 import { usePathname } from "next/navigation";
-import { useUserContext } from "../app/contexts/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const { registerUser } = useUserContext();
+  const { registerUser, login } = useUserContext();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
@@ -32,10 +31,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsCreateURL(false);
     }
   }, [pathname]);
-
-  const login = async () => {
-    const data = await LoginUserApi(username, password);
-  };
 
   const create = async () => {
     const data = await createUserApi(username, password, isAdmin);
@@ -57,17 +52,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const hashedPassword = await sha256(password);
     console.log("Hashed Password:", hashedPassword);
 
-    registerUser({
-      username: username,
-      isAdmin: isAdmin,
-    });
-    Router.push("/s/dashboard/overview");
+    await login(username, hashedPassword)
 
-    if (isCreateURL) {
-      await createUserApi(username, hashedPassword, isAdmin);
-    } else {
-      await LoginUserApi(username, hashedPassword);
-    }
+
+    // Router.push("/s/dashboard/overview");
+
+    // if (isCreateURL) {
+    //   await createUserApi(username, hashedPassword, isAdmin);
+    // } else {
+    //   await LoginUserApi(username, hashedPassword);
+    // }
 
     setIsLoading(false);
   }
