@@ -13,6 +13,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { registerUser, login } = useUserContext();
+  const [loginErr, setLoginErr] = React.useState();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
@@ -52,16 +53,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const hashedPassword = await sha256(password);
     console.log("Hashed Password:", hashedPassword);
 
-    await login(username, hashedPassword)
 
-
-    // Router.push("/s/dashboard/overview");
-
-    // if (isCreateURL) {
-    //   await createUserApi(username, hashedPassword, isAdmin);
-    // } else {
-    //   await LoginUserApi(username, hashedPassword);
-    // }
+    if (isCreateURL) {
+      await createUserApi(username, hashedPassword, isAdmin);
+    } else {
+      await login(username, hashedPassword);
+      //Kun ved success vi skal have et check her måske login retunere bool
+      // Router.push("/s/dashboard/overview"); 
+    }
 
     setIsLoading(false);
   }

@@ -1,8 +1,14 @@
 import axios from "axios";
+import { IThrowError } from "../util/HelperInterfaces";
 
 const URL = process.env.NEXT_PUBLIC_API_URL;
-const API_KEY = "IFWENEEDTHIS";
+let session = "lasd";
 
+export const reloadToken = () => {
+  let tmp = localStorage.getItem("jwt");
+  if (tmp)
+    session = tmp
+}
 
 export const loginApi = async (username: string, password: string) => {
   try {
@@ -19,34 +25,34 @@ export const loginApi = async (username: string, password: string) => {
       }
     });
 
-    return response;
+    return e.response.data;
   } catch (e) {
     console.log(e);
+    return e.response.data;
   }
 };
 
 export const createUserApi = async (
-  unsername: string,
+  username: string,
   password: string,
-  isAdmin: boolean
+  isAdmin: boolean,
 ) => {
   try {
-    console.log("CreateUserApi Bliver kaldt --> User-auth-Form");
-    const apiUrl = `${URL}/registerUser?username=${unsername}&password=${password}&isAdmin=${isAdmin}`;
-    console.log(apiUrl);
-    console.log("API URL:", apiUrl); // Bliver brugt til at se hvad den sender da der ikke er en
+    // reloadToken();
     const response = await axios({
       method: "POST",
-      url: apiUrl,
-      withCredentials: true,
+      url: `/api/registerUser?username=${username}&password=${password}&isAdmin=${isAdmin}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session}`
       },
     });
     if (response.data) return response.data;
   } catch (e) {
     console.log(e);
-    return false;
+    const casted: IThrowError = e.response.data as IThrowError
+    return casted.message;
   }
 
 };
