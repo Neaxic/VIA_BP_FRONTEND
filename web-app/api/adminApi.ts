@@ -189,23 +189,6 @@ export const getStatusCodeByIdApi = async (id: number) => {
   }
 };
 
-export const getAllUserApi = async () => {
-  try {
-    const apiUrl = `${URL}/FUCKDIG`;
-    const response = await axios({
-      method: "GET",
-      url: apiUrl,
-      withCredentials: true,
-      headers: {
-        accept: "application/json",
-      },
-    });
-    return response.data;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const getAllStatusCodeApi = async () => {
   try {
     const apiUrl = `${URL}/getAllStatusCodes`;
@@ -291,7 +274,8 @@ export const getAllMEH = async () => {
   }
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (token: String) => {
+  // token is passed as an argument to the function
   try {
     const apiUrl = `${URL}/getAllUsers`;
     const response = await axios({
@@ -300,10 +284,12 @@ export const getAllUsers = async () => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
   } catch (e) {
     console.log(e);
+    return null;
   }
 };

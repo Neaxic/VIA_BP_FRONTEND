@@ -1,106 +1,95 @@
 "use client";
-import React from "react";
-import { Line } from "react-chartjs-2";
-import TabButtons from "../../../../components/tabButtons";
+import React, { useEffect, useState } from "react";
+import { cn } from "../../../../lib/utils";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import Table from "../../../../components/tableAdmin";
-import { cn } from "../../../../lib/utils";
-import { da } from "date-fns/locale";
+import TabButtons from "../../../../components/tabButtons";
+import {
+  getAllUsers,
+  getAllMEH,
+  getAllMachines,
+  getAllBatchs,
+  getAllErrorCodes,
+  getAllStatusCodeApi,
+} from "../../../../api/adminApi";
 
 const Tabs = TabsPrimitive.Root;
-
-const columns = [
-  { field: "id", headerName: "ID" },
-  { field: "name", headerName: "Navn" },
-  { field: "age", headerName: "Alder" },
-];
-
-const data = [
-  { id: 1, name: "Alice", age: 30 },
-  { id: 2, name: "Bob", age: 24 },
-];
-
-const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    {...props}
-  />
-));
-TabsList.displayName = TabsPrimitive.List.displayName;
-
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
-      className
-    )}
-    {...props}
-  />
-));
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
-
-const TabsContent = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
-    ref={ref}
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className
-    )}
-    {...props}
-  />
-));
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+const TabsList = TabsPrimitive.List;
+const TabsTrigger = TabsPrimitive.Trigger;
+const TabsContent = TabsPrimitive.Content;
 
 export default function Page() {
+  const [users, setUsers] = useState([]);
+  const [mehs, setMehs] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [batchs, setBatchs] = useState([]);
+  const [errorCodes, setErrorCodes] = useState([]);
+  const [statusCodes, setStatusCodes] = useState([]);
+  const token =
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcGlUZXN0OTIiLCJ1c2VybmFtZSI6ImFwaVRlc3Q5MiIsImV4cCI6MTkxNTQ2MTYzNX0.o2GRj3EtSLvNiLFVyl65vFcbcIAf4pAoDb4xKGxU9pc";
+  useEffect(() => {
+    async function fetchData() {
+      setUsers(await getAllUsers(token));
+      setMehs(await getAllMEH());
+      setMachines(await getAllMachines());
+      setBatchs(await getAllBatchs());
+      setErrorCodes(await getAllErrorCodes());
+      setStatusCodes(await getAllStatusCodeApi());
+    }
+
+    fetchData();
+  }, []);
+
+  function generateColumnsForData(data: string | any[]) {
+    if (data && data.length > 0) {
+      return Object.keys(data[0]).map((key) => ({
+        field: key,
+        headerName: key.charAt(0).toUpperCase() + key.slice(1),
+      }));
+    }
+    return [];
+  }
+
   return (
     <div>
-      <Tabs>
-        <TabsList>
-          <TabsTrigger value={"1"}>Register User</TabsTrigger>
-          <TabsTrigger value={"2"}>Register Error Codes</TabsTrigger>
-          <TabsTrigger value={"3"}>Register Status</TabsTrigger>
-          <TabsTrigger value={"4"}>Register Batch</TabsTrigger>
-          <TabsTrigger value={"5"}>Register Machine</TabsTrigger>
-          <TabsTrigger value={"6"}>Register MEH</TabsTrigger>
+      <Tabs defaultValue="User">
+        <TabsList aria-label="Manage data tabs">
+          <TabsTrigger value="User">Register User</TabsTrigger>
+          <TabsTrigger value="ErrorCodes">Register Error Codes</TabsTrigger>
+          <TabsTrigger value="Status">Register Status</TabsTrigger>
+          <TabsTrigger value="Batch">Register Batch</TabsTrigger>
+          <TabsTrigger value="Machine">Register Machine</TabsTrigger>
+          <TabsTrigger value="MEH">Register MEH</TabsTrigger>
         </TabsList>
-        <TabsContent value={"1"}>
+        <TabsContent value="User">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table columns={generateColumnsForData(users)} data={users} />
         </TabsContent>
-
-        <TabsContent value={"2"}>
+        <TabsContent value="ErrorCodes">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table
+            columns={generateColumnsForData(errorCodes)}
+            data={errorCodes}
+          />
         </TabsContent>
-        <TabsContent value={"3"}>
+        <TabsContent value="Status">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table
+            columns={generateColumnsForData(statusCodes)}
+            data={statusCodes}
+          />
         </TabsContent>
-        <TabsContent value={"4"}>
+        <TabsContent value="Batch">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table columns={generateColumnsForData(batchs)} data={batchs} />
         </TabsContent>
-        <TabsContent value={"5"}>
+        <TabsContent value="Machine">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table columns={generateColumnsForData(machines)} data={machines} />
         </TabsContent>
-        <TabsContent value={"6"}>
+        <TabsContent value="MEH">
           <TabButtons />
-          <Table columns={columns} data={data} />
+          <Table columns={generateColumnsForData(mehs)} data={mehs} />
         </TabsContent>
       </Tabs>
     </div>

@@ -9,13 +9,6 @@ import {
   TableRow,
 } from "../components/ui/table";
 
-import {
-  getStatusCodeByIdApi,
-  getBatchInfoByBatchNoApi,
-  getMachineByIdApi,
-  getMachineErrorHistoryByIdApi,
-} from "../api/adminApi";
-
 interface TableColumn {
   field: string;
   headerName: string;
@@ -29,20 +22,22 @@ interface TableData {
 interface TableProps {
   caption?: string;
   columns: TableColumn[];
-  data: TableData[];
+  data: TableData[]; // Ensure this is always an array
 }
 
-const Table: React.FC<TableProps> = ({ caption, columns, data }) => {
-  // En state for at holde værdierne for de nye input felter.
-  // Starter med et tomt objekt der passer med TableData interfacet.
+const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
   const [newRowData, setNewRowData] = React.useState<TableData>(
     columns.reduce((acc, column) => ({ ...acc, [column.field]: "" }), {})
   );
 
-  // Funktion til at opdatere den nye række med data fra inputfelterne
   const handleInputChange = (field: string, value: string) => {
     setNewRowData({ ...newRowData, [field]: value });
   };
+
+  // If data is undefined or not an array, the component will return null or you can handle it as you see fit
+  if (!Array.isArray(data)) {
+    return null; // or some error component
+  }
 
   return (
     <UITable>
@@ -57,7 +52,6 @@ const Table: React.FC<TableProps> = ({ caption, columns, data }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {/* Input række */}
         <TableRow>
           {columns.map((column, colIndex) => (
             <TableCell key={colIndex} className={column.className}>
@@ -67,12 +61,11 @@ const Table: React.FC<TableProps> = ({ caption, columns, data }) => {
                 onChange={(e) =>
                   handleInputChange(column.field, e.target.value)
                 }
-                className="input-class" // Du skal muligvis style dette
+                className="input-class"
               />
             </TableCell>
           ))}
         </TableRow>
-        {/* Eksisterende tabelrækker */}
         {data.map((row, rowIndex) => (
           <TableRow key={rowIndex}>
             {columns.map((column, colIndex) => (
