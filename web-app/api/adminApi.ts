@@ -60,7 +60,14 @@ export const registerMachineErrorHistoryApi = async (
 ) => {
   try {
     const apiUrl = `${URL}/registerMEH?historyId=${historyId}&machineId=${machineId}&errorId=${errorId}&timeForMistake=${timeForMistake}`;
-    const response = await axios.post(apiUrl);
+    const response = await axios({
+      method: "POST",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -72,7 +79,14 @@ export const registerMachineErrorHistoryApi = async (
 export const getErrorCodeByIdApi = async (id: number) => {
   try {
     const apiUrl = `${URL}/getErrorCode?id=${id}`;
-    const response = await axios.get(apiUrl);
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -82,7 +96,14 @@ export const getErrorCodeByIdApi = async (id: number) => {
 export const getMachineErrorHistoryByIdApi = async (id: number) => {
   try {
     const apiUrl = `${URL}/getMachineErrorHistory?id=${id}`;
-    const response = await axios.get(apiUrl);
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -92,7 +113,14 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
 export const getMachineByIdApi = async (id: number) => {
   try {
     const apiUrl = `${URL}/getMachine?id=${id}`;
-    const response = await axios.get(apiUrl);
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -102,7 +130,14 @@ export const getMachineByIdApi = async (id: number) => {
 export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
   try {
     const apiUrl = `${URL}/getBatchInfo?batchno=${batchNo}`;
-    const response = await axios.get(apiUrl);
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -112,7 +147,14 @@ export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
 export const getStatusCodeByIdApi = async (id: number) => {
   try {
     const apiUrl = `${URL}/getStatusCode?id=${id}`;
-    const response = await axios.get(apiUrl);
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);

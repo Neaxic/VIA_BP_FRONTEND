@@ -6,9 +6,8 @@ let session = "lasd";
 
 export const reloadToken = () => {
   let tmp = localStorage.getItem("jwt");
-  if (tmp)
-    session = tmp
-}
+  if (tmp) session = tmp;
+};
 
 export const loginApi = async (username: string, password: string) => {
   try {
@@ -21,8 +20,8 @@ export const loginApi = async (username: string, password: string) => {
       },
       data: {
         email: username,
-        password: password
-      }
+        password: password,
+      },
     });
 
     return e.response.data;
@@ -35,7 +34,7 @@ export const loginApi = async (username: string, password: string) => {
 export const createUserApi = async (
   username: string,
   password: string,
-  isAdmin: boolean,
+  isAdmin: boolean
 ) => {
   try {
     // reloadToken();
@@ -45,14 +44,13 @@ export const createUserApi = async (
       baseURL: URL,
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${session}`
+        Authorization: `Bearer ${session}`,
       },
     });
     if (response.data) return response.data;
   } catch (e) {
     console.log(e);
-    const casted: IThrowError = e.response.data as IThrowError
+    const casted: IThrowError = e.response.data as IThrowError;
     return casted.message;
   }
-
 };
