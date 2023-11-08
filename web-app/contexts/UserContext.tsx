@@ -1,6 +1,9 @@
 "use client"
 import * as React from 'react'
 import { loginApi } from '../api/AuthAPI'
+import { ILoginResponse, IThrowError, initialLoginResponse } from '../util/HelperInterfaces';
+import { useToast } from '../components/ui/use-toast';
+import { ToastAction } from '@radix-ui/react-toast';
 
 export interface IUser {
     username: string
@@ -12,14 +15,14 @@ interface UserContextInterface {
     isLoggedIn: boolean
     registerUser: (user: IUser) => void
     signOut: () => void
-    login: (username: string, password: string) => void
+    login: (username: string, password: string) => boolean
 }
 
 export const UserContext = React.createContext<UserContextInterface>({
     isLoggedIn: false,
     registerUser: () => { },
     signOut: () => { },
-    login: () => { },
+    login: () => false,
 })
 
 interface loginInterface {
@@ -28,13 +31,34 @@ interface loginInterface {
 }
 
 export default function UserProvider({ children, }: { children: React.ReactNode }) {
+    const { toast } = useToast();
     const [user, setUser] = React.useState<IUser>()
     const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false)
 
     const login = async (username: string, password: string) => {
-        const response: loginInterface = await loginApi(username, password)
-        console.log(response);
-        localStorage.setItem("token", JSON.stringify(response.token));
+        const response = await loginApi(username, password)
+        try {
+            const user: ILoginResponse = response
+            if (user && user.token) {
+                setUser({
+                    username: user.email,
+                    isAdmin: false // placeholder
+                })
+
+                localStorage.setItem("token", JSON.stringify(response.token));
+                return true
+            } else {
+                throw response
+            }
+        } catch (e) {
+            const err: IThrowError = response
+            toast({
+                title: "There was a problem with your request.",
+                description: response.message,
+            })
+        }
+
+        return false
     }
 
     const registerUser = async (user: IUser) => {

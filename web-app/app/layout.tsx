@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import PageProvider from '../contexts/PageContext'
 import { ThemeProvider } from '../components/theme-provider'
 import UserProvider from '../contexts/UserContext'
+import { Toaster } from '../components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <PageProvider>
             <UserProvider>
               {children}
+              <Toaster />
             </UserProvider>
           </PageProvider>
         </ThemeProvider>
