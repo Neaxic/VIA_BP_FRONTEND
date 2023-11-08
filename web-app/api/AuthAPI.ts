@@ -2,7 +2,7 @@ import axios from "axios";
 import { IThrowError } from "../util/HelperInterfaces";
 
 const URL = process.env.NEXT_PUBLIC_API_URL;
-let session = "lasd";
+let session = "placeholder";
 
 export const reloadToken = () => {
   let tmp = localStorage.getItem("jwt");
@@ -24,7 +24,7 @@ export const loginApi = async (username: string, password: string) => {
       },
     });
 
-    return e.response.data;
+    return response.data;
   } catch (e) {
     console.log(e);
     return e.response.data;
