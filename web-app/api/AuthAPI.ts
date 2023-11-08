@@ -25,7 +25,7 @@ export const loginApi = async (username: string, password: string) => {
     });
 
     return response.data;
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
     return e.response.data;
   }
@@ -48,7 +48,7 @@ export const createUserApi = async (
       },
     });
     if (response.data) return response.data;
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
     const casted: IThrowError = e.response.data as IThrowError;
     return casted.message;
