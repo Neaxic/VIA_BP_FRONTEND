@@ -9,6 +9,13 @@ import {
   TableRow,
 } from "../components/ui/table";
 
+import {
+  getStatusCodeByIdApi,
+  getBatchInfoByBatchNoApi,
+  getMachineByIdApi,
+  getMachineErrorHistoryByIdApi,
+} from "../api/adminApi";
+
 interface TableColumn {
   field: string;
   headerName: string;

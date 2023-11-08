@@ -9,7 +9,14 @@ export const registerMachineApi = async (
 ) => {
   try {
     const apiUrl = `${URL}/registerMachine?machineName=${machineName}&description=${description}&statusCode=${statusCode}`;
-    const response = await axios.post(apiUrl);
+    const response = await axios({
+      method: "POST",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -25,7 +32,14 @@ export const registerBatchApi = async (
 ) => {
   try {
     const apiUrl = `${URL}/registerBatch?batchNo=${batchNo}&machineID=${machineID}&producedItems=${producedItems}&startTime=${startTime}&endTime=${endTime}`;
-    const response = await axios.post(apiUrl);
+    const response = await axios({
+      method: "POST",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -35,7 +49,14 @@ export const registerBatchApi = async (
 export const registerStatusCodeApi = async (statusCode: string) => {
   try {
     const apiUrl = `${URL}/registerStatus?statusCode=${statusCode}`;
-    const response = await axios.post(apiUrl);
+    const response = await axios({
+      method: "POST",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
@@ -45,7 +66,14 @@ export const registerStatusCodeApi = async (statusCode: string) => {
 export const registerErrorCodeApi = async (errorCode: string) => {
   try {
     const apiUrl = `${URL}/registerErrorCodes?errorCode=${errorCode}`;
-    const response = await axios.post(apiUrl);
+    const response = await axios({
+      method: "POST",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
     return response.data;
   } catch (e) {
     console.log(e);
