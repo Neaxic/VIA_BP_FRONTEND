@@ -15,14 +15,14 @@ interface UserContextInterface {
     isLoggedIn: boolean
     registerUser: (user: IUser) => void
     signOut: () => void
-    login: (username: string, password: string) => boolean
+    login: (username: string, password: string) => Promise<boolean>
 }
 
 export const UserContext = React.createContext<UserContextInterface>({
     isLoggedIn: false,
     registerUser: () => { },
     signOut: () => { },
-    login: () => false,
+    login: () => new Promise(() => { }),
 })
 
 interface loginInterface {
