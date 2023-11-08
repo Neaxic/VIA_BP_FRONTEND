@@ -3,10 +3,22 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 import TabButtons from "../../../../components/tabButtons";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-
+import Table from "../../../../components/tableAdmin";
 import { cn } from "../../../../lib/utils";
+import { da } from "date-fns/locale";
 
 const Tabs = TabsPrimitive.Root;
+
+const columns = [
+  { field: "id", headerName: "ID" },
+  { field: "name", headerName: "Navn" },
+  { field: "age", headerName: "Alder" },
+];
+
+const data = [
+  { id: 1, name: "Alice", age: 30 },
+  { id: 2, name: "Bob", age: 24 },
+];
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
@@ -66,15 +78,30 @@ export default function Page() {
           <TabsTrigger value={"6"}>Register MEH</TabsTrigger>
         </TabsList>
         <TabsContent value={"1"}>
-          <h1>registerUser</h1>
           <TabButtons />
+          <Table columns={columns} data={data} />
         </TabsContent>
 
-        <TabsContent value={"2"}>registerErrorCodes</TabsContent>
-        <TabsContent value={"3"}>registerStatus</TabsContent>
-        <TabsContent value={"4"}>registerBatch</TabsContent>
-        <TabsContent value={"5"}>registerMachine</TabsContent>
-        <TabsContent value={"6"}>registerMEH</TabsContent>
+        <TabsContent value={"2"}>
+          <TabButtons />
+          <Table columns={columns} data={data} />
+        </TabsContent>
+        <TabsContent value={"3"}>
+          <TabButtons />
+          <Table columns={columns} data={data} />
+        </TabsContent>
+        <TabsContent value={"4"}>
+          <TabButtons />
+          <Table columns={columns} data={data} />
+        </TabsContent>
+        <TabsContent value={"5"}>
+          <TabButtons />
+          <Table columns={columns} data={data} />
+        </TabsContent>
+        <TabsContent value={"6"}>
+          <TabButtons />
+          <Table columns={columns} data={data} />
+        </TabsContent>
       </Tabs>
     </div>
   );
