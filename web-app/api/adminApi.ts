@@ -290,3 +290,20 @@ export const getAllMEH = async () => {
     console.log(e);
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const apiUrl = `${URL}/getAllUsers`;
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      withCredentials: true,
+      headers: {
+        accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
