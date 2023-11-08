@@ -33,6 +33,9 @@ const TabButtons = () => {
       <Button onClick={handleToggle}>
         {isToggled ? "Edit/Remove" : "Save/Cancel"}
       </Button>
+      <Button onClick={() => console.log("Handling for ReFreash")}>
+        refresh
+      </Button>
     </div>
   );
 };
