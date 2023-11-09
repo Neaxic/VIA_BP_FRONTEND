@@ -22,7 +22,7 @@ interface TableData {
 interface TableProps {
   caption?: string;
   columns: TableColumn[];
-  data: TableData[]; // Ensure this is always an array
+  data: TableData[];
 }
 
 const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
@@ -34,7 +34,6 @@ const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
     setNewRowData({ ...newRowData, [field]: value });
   };
 
-  // If data is undefined or not an array, the component will return null or you can handle it as you see fit
   if (!Array.isArray(data)) {
     return null; // or some error component
   }

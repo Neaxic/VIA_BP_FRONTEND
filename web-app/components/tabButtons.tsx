@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 
 const TabButtons = () => {
-  // State variable for at holde styr på, om knapperne er toggled eller ej.
+  // State variable for at holde styr på, om knapperne er toggl eller ej.
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {

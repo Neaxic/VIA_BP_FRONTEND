@@ -304,7 +304,7 @@ export const getAllMEH = async () => {
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
-    return response.data;
+    return console.log(response.data);
   } catch (e) {
     console.log(e);
   }

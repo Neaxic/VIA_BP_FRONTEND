@@ -26,14 +26,14 @@ export default function Page() {
   const [errorCodes, setErrorCodes] = useState([]);
   const [statusCodes, setStatusCodes] = useState([]);
   const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcGlUZXN0OTIiLCJ1c2VybmFtZSI6ImFwaVRlc3Q5MiIsImV4cCI6MTkxNTQ2MTYzNX0.o2GRj3EtSLvNiLFVyl65vFcbcIAf4pAoDb4xKGxU9pc";
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcGlUZXN0OTIiLCJ1c2VybmFtZSI6ImFwaVRlc3Q5MiIsImV4cCI6MTkxNTQ3NDU4OX0.ht38bn_z5fU287Ki3lTu20pG3dOoFSCA3Y32iCssIOc";
   useEffect(() => {
     async function fetchData() {
-      setUsers(await getAllUsers(token));
-      setMehs(await getAllMEH());
-      setMachines(await getAllMachines());
-      setBatchs(await getAllBatchs());
-      setErrorCodes(await getAllErrorCodes());
+      //setUsers(await getAllUsers(token));
+      //setMehs(await getAllMEH());
+      //setMachines(await getAllMachines());
+      //setBatchs(await getAllBatchs(token));
+      //setErrorCodes(await getAllErrorCodes());
       setStatusCodes(await getAllStatusCodeApi());
     }
 
