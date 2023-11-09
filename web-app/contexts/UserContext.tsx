@@ -73,11 +73,11 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
 
     const refetchUserFromToken = async () => {
         const token = localStorage.getItem("token")
-        toast({
-            title: "Validating your credentials",
-            description: "Proccessing your local data against the server, please wait.",
-        })
         if (token) {
+            toast({
+                title: "Validating your credentials",
+                description: "Proccessing your local data against the server, please wait.",
+            })
             const response = await verifyTokenApi(token) //Refetches user if token is valid
             const user: ILoginResponse = response
             if (user && user.token) {
