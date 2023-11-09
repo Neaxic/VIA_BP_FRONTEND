@@ -223,7 +223,7 @@ export const getAllErrorCodes = async () => {
   }
 };
 
-export const getAllBatchs = async () => {
+export const getAllBatchs = async (token: String) => {
   try {
     const apiUrl = `${URL}/getAllBatchs`;
     const response = await axios({
@@ -232,6 +232,7 @@ export const getAllBatchs = async () => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -268,7 +269,7 @@ export const getAllMEH = async () => {
         accept: "application/json",
       },
     });
-    return response.data;
+    return console.log(response.data);
   } catch (e) {
     console.log(e);
   }
