@@ -1,6 +1,7 @@
 import axios from "axios";
-const URL = "https://via-bp-backend-delegator-bb6352f3951c.herokuapp.com";
-const API_KEY = "IFWENEEDTHIS";
+
+const URL = process.env.NEXT_PUBLIC_API_URL;
+let session = "placeholder";
 
 export const registerMachineApi = async (
   machineName: string,
@@ -243,10 +244,10 @@ export const getAllBatchs = async (token: String) => {
 
 export const getAllMachines = async () => {
   try {
-    const apiUrl = `${URL}/getAllMachines`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllMachines`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
@@ -260,10 +261,10 @@ export const getAllMachines = async () => {
 
 export const getAllMEH = async () => {
   try {
-    const apiUrl = `${URL}/getAllMEH`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllMEH`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
@@ -277,6 +278,8 @@ export const getAllMEH = async () => {
 
 export const getAllUsers = async (token: String) => {
   // token is passed as an argument to the function
+
+  //laver anden logik end det der ^^ WIP
   try {
     const apiUrl = `${URL}/getAllUsers`;
     const response = await axios({
