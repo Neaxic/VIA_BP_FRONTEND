@@ -31,6 +31,25 @@ export const loginApi = async (username: string, password: string) => {
   }
 };
 
+export const verifyTokenApi = async (token: string) => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/auth/verify?token=${token.replace(/['"]+/g, "")}`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+      },
+    });
+    if (response.data) return response.data;
+  } catch (e: any) {
+    console.log(e);
+    const casted: IThrowError = e.response.data as IThrowError;
+    return casted.message;
+  }
+};
+
+
 export const createUserApi = async (
   username: string,
   password: string,
@@ -54,3 +73,4 @@ export const createUserApi = async (
     return casted.message;
   }
 };
+
