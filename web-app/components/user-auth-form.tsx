@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const { registerUser, login } = useUserContext();
+  const { login } = useUserContext();
   const [loginErr, setLoginErr] = React.useState();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, SetUsername] = React.useState<string>("");
