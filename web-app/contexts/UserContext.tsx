@@ -44,8 +44,11 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     username: user.email,
                     isAdmin: false // placeholder
                 })
-
-                localStorage.setItem("token", JSON.stringify(response.token));
+                toast({
+                    title: "Credentials correct!",
+                    description: "Proccessing your data, and logging you securely inside.",
+                })
+                localStorage.setItem("token", JSON.stringify(user.token));
                 return true
             } else {
                 throw response

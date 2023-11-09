@@ -5,7 +5,7 @@ const URL = process.env.NEXT_PUBLIC_API_URL;
 let session = "placeholder";
 
 export const reloadToken = () => {
-  let tmp = localStorage.getItem("jwt");
+  let tmp = localStorage.getItem("token");
   if (tmp) session = tmp;
 };
 
@@ -37,14 +37,14 @@ export const createUserApi = async (
   isAdmin: boolean
 ) => {
   try {
-    // reloadToken();
+    reloadToken();
     const response = await axios({
       method: "POST",
       url: `/api/registerUser?username=${username}&password=${password}&isAdmin=${isAdmin}`,
       baseURL: URL,
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${session}`,
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     if (response.data) return response.data;

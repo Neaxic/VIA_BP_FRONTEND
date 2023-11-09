@@ -57,9 +57,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (isCreateURL) {
       await createUserApi(username, hashedPassword, isAdmin);
     } else {
-      await login(username, hashedPassword);
-      //Kun ved success vi skal have et check her måske login retunere bool
-      // Router.push("/s/dashboard/overview"); 
+      const isAuthed = await login(username, hashedPassword); //Retunere bool
+      if (isAuthed) {
+        Router.push("/s/dashboard/overview");
+      }
     }
 
     setIsLoading(false);

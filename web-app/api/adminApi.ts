@@ -3,11 +3,17 @@ import axios from "axios";
 const URL = process.env.NEXT_PUBLIC_API_URL;
 let session = "placeholder";
 
+export const reloadToken = () => {
+  let tmp = localStorage.getItem("token");
+  if (tmp) session = tmp;
+};
+
 export const registerMachineApi = async (
   machineName: string,
   description: string,
   statusCode: string
 ) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/registerMachine?machineName=${machineName}&description=${description}&statusCode=${statusCode}`;
     const response = await axios({
@@ -16,6 +22,7 @@ export const registerMachineApi = async (
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -31,6 +38,7 @@ export const registerBatchApi = async (
   startTime: string,
   endTime: string
 ) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/registerBatch?batchNo=${batchNo}&machineID=${machineID}&producedItems=${producedItems}&startTime=${startTime}&endTime=${endTime}`;
     const response = await axios({
@@ -39,6 +47,7 @@ export const registerBatchApi = async (
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -48,6 +57,7 @@ export const registerBatchApi = async (
 };
 
 export const registerStatusCodeApi = async (statusCode: string) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/registerStatus?statusCode=${statusCode}`;
     const response = await axios({
@@ -56,6 +66,7 @@ export const registerStatusCodeApi = async (statusCode: string) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -65,6 +76,7 @@ export const registerStatusCodeApi = async (statusCode: string) => {
 };
 
 export const registerErrorCodeApi = async (errorCode: string) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/registerErrorCodes?errorCode=${errorCode}`;
     const response = await axios({
@@ -73,6 +85,7 @@ export const registerErrorCodeApi = async (errorCode: string) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -87,6 +100,7 @@ export const registerMachineErrorHistoryApi = async (
   errorId: number,
   timeForMistake: string
 ) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/registerMEH?historyId=${historyId}&machineId=${machineId}&errorId=${errorId}&timeForMistake=${timeForMistake}`;
     const response = await axios({
@@ -95,6 +109,7 @@ export const registerMachineErrorHistoryApi = async (
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -106,6 +121,7 @@ export const registerMachineErrorHistoryApi = async (
 //                                                GET
 
 export const getErrorCodeByIdApi = async (id: number) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/getErrorCode?id=${id}`;
     const response = await axios({
@@ -114,6 +130,7 @@ export const getErrorCodeByIdApi = async (id: number) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -123,6 +140,7 @@ export const getErrorCodeByIdApi = async (id: number) => {
 };
 
 export const getMachineErrorHistoryByIdApi = async (id: number) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/getMachineErrorHistory?id=${id}`;
     const response = await axios({
@@ -131,6 +149,7 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -140,6 +159,7 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
 };
 
 export const getMachineByIdApi = async (id: number) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/getMachine?id=${id}`;
     const response = await axios({
@@ -148,6 +168,7 @@ export const getMachineByIdApi = async (id: number) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -157,6 +178,7 @@ export const getMachineByIdApi = async (id: number) => {
 };
 
 export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
+  reloadToken();
   try {
     const apiUrl = `${URL}/getBatchInfo?batchno=${batchNo}`;
     const response = await axios({
@@ -165,6 +187,7 @@ export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -174,14 +197,16 @@ export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
 };
 
 export const getStatusCodeByIdApi = async (id: number) => {
+  reloadToken();
   try {
-    const apiUrl = `${URL}/getStatusCode?id=${id}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getStatusCode?id=${id}`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -191,14 +216,16 @@ export const getStatusCodeByIdApi = async (id: number) => {
 };
 
 export const getAllStatusCodeApi = async () => {
+  reloadToken();
   try {
-    const apiUrl = `${URL}/getAllStatusCodes`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllStatusCodes`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -208,14 +235,16 @@ export const getAllStatusCodeApi = async () => {
 };
 
 export const getAllErrorCodes = async () => {
+  reloadToken();
   try {
-    const apiUrl = `${URL}/getAllErrorCodes`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllErrorCodes`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -225,14 +254,16 @@ export const getAllErrorCodes = async () => {
 };
 
 export const getAllBatchs = async () => {
+  reloadToken();
   try {
-    const apiUrl = `${URL}/getAllBatchs`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllBatchs`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -242,6 +273,7 @@ export const getAllBatchs = async () => {
 };
 
 export const getAllMachines = async () => {
+  reloadToken();
   try {
     const response = await axios({
       method: "GET",
@@ -250,6 +282,7 @@ export const getAllMachines = async () => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -259,6 +292,7 @@ export const getAllMachines = async () => {
 };
 
 export const getAllMEH = async () => {
+  reloadToken();
   try {
     const response = await axios({
       method: "GET",
@@ -267,6 +301,7 @@ export const getAllMEH = async () => {
       withCredentials: true,
       headers: {
         accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -275,19 +310,17 @@ export const getAllMEH = async () => {
   }
 };
 
-export const getAllUsers = async (token: String) => {
-  // token is passed as an argument to the function
-
-  //laver anden logik end det der ^^ WIP
+export const getAllUsers = async () => {
+  reloadToken();
   try {
-    const apiUrl = `${URL}/getAllUsers`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getAllUsers`,
+      baseURL: URL,
       withCredentials: true,
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
