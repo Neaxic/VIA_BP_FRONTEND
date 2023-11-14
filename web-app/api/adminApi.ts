@@ -8,6 +8,28 @@ export const reloadToken = () => {
   if (tmp) session = tmp;
 };
 
+export const getToken: string = localStorage.getItem("token") || "";
+
+export const testConnection = async (token: string) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/testConnection`,
+      baseURL: URL,
+      headers: {
+        "accept": "application/json",
+        "content-Type": "application/json",
+        "authorization": `Bearer ${token.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e: any) {
+    console.log(e);
+    return e.response.data;
+  }
+}
+
 export const registerMachineApi = async (
   machineName: string,
   description: string,
@@ -19,7 +41,6 @@ export const registerMachineApi = async (
     const response = await axios({
       method: "POST",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -44,7 +65,6 @@ export const registerBatchApi = async (
     const response = await axios({
       method: "POST",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -63,7 +83,6 @@ export const registerStatusCodeApi = async (statusCode: string) => {
     const response = await axios({
       method: "POST",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -82,7 +101,6 @@ export const registerErrorCodeApi = async (errorCode: string) => {
     const response = await axios({
       method: "POST",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -106,7 +124,6 @@ export const registerMachineErrorHistoryApi = async (
     const response = await axios({
       method: "POST",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -127,7 +144,6 @@ export const getErrorCodeByIdApi = async (id: number) => {
     const response = await axios({
       method: "GET",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -146,7 +162,6 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
     const response = await axios({
       method: "GET",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -165,7 +180,6 @@ export const getMachineByIdApi = async (id: number) => {
     const response = await axios({
       method: "GET",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -184,7 +198,6 @@ export const getBatchInfoByBatchNoApi = async (batchNo: number) => {
     const response = await axios({
       method: "GET",
       url: apiUrl,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -203,7 +216,6 @@ export const getStatusCodeByIdApi = async (id: number) => {
       method: "GET",
       url: `/getStatusCode?id=${id}`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -222,7 +234,6 @@ export const getAllStatusCodeApi = async () => {
       method: "GET",
       url: `/getAllStatusCodes`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -241,7 +252,6 @@ export const getAllErrorCodes = async () => {
       method: "GET",
       url: `/getAllErrorCodes`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -260,7 +270,6 @@ export const getAllBatchs = async () => {
       method: "GET",
       url: `/getAllBatchs`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -279,7 +288,6 @@ export const getAllMachines = async () => {
       method: "GET",
       url: `/getAllMachines`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -298,7 +306,6 @@ export const getAllMEH = async () => {
       method: "GET",
       url: `/getAllMEH`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -317,7 +324,6 @@ export const getAllUsers = async () => {
       method: "GET",
       url: `/getAllUsers`,
       baseURL: URL,
-      withCredentials: true,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,

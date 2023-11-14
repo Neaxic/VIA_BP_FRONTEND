@@ -25,8 +25,6 @@ export default function Page() {
   const [batchs, setBatchs] = useState([]);
   const [errorCodes, setErrorCodes] = useState([]);
   const [statusCodes, setStatusCodes] = useState([]);
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcGlUZXN0OTIiLCJ1c2VybmFtZSI6ImFwaVRlc3Q5MiIsImV4cCI6MTkxNTQ3NDU4OX0.ht38bn_z5fU287Ki3lTu20pG3dOoFSCA3Y32iCssIOc";
   useEffect(() => {
     async function fetchData() {
       //setUsers(await getAllUsers(token));

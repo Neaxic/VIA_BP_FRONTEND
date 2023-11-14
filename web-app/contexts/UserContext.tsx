@@ -5,6 +5,7 @@ import { ILoginResponse, IThrowError, initialLoginResponse } from '../util/Helpe
 import { useToast } from '../components/ui/use-toast';
 import { ToastAction } from '@radix-ui/react-toast';
 import { useRouter } from 'next/navigation';
+import { testConnection } from '../api/adminApi';
 
 export interface IUser {
     username: string
@@ -94,6 +95,10 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     username: user.email,
                     isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
                 })
+                console.log(user.token)
+                localStorage.setItem("token", JSON.stringify(user.token));
+                // router.push("/s/dashboard")
+                await testConnection(user.token)
             } else {
                 toast({
                     title: "Session expired",
