@@ -8,8 +8,6 @@ export const reloadToken = () => {
   if (tmp) session = tmp;
 };
 
-export const getToken: string = localStorage.getItem("token") || "";
-
 export const testConnection = async (token: string) => {
   reloadToken();
   try {
