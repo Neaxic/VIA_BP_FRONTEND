@@ -5,6 +5,7 @@ import PageProvider from '../contexts/PageContext'
 import { ThemeProvider } from '../components/theme-provider'
 import UserProvider from '../contexts/UserContext'
 import { Toaster } from '../components/ui/toaster'
+import MachineProvider from '../contexts/MachineContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,8 +30,10 @@ export default function RootLayout({
         >
           <PageProvider>
             <UserProvider>
-              {children}
-              <Toaster />
+              <MachineProvider>
+                {children}
+                <Toaster />
+              </MachineProvider>
             </UserProvider>
           </PageProvider>
         </ThemeProvider>

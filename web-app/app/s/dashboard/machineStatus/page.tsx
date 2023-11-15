@@ -4,30 +4,8 @@ import { Label } from "../../../../components/ui/label";
 import { Card } from "../../../../components/ui/card";
 import { getAllMachines } from "../../../../api/adminApi";
 import { machine } from "os";
-interface Machine {
-  machineID: number;
-  machineName: string;
-  description: string;
-  statusCode: {
-    statusCodeID: number;
-    statusDescription: string;
-  };
-  currentBatch: {
-    batchNo: number;
-    machineID: number;
-    producedItems: number;
-    startTime: string;
-    endTime: string;
-  };
-  batches: Array<{
-    batchNo: number;
-    machineID: number;
-    producedItems: number;
-    startTime: string;
-    endTime: string;
-  }>;
-  machineRunning: boolean;
-}
+import { IMachine } from "../../../../util/MachinesInterfaces";
+import { useMachineContext } from "../../../../contexts/MachineContext";
 
 function getHoursDifference(startTime: string, endTime: string | number) {
   return null;
@@ -89,34 +67,15 @@ function getHoursDifference(startTime: string, endTime: string | number) {
 //}
 
 export default function Page() {
-  const [machines, setMachines] = useState<Machine[]>([]);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await getAllMachines();
-        if (response && response.data) {
-          console.log(response);
-          setMachines(response.data);
-          console.log("Inside API " + response.data);
-        } else {
-          console.log("Response is undefined or does not contain data");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
+  const { machines } = useMachineContext();
 
   return (
     <div>
-      {machines?.map((machine) => (
+      {machines && machines.length > 0 && machines?.map((machine) => (
         <div key={machine.machineID}>
-          console.log(machine.machineID);
           <h2>{machine.machineName}</h2>
           <p>Description: {machine.description}</p>
           <p>Status: {machine.statusCode.statusDescription}</p>
-          <p>Batch: {machine.currentBatch.batchNo}</p>
         </div>
       ))}
     </div>

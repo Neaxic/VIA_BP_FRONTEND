@@ -1,11 +1,11 @@
 "use client"
 import * as React from 'react'
 import { loginApi, verifyTokenApi } from '../api/AuthAPI'
-import { ILoginResponse, IThrowError, initialLoginResponse } from '../util/HelperInterfaces';
+import { ILoginResponse, IThrowError } from '../util/HelperInterfaces';
 import { useToast } from '../components/ui/use-toast';
-import { ToastAction } from '@radix-ui/react-toast';
 import { useRouter } from 'next/navigation';
 import { testConnection } from '../api/adminApi';
+import { usePathname } from 'next/navigation'
 
 export interface IUser {
     username: string
@@ -35,6 +35,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
     const [user, setUser] = React.useState<IUser>()
     const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false)
     const router = useRouter();
+    const pathname = usePathname()
 
     const login = async (username: string, password: string) => {
         const response = await loginApi(username, password)
@@ -95,9 +96,8 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     username: user.email,
                     isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
                 })
-                console.log(user.token)
                 localStorage.setItem("token", JSON.stringify(user.token));
-                // router.push("/s/dashboard")
+                if (pathname === "/") router.push("/s/dashboard")
                 await testConnection(user.token)
             } else {
                 toast({
