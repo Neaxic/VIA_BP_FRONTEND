@@ -27,11 +27,11 @@ export default function Page() {
   const [statusCodes, setStatusCodes] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      //setUsers(await getAllUsers(token));
+      setUsers(await getAllUsers());
       //setMehs(await getAllMEH());
-      //setMachines(await getAllMachines());
-      //setBatchs(await getAllBatchs(token));
-      //setErrorCodes(await getAllErrorCodes());
+      setMachines(await getAllMachines());
+      setBatchs(await getAllBatchs());
+      setErrorCodes(await getAllErrorCodes());
       setStatusCodes(await getAllStatusCodeApi());
     }
 

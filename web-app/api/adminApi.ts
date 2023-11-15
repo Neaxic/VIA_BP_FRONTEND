@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = process.env.NEXT_PUBLIC_API_URL;
+//const URL = process.env.NEXT_PUBLIC_API_URL;
+const URL = "http://localhost:5000";
 let session = "placeholder";
 
 export const reloadToken = () => {
@@ -16,9 +17,9 @@ export const testConnection = async (token: string) => {
       url: `/testConnection`,
       baseURL: URL,
       headers: {
-        "accept": "application/json",
+        accept: "application/json",
         "content-Type": "application/json",
-        "authorization": `Bearer ${token.replace(/['"]+/g, "")}`,
+        authorization: `Bearer ${token.replace(/['"]+/g, "")}`,
       },
     });
     return response.data;
@@ -26,7 +27,7 @@ export const testConnection = async (token: string) => {
     console.log(e);
     return e.response.data;
   }
-}
+};
 
 export const registerMachineApi = async (
   machineName: string,

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { IThrowError } from "../util/HelperInterfaces";
 
-const URL = process.env.NEXT_PUBLIC_API_URL;
+//const URL = process.env.NEXT_PUBLIC_API_URL;
+const URL = "http://localhost:5000";
 let session = "placeholder";
 
 export const reloadToken = () => {
@@ -49,7 +50,6 @@ export const verifyTokenApi = async (token: string) => {
   }
 };
 
-
 export const createUserApi = async (
   username: string,
   password: string,
@@ -73,4 +73,3 @@ export const createUserApi = async (
     return casted.message;
   }
 };
-
