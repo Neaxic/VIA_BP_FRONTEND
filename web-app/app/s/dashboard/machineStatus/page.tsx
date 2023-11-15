@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Label } from "../../../../components/ui/label";
-import { Card } from "../../../../components/ui/card";
 import { getAllMachines } from "../../../../api/adminApi";
 import { machine } from "os";
 import { IMachine } from "../../../../util/MachinesInterfaces";
 import { useMachineContext } from "../../../../contexts/MachineContext";
+import { Card } from "../../../../components/ui/card";
 
 function getHoursDifference(startTime: string, endTime: string | number) {
   return null;
@@ -72,11 +72,15 @@ export default function Page() {
   return (
     <div>
       {machines && machines.length > 0 && machines?.map((machine) => (
-        <div key={machine.machineID}>
-          <h2>{machine.machineName}</h2>
-          <p>Description: {machine.description}</p>
-          <p>Status: {machine.statusCode.statusDescription}</p>
-        </div>
+        <Card key={machine.machineID} className="p-4 mb-4" style={{ borderColor: machine.statusCode.statusDescription === "Aktiv" ? "lightgreen" : undefined }}>
+          <div style={{ display: "flex" }}>
+            <div>
+              <h2>{machine.machineName}</h2>
+              <p>Description: {machine.description}</p>
+              <p>Status: {machine.statusCode.statusDescription}</p>
+            </div>
+          </div>
+        </Card>
       ))}
     </div>
   );
