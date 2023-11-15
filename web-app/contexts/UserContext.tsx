@@ -4,7 +4,6 @@ import { loginApi, verifyTokenApi } from '../api/AuthAPI'
 import { ILoginResponse, IThrowError } from '../util/HelperInterfaces';
 import { useToast } from '../components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { testConnection } from '../api/adminApi';
 import { usePathname } from 'next/navigation'
 
 export interface IUser {
@@ -56,7 +55,6 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
                 })
 
-
                 localStorage.setItem("token", JSON.stringify(user.token));
                 return true
             } else {
@@ -98,7 +96,6 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                 })
                 localStorage.setItem("token", JSON.stringify(user.token));
                 if (pathname === "/") router.push("/s/dashboard")
-                await testConnection(user.token)
             } else {
                 toast({
                     title: "Session expired",
