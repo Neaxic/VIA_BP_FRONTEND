@@ -12,9 +12,10 @@ import { addDays, format } from "date-fns"
 interface graphWrapperProps {
     enableSettings?: boolean
     children?: React.ReactNode
+    title?: string
 }
 
-export function GraphWrapper({ children, enableSettings = true, ...props }: graphWrapperProps) {
+export function GraphWrapper({ children, title = "Settings", enableSettings = false, ...props }: graphWrapperProps) {
     const [date, setDate] = React.useState<DateRange | undefined>({
         from: new Date(2022, 0, 20),
         to: addDays(new Date(2022, 0, 20), 20),
@@ -23,14 +24,19 @@ export function GraphWrapper({ children, enableSettings = true, ...props }: grap
     return (
         <>
             <div className="flex justify-between p-3">
-                <Label className="text-lg">Settings</Label>
+                {!enableSettings && (
+                    <Label className="text-lg">{title}</Label>
+                )}
                 {enableSettings && (
                     <Sheet>
-                        <SheetTrigger>
-                            <Button variant={"outline"} >
-                                <Settings size={18} />
-                            </Button>
-                        </SheetTrigger>
+                        <div className="w-full flex items-center justify-between">
+                            <Label className="text-lg">{title}</Label>
+                            <SheetTrigger>
+                                <Button variant={"outline"} className="ml-4" >
+                                    <Settings size={18} />
+                                </Button>
+                            </SheetTrigger>
+                        </div>
                         <SheetContent>
                             <SheetHeader>
                                 <SheetTitle>Power vs production graph</SheetTitle>

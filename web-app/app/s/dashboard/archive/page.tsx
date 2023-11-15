@@ -1,311 +1,339 @@
 "use client";
 
-import * as React from "react";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../../../../components/ui/button";
-import { Checkbox } from "../../../../components/ui/checkbox";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../../components/ui/dropdown-menu";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { Input } from "../../../../components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../../components/ui/table";
+  Area,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  LineChart,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Scatter,
+  ScatterChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { Card } from "../../../../components/ui/card";
 import { Label } from "../../../../components/ui/label";
+import { GraphWrapper } from "../../../../components/graph-wrapper";
 
-const data: Payment[] = [
+const data = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    name: "Jan",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    name: "Feb",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
+    name: "Mar",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
+    name: "Apr",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
   {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
+    name: "May",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Jun",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Jul",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Aug",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Sep",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Oct",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 5000,
+  },
+  {
+    name: "Nov",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
+  },
+  {
+    name: "Dec",
+    total: Math.floor(Math.random() * 5000) + 1000,
+    total2: Math.floor(Math.random() * 5000) + 500,
   },
 ];
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
+const dataScatter = [
+  { x: 100, y: 200, z: 200 },
+  { x: 120, y: 100, z: 260 },
+  { x: 170, y: 300, z: 400 },
+  { x: 140, y: 250, z: 280 },
+  { x: 150, y: 400, z: 500 },
+  { x: 110, y: 280, z: 200 },
+];
 
-const columns: ColumnDef<Payment>[] = [
+const dataLineBarArea = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    name: 'Page A',
+    uv: 590,
+    pv: 800,
+    amt: 1400,
+    cnt: 490,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    name: 'Page B',
+    uv: 868,
+    pv: 967,
+    amt: 1506,
+    cnt: 590,
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    name: 'Page C',
+    uv: 1397,
+    pv: 1098,
+    amt: 989,
+    cnt: 350,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
+    name: 'Page D',
+    uv: 1480,
+    pv: 1200,
+    amt: 1228,
+    cnt: 480,
   },
   {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
+    name: 'Page E',
+    uv: 1520,
+    pv: 1108,
+    amt: 1100,
+    cnt: 460,
+  },
+  {
+    name: 'Page F',
+    uv: 1400,
+    pv: 680,
+    amt: 1700,
+    cnt: 380,
+  },
+];
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+const dataRadar = [
+  {
+    subject: "Math",
+    A: 120,
+    B: 110,
+    fullMark: 150,
+  },
+  {
+    subject: "Chinese",
+    A: 98,
+    B: 130,
+    fullMark: 150,
+  },
+  {
+    subject: "English",
+    A: 86,
+    B: 130,
+    fullMark: 150,
+  },
+  {
+    subject: "Geography",
+    A: 99,
+    B: 100,
+    fullMark: 150,
+  },
+  {
+    subject: "Physics",
+    A: 85,
+    B: 90,
+    fullMark: 150,
+  },
+  {
+    subject: "History",
+    A: 65,
+    B: 85,
+    fullMark: 150,
   },
 ];
 
 export default function Page() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
   return (
     <>
-      <div className="w-full">
-        <Label>ALL REGISTERED MACHINES</Label>
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter machines..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value: any) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+      <h1>Hello, overview page!</h1>
+      <div className="flex gap-4">
+        <Card className="w-full p-2">
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <ComposedChart
+              width={500}
+              height={400}
+              data={dataLineBarArea}
             >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+              <CartesianGrid />
+              <XAxis dataKey="name" scale="band" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
+              <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+              <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+              <Scatter dataKey="cnt" fill="red" />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card className="w-full p-2 ">
+          <ResponsiveContainer width="100%" className="mt-4" height={350} >
+            <ScatterChart>
+              <CartesianGrid />
+              <XAxis type="number" dataKey="x" name="stature" unit="cm" />
+              <YAxis type="number" dataKey="y" name="weight" unit="kg" />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Tooltip />
+              <Scatter name="A school" data={dataScatter} className="fill-primary" />
+            </ScatterChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card className="w-full p-2">
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <RadarChart data={dataRadar}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <PolarRadiusAxis />
+              <Tooltip />
+              <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
+            </RadarChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+
+
+
+      <div className="flex w-full gap-4 mt-6">
+        <Card className="w-full p-2">
+          <GraphWrapper>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <BarChart data={data}>
+                <XAxis
+                  dataKey="name"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip />
+                <Bar
+                  dataKey="total"
+                  className="fill-primary"
+                  radius={[4, 4, 0, 0]}
+                />
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              </BarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
+        </Card>
+        <Card className="w-full p-2">
+          <Label className="mb-2 text-lg ml-2">Revenue</Label>
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <LineChart data={data}>
+              <XAxis
+                dataKey="name"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `$${value}`}
+              />
+              <Tooltip />
+              <Legend />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="undefined"
+                strokeWidth={3}
+                className="stroke-primary"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+      <div className="mt-4">
+        <Card className="w-full p-2">
+          <Label className="mb-2 text-lg ml-2">Revenue vs Privous best</Label>
+          <ResponsiveContainer width="100%" className="mt-4" height={350}>
+            <LineChart data={data}>
+              <XAxis
+                dataKey="name"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `$${value}`}
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="undefined"
+                strokeWidth={3}
+                className="stroke-primary"
+              />
+              <ReferenceLine y={9800} label="Max" stroke="red" />
+              <Line
+                type="monotone"
+                dataKey="total2"
+                stroke="undefined"
+                strokeWidth={3}
+                className="stroke-primary"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Card>
       </div>
     </>
   );
