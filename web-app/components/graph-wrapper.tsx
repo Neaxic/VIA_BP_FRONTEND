@@ -23,7 +23,7 @@ export function GraphWrapper({ children, title = "Settings", enableSettings = fa
 
     return (
         <>
-            <div className="flex justify-between p-3">
+            <div className="flex justify-between pt-3 px-3">
                 {!enableSettings && (
                     <Label className="text-lg">{title}</Label>
                 )}

@@ -12,7 +12,7 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Hello, Home page!</h1>
+            <h1>Hello, Redirecting you to overview!</h1>
         </div>
     );
 }
