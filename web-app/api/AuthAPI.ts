@@ -1,8 +1,7 @@
 import axios from "axios";
 import { IThrowError } from "../util/HelperInterfaces";
 
-//const URL = process.env.NEXT_PUBLIC_API_URL;
-const URL = "http://localhost:5000";
+const URL = process.env.NEXT_PUBLIC_API_URL;
 let session = "placeholder";
 
 export const reloadToken = () => {

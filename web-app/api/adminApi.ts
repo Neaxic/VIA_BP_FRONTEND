@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const URL = process.env.NEXT_PUBLIC_API_URL;
-const URL = "http://localhost:5000";
+const URL = process.env.NEXT_PUBLIC_API_URL;
+// const URL = "http://localhost:5000";
 let session = "placeholder";
 
 export const reloadToken = () => {
