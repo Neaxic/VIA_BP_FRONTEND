@@ -11,44 +11,14 @@ function getHoursDifference(startTime: string, endTime: string | number) {
   return null;
 }
 
-//function MachineCard({
-// name,
-// isRunning,
-// errorCount,
-// acceptedCount,
-// rejectCount,
-// plannedProductionTime,
-// totalPossibleCount,
-//: MachineCardProps) {
-// const cardStyle = {
-//   display: "grid",
-//   gridTemplateColumns: "1fr 1fr 1fr 1fr",
-//   gap: "10px",
-//   padding: "10px",
-//   border: "1px solid black",
-//   width: "100%",
-// };
+//
+// const availability =
+//   ((acceptedCount + rejectCount) * 60) / plannedProductionTime;
+// const performance = (acceptedCount - rejectCount) / totalPossibleCount;
+// const quality = (acceptedCount - rejectCount) / acceptedCount;
+//
+// const oee = (availability * performance * quality * 100).toFixed(2); // OEE i procet et eller andet er forkert
 
-//  const sectionStyle = {
-//    display: "flex",
-//    alignItems: "center",
-//    justifyContent: "center",
-//    height: "100px",
-//    border: "2px solid black",
-//  };
-//
-//  const runningStyle = {
-//    ...sectionStyle,
-//    backgroundColor: isRunning ? "green" : "red",
-//  };
-//
-//  const availability =
-//    ((acceptedCount + rejectCount) * 60) / plannedProductionTime;
-//  const performance = (acceptedCount - rejectCount) / totalPossibleCount;
-//  const quality = (acceptedCount - rejectCount) / acceptedCount;
-//
-//  const oee = (availability * performance * quality * 100).toFixed(2); // OEE i procet et eller andet er forkert
-//
 //  return (
 //    <div style={cardStyle}>
 //      <Label className="mb-2 text-lg ml-2"></Label>
@@ -68,20 +38,51 @@ function getHoursDifference(startTime: string, endTime: string | number) {
 
 export default function Page() {
   const { machines } = useMachineContext();
-
+  const fail = "Ingen Aktive Ordre";
   return (
     <div>
-      {machines && machines.length > 0 && machines?.map((machine) => (
-        <Card key={machine.machineID} className="p-4 mb-4" style={{ borderColor: machine.statusCode.statusDescription === "Aktiv" ? "lightgreen" : undefined }}>
-          <div style={{ display: "flex" }}>
-            <div>
-              <h2>{machine.machineName}</h2>
-              <p>Description: {machine.description}</p>
-              <p>Status: {machine.statusCode.statusDescription}</p>
+      {machines &&
+        machines.length > 0 &&
+        machines?.map((machine) => (
+          <Card
+            key={machine.machineID}
+            className="p-4 mb-4"
+            style={{
+              borderColor:
+                machine.statusCode.statusDescription === "Aktiv"
+                  ? "lightgreen"
+                  : "red",
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              <div>
+                <h2>{machine.machineName}</h2>
+                <p>Description: {machine.description}</p>
+                <p>Status: {machine.statusCode.statusDescription}</p>
+                <p>
+                  Current Batch:{" "}
+                  {machine.currentBatch !== null
+                    ? machine.currentBatch.batchNo
+                    : fail}
+                </p>
+                <p>
+                  {" "}
+                  Produced:{" "}
+                  {machine.currentBatch !== null
+                    ? machine.currentBatch.producedItems
+                    : fail}{" "}
+                </p>
+                <p>
+                  Need to produce :{" "}
+                  {machine.currentBatch !== null
+                    ? machine.currentBatch.producedItems
+                    : fail}
+                </p>
+                <button>Se mere</button>
+              </div>
             </div>
-          </div>
-        </Card>
-      ))}
+          </Card>
+        ))}
     </div>
   );
 }
