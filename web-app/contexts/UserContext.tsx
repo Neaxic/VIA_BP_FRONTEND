@@ -95,7 +95,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
                 })
                 localStorage.setItem("token", JSON.stringify(user.token));
-                if (pathname === "/") router.push("/s/dashboard")
+                if (pathname === "/") router.push("/s/dashboard/overview")
             } else {
                 toast({
                     title: "Session expired",
