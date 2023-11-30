@@ -7,9 +7,16 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 
 export interface IUser {
+    id?: string //Yet to be impl
     username: string
-    isAdmin: boolean
+    isAdmin: boolean //Depricated
+    roles?: string[] //Yet to be impl
 }
+
+export const roles = [
+    "Admin",
+    "User"
+]
 
 interface UserContextInterface {
     user?: IUser

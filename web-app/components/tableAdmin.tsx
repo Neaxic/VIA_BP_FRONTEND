@@ -74,6 +74,11 @@ const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
             ))}
           </TableRow>
         ))}
+        <TableRow>
+          <TableCell >
+            <button>lol</button>
+          </TableCell>
+        </TableRow>
       </TableBody>
     </UITable>
   );
