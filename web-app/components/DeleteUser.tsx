@@ -35,7 +35,7 @@ export function DeleteUser({ user, buttonName = "Open", onDelete, ...props }: De
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={() => {
-                        onDelete()
+                        onDelete && onDelete()
                         deletUserConfirm()
                     }}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
