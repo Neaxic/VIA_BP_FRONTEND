@@ -57,9 +57,10 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("roles")[0]}</div>
-      ),
+      cell: ({ row }) => {
+        const roles = row.getValue("roles") as IUser["roles"];
+        return <div className="capitalize">{roles ? roles[0] : 'N/A'}</div>
+      },
     },
     {
       accessorKey: "username",
