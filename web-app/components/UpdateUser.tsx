@@ -1,14 +1,10 @@
 "use client"
 
-import { SetStateAction, useCallback, useState } from "react"
+import { useCallback, useState } from "react"
 import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
-import { Check, ChevronsUpDown, Command } from "lucide-react"
-import { CommandEmpty, CommandGroup, CommandInput, CommandItem } from "./ui/command"
-import { cn } from "../lib/utils"
 import { IUser } from "../contexts/UserContext"
 import { deleteUser } from "../api/adminApi"
 import { SelectContent, SelectItem } from "./ui/select"
@@ -44,13 +40,9 @@ interface UpdateUserProps {
 }
 
 export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, ...props }: UpdateUserProps) {
-    const [open, setOpen] = useState(false)
-    const [value, setValue] = useState("")
-
     const updateUser = useCallback(async () => {
-        console.log("User updated")
-        await deleteUser(user.id)
-    }, [])
+        console.log("User updated " + user.id)
+    }, [user.id])
 
     return (
         <Dialog>

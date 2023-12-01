@@ -16,7 +16,7 @@ export function DeleteUser({ user, buttonName = "Open", onDelete, ...props }: De
     const deletUserConfirm = useCallback(async () => {
         console.log("User deleted")
         await deleteUser(user.id)
-    }, [])
+    }, [user.id])
 
     return (
         <AlertDialog>
