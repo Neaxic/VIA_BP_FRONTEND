@@ -55,7 +55,7 @@ export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, 
                 <DialogHeader>
                     <DialogTitle>Edit {user?.username}</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Make changes to your profile here. Click save when youre done.
                         <br />
                         <br />
                         Only change what you need, leave the rest as is if not relevant.
