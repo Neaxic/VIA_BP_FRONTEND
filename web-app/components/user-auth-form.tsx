@@ -9,7 +9,8 @@ import { usePathname } from "next/navigation";
 import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+import { sha256 } from "../util/HelperInterfaces";
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { login } = useUserContext();
@@ -37,22 +38,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const data = await createUserApi(username, password, isAdmin);
   };
 
-  async function sha256(password: string | undefined) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hash))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
     const hashedPassword = await sha256(password);
     console.log("Hashed Password:", hashedPassword);
-
 
     if (isCreateURL) {
       await createUserApi(username, hashedPassword, isAdmin);
