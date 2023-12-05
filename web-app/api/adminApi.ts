@@ -1,4 +1,9 @@
 import axios from "axios";
+import { IThrowError } from "../util/HelperInterfaces";
+
+//NEEDED FOR JEST TESTS - TO LOAD FORCEFULLY ENV VARIABLES
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 
 const URL = process.env.NEXT_PUBLIC_API_URL;
 //const URL = "http://localhost:5000";
@@ -10,7 +15,6 @@ export const reloadToken = () => {
 };
 
 export const testConnection = async (token: string) => {
-  reloadToken();
   try {
     const response = await axios({
       method: "GET",
@@ -25,9 +29,15 @@ export const testConnection = async (token: string) => {
     return response.data;
   } catch (e: any) {
     console.log(e);
-    return e.response.data;
+    if (e.response && e.response.data) {
+      const casted: IThrowError = e.response.data as IThrowError;
+      return casted.message;
+    }
+    return e.response;
   }
 };
+
+
 
 export const registerMachineApi = async (
   machineName: string,
