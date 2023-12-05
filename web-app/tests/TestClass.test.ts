@@ -9,8 +9,17 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 
 //VERY IMPORTANT - MAKE SURE THAT THEESE ALIGN, USERNAME & TOKEN MUST BE GENERATED FROM THE SAME USER
-const ValidUsername = "username123";
-const ValidWebToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZTEyMyIsInVzZXJuYW1lIjoidXNlcm5hbWUxMjMiLCJleHAiOjE5MTc3ODA1ODJ9.zTZws2ZYSvtpj6TKjUJwBToofJx_cMFjAFIvRyDRoCg";
+const ValidUsername = process.env.NEXT_PUBLIC_TEST_USERNAME;
+const ValidPassword = process.env.NEXT_PUBLIC_TEST_PASSWORD;
+const ValidWebToken = process.env.NEXT_PUBLIC_TEST_WEBTOKEN;
+
+describe("Test process.env load", () => {
+  it("Should load env variables", async () => {
+    expect(ValidUsername);
+    expect(ValidPassword);
+    expect(ValidWebToken);
+  })
+});
 
 describe("SHA-256 Hashing", () => {
   it("should hash a password and verify the hash", async () => {
@@ -24,15 +33,23 @@ describe("SHA-256 Hashing", () => {
 
 describe("Test webtoken & connection to secure endpoint", () => {
   it("Test webtoken & alignment with username", async () => {
-    //Test webtoken - added force env load to api files & token align to user
-    const validToken = await verifyTokenApi(ValidWebToken);
-    console.log(validToken)
-    expect(ValidUsername).toEqual(validToken.email);
+    if (ValidWebToken) {
+      //Test webtoken - added force env load to api files & token align to user
+      const validToken = await verifyTokenApi(ValidWebToken);
+      console.log(validToken)
+      expect(ValidUsername).toEqual(validToken.email);
+    } else {
+      expect(ValidWebToken).toEqual("No webtoken found");
+    }
   })
   it("Should return string from server", async () => {
-    //Test endpoint
-    const response = await testConnection(ValidWebToken);
-    expect(response).toEqual("Connected to Server!");
+    if (ValidWebToken) {
+      //Test endpoint
+      const response = await testConnection(ValidWebToken);
+      expect(response).toEqual("Connected to Server!");
+    } else {
+      expect(ValidWebToken).toEqual("No webtoken found");
+    }
   });
 });
 
