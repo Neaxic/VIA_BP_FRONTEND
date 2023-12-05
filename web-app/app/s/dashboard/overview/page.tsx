@@ -57,23 +57,25 @@ export default function Page() {
           <p style={{ fontSize: 14 }}>Last seen: 21/02/2020 13:30 GMT+1</p>
           <p style={{ fontSize: 14 }}>Your role: System administrator</p>
         </Card>
-        <Card className="p-4 w-full">
-          <h1 style={{ fontSize: 24 }}>Quick navigate (maybe gør den her selvalgt liste?, ku være cool)</h1>
-          <div className="flex gap-2">
-            <div>
-              <Button className="w-full mb-2">Machine status</Button>
-              <Button className="w-full">Machine status</Button>
+        {!user?.isAdmin && (
+          <Card className="p-4 w-full">
+            <h1 style={{ fontSize: 24 }}>Quick navigate (maybe gør den her selvalgt liste?, ku være cool)</h1>
+            <div className="flex gap-2">
+              <div>
+                <Button className="w-full mb-2">Administrator tools</Button>
+                <Button className="w-full">Machine 012</Button>
+              </div>
+              <div>
+                <Button className="w-full mb-2">Machine status</Button>
+                <Button className="w-full">Machine status</Button>
+              </div>
+              <div>
+                <Button className="w-full mb-2">Machine status</Button>
+                <Button className="w-full">Machine status</Button>
+              </div>
             </div>
-            <div>
-              <Button className="w-full mb-2">Machine status</Button>
-              <Button className="w-full">Machine status</Button>
-            </div>
-            <div>
-              <Button className="w-full mb-2">Machine status</Button>
-              <Button className="w-full">Machine status</Button>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
       </div>
 
       <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>Heres todays current overview</h1>
@@ -82,6 +84,9 @@ export default function Page() {
       </Card>
       <Card className="w-full mb-4 p-4 border-green-600 bg-green-700">
         Currently everything is running accordingly.
+      </Card>
+      <Card className="w-full mb-4 p-4 border-yellow-600 bg-yellow-700">
+        Attention! 1 machine is currently under maintenence.
       </Card>
 
       <div className="flex gap-2">

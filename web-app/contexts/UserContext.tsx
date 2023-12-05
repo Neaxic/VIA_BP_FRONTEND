@@ -7,9 +7,16 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
 
 export interface IUser {
+    id?: string //Yet to be impl
     username: string
-    isAdmin: boolean
+    isAdmin: boolean //Depricated
+    roles?: string[] //Yet to be impl
 }
+
+export const roles = [
+    "Admin",
+    "User"
+]
 
 interface UserContextInterface {
     user?: IUser
@@ -95,7 +102,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
                 })
                 localStorage.setItem("token", JSON.stringify(user.token));
-                if (pathname === "/") router.push("/s/dashboard")
+                if (pathname === "/") router.push("/s/dashboard/overview")
             } else {
                 toast({
                     title: "Session expired",

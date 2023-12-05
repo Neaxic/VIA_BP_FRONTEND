@@ -334,3 +334,23 @@ export const getAllUsers = async () => {
     return null;
   }
 };
+
+export const deleteUser = async (id: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "DELETE",
+      url: `/deleteUser?id=${id}`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        "content-Type": "application/json",
+        authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
