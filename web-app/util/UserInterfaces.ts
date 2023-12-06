@@ -1,7 +1,7 @@
 export interface IUser {
-    userId: string
+    userId: number
     username: string
-    userRoles: IRole[]
+    roles: IRole[]
     firstname: string
     lastname: string
     createDate: string
@@ -9,7 +9,7 @@ export interface IUser {
 }
 
 export interface IRole {
-    userRolesLookUpId?: string
+    userRolesLookUpId?: number
     roleName: string
     description: string
 }

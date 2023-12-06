@@ -55,9 +55,9 @@ export default function Page() {
           <h1 style={{ fontSize: 24 }}>Welcome back!</h1>
           <h1 style={{ fontSize: 32, fontWeight: "bold" }}>{user?.username}</h1>
           <p style={{ fontSize: 14 }}>Last seen: 21/02/2020 13:30 GMT+1</p>
-          <p style={{ fontSize: 14 }}>Your role: {user?.userRoles[user.userRoles?.length - 1].roleName}</p>
+          <p style={{ fontSize: 14 }}>Your role: {user?.userRoles && user.userRoles[user?.userRoles?.length - 1].roleName}</p>
         </Card>
-        {user?.userRoles.find(e => e.roleName === "Admin") && (
+        {user?.userRoles?.find(e => e.roleName === "Admin") && (
           <Card className="p-4 w-full">
             <h1 style={{ fontSize: 24 }}>Quick navigate </h1>
             <div className="flex gap-2">

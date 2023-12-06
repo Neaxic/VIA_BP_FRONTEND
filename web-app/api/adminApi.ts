@@ -369,7 +369,7 @@ export const deleteUser = async (id: number) => {
   try {
     const response = await axios({
       method: "DELETE",
-      url: `/deleteUser?id=${id}`,
+      url: `/deleteUser?userId=${id}`,
       baseURL: URL,
       headers: {
         accept: "application/json",

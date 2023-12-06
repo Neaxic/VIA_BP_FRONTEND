@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   getAllUsers,
 } from "../../../../../api/adminApi";
@@ -28,7 +28,7 @@ export default function Page() {
 
   const columns: ColumnDef<IUser>[] = [
     {
-      accessorKey: "id",
+      accessorKey: "userId",
       header: ({ column }) => {
         return (
           <Button
@@ -41,7 +41,7 @@ export default function Page() {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("id")}</div>
+        <div className="capitalize">{row.getValue("userId")}</div>
       ),
     },
     {
@@ -56,8 +56,9 @@ export default function Page() {
         );
       },
       cell: ({ row }) => {
-        const roles = row.getValue("roles") as IUser["roles"];
-        return <div className="capitalize">{roles ? roles[0] : 'N/A'}</div>
+        const roles = row.getValue("roles");
+        const roleNames = roles?.map(e => e.roleName);
+        return <div className="capitalize">{roleNames ? roleNames[0] : 'N/A'}</div>
       },
     },
     {
@@ -159,20 +160,20 @@ export default function Page() {
     },
   ];
 
+  const reloadData = useCallback(async () => {
+    var users = await getAllUsers();
+    setUsers(users);
+  }, [])
+
   useEffect(() => {
-    async function fetchData() {
-      var users = await getAllUsers();
-      //Dummy
-      users.forEach((element: IUser, index: string | undefined) => {
-        element.id = index;
-        element.roles = ["Admin", "User"];
-      });
+    reloadData();
 
-      setUsers(users);
-    }
-
-    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(users)
+  }, [users])
 
   const table = useReactTable({
     data: users,
@@ -235,7 +236,7 @@ export default function Page() {
                     })}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <CreateUser buttonName="Register new account" />
+              <CreateUser onCreated={() => reloadData()} buttonName="Register new account" />
             </div>
           </div>
           <div className="rounded-md border">

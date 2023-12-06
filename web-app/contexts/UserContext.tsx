@@ -42,14 +42,13 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     description: "Proccessing your data, and logging you securely inside.",
                 })
                 setUser({
-                    username: user.email,
-                    isAdmin: true
+                    ...user.userData,
+                    token: user.token,
                 })
                 setIsLoggedIn(true)
-                savingDataToLocalStorage({
-                    username: user.email,
-                    isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
-                })
+                savingDataToLocalStorage(
+                    user
+                )
 
                 localStorage.setItem("token", JSON.stringify(user.token));
                 return true
@@ -84,7 +83,6 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                 setUser({
                     ...user.userData,
                     token: user.token,
-                    userRoles: user.userRoles
                 })
                 setIsLoggedIn(true)
                 savingDataToLocalStorage(user)

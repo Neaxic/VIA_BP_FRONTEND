@@ -39,9 +39,10 @@ const roles = [
 
 interface CreateUserProps {
     buttonName?: string
+    onCreated?: () => void //Callback
 }
 
-export function CreateUser({ buttonName = "Open", ...props }: CreateUserProps) {
+export function CreateUser({ buttonName = "Open", onCreated, ...props }: CreateUserProps) {
     const [allRoles, setAllRoles] = useState<IRole[]>([])
     const [selectedRole, setSelectedRole] = useState<IRole | undefined>(undefined)
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,6 +78,7 @@ export function CreateUser({ buttonName = "Open", ...props }: CreateUserProps) {
                     title: "User created!",
                     description: "New user should be visable in list soon.",
                 })
+                onCreated && onCreated()
             } else {
                 toast({
                     title: "Error creating user!",
