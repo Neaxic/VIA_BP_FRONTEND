@@ -87,7 +87,6 @@ export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, 
                             Roles
                         </Label>
                         <Select>
-
                             <SelectContent position="popper">
                                 <SelectItem value="next">Next.js</SelectItem>
                                 <SelectItem value="sveltekit">SvelteKit</SelectItem>

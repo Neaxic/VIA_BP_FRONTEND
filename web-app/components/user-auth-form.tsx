@@ -10,7 +10,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { sha256 } from "../util/HelperInterfaces";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { login } = useUserContext();

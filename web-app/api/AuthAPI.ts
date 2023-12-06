@@ -59,16 +59,26 @@ export const verifyTokenApi = async (token: string) => {
 export const createUserApi = async (
   username: string,
   password: string,
-  isAdmin: boolean
+  firstname: string,
+  lastname: string,
+  roleId: number,
 ) => {
   try {
     reloadToken();
     const response = await axios({
       method: "POST",
-      url: `/api/registerUser?username=${username}&password=${password}&isAdmin=${isAdmin}`,
+      url: `/registerUser`,
       baseURL: URL,
+      data: {
+        username: username,
+        password: password,
+        firstname: firstname,
+        lastname: lastname,
+        roleId: roleId,
+      },
       headers: {
         accept: "application/json",
+        "content-Type": "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });

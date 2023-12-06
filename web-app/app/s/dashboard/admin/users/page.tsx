@@ -13,6 +13,8 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal, Rows } from "lucide-react";
 import { UpdateUser } from "../../../../../components/UpdateUser";
 import { DeleteUser } from "../../../../../components/DeleteUser";
 import { IUser } from "../../../../../util/UserInterfaces";
+import { CreateUser } from "../../../../../components/CreateUser";
+import { titleCaseWord } from "../../../../../util/helpers";
 
 export default function Page() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -71,7 +73,7 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("username")}</div>,
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("username"))}</div>,
     },
     {
       accessorKey: "firstname",
@@ -86,7 +88,7 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("firstname")}</div>,
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("firstname"))}</div>,
     },
     {
       accessorKey: "lastname",
@@ -101,7 +103,7 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("lastname")}</div>,
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("lastname"))}</div>,
     },
     {
       accessorKey: "createDate",
@@ -233,9 +235,7 @@ export default function Page() {
                     })}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button variant="outline" className="ml-4">
-                Register new account
-              </Button>
+              <CreateUser buttonName="Register new account" />
             </div>
           </div>
           <div className="rounded-md border">
