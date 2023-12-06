@@ -70,7 +70,7 @@ export default function Page({ params }: { params: { slug: number } }) {
     };
 
     fetchData();
-  }, [params.slug]); // Afhænger af slug-parameteren
+  }, [params.slug]);
 
   const { machine } = useMachineContext();
   const { user } = useUserContext();
@@ -78,6 +78,13 @@ export default function Page({ params }: { params: { slug: number } }) {
     { field: "productlookupid", headerName: "productlookupid" },
     { field: "count", headerName: "count" },
   ];
+  const tableColumns1 = [
+    { field: "batchNo", headerName: "batchNo" },
+    { field: "oee", headerName: "oee" },
+    { field: "mostFreqent", headerName: "mostFreqentMistakeOnProduct" },
+    { field: "endtime", headerName: "endtime" },
+  ];
+
   const tableData =
     frequentErrors &&
     frequentErrors.map((item, index) => ({
@@ -187,7 +194,10 @@ export default function Page({ params }: { params: { slug: number } }) {
           </GraphWrapper>
         </Card>
       </div>
-
+      <Card className="p-4 mt-2">
+        <h1>All batches and OEE</h1>
+        <Table columns={tableColumns1} data={tableData} />
+      </Card>
       <Card className="p-4 mt-2">
         <h1>All mistakes</h1>
         <Table columns={tableColumns} data={tableData} />
