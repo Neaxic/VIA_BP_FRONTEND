@@ -62,7 +62,7 @@ export default function Page() {
     async function fetchData() {
       try {
         const data = await getMostFrequentStatusForMachine();
-        setMachineData(data); // Antager, at data er i et passende format for RadarChart
+        setMachineData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
