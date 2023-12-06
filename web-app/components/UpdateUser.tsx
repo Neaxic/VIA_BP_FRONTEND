@@ -1,12 +1,11 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { IUser } from "../contexts/UserContext"
-import { deleteUser } from "../api/adminApi"
 import { SelectContent, SelectItem } from "./ui/select"
 
 const roles = [
