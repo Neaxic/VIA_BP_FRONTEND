@@ -1,17 +1,14 @@
 import crypto from "crypto";
+import { ILoginResponse } from "./UserInterfaces";
 
 export interface IThrowError {
   httpStatus: string;
   message: string;
 }
 
-export interface ILoginResponse {
-  email: string;
-  token: string;
-}
 
 export const initialLoginResponse: ILoginResponse = {
-  email: "",
+  username: "",
   token: "",
 };
 

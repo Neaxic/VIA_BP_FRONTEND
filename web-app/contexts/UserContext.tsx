@@ -5,18 +5,7 @@ import { ILoginResponse, IThrowError } from '../util/HelperInterfaces';
 import { useToast } from '../components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
-
-export interface IUser {
-    id?: string //Yet to be impl
-    username: string
-    isAdmin: boolean //Depricated
-    roles?: string[] //Yet to be impl
-}
-
-export const roles = [
-    "Admin",
-    "User"
-]
+import { IUser } from '../util/UserInterfaces';
 
 interface UserContextInterface {
     user?: IUser
@@ -54,7 +43,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                 })
                 setUser({
                     username: user.email,
-                    isAdmin: false // placeholder
+                    isAdmin: true
                 })
                 setIsLoggedIn(true)
                 savingDataToLocalStorage({
@@ -89,18 +78,16 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
             const user: ILoginResponse = response
             if (user && user.token) {
                 toast({
-                    title: "Welcome back!",
+                    title: "Welcome back " + user.userData.firstname + "!",
                     description: "Proccessing, and redirecting you to the dashboard.",
                 })
                 setUser({
-                    username: user.email,
-                    isAdmin: false // placeholder
+                    ...user.userData,
+                    token: user.token,
+                    userRoles: user.userRoles
                 })
                 setIsLoggedIn(true)
-                savingDataToLocalStorage({
-                    username: user.email,
-                    isAdmin: false // placeholder - indtil backend er iorden. Vi snakkede om permission system
-                })
+                savingDataToLocalStorage(user)
                 localStorage.setItem("token", JSON.stringify(user.token));
                 if (pathname === "/") router.push("/s/dashboard/overview")
             } else {
