@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Input } from "./ui/input"
@@ -39,6 +39,9 @@ interface UpdateUserProps {
 }
 
 export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, ...props }: UpdateUserProps) {
+    const [username, SetUsername] = useState<string>("");
+    const [password, SetPassword] = useState<string>("");
+
     const updateUser = useCallback(async () => {
         console.log("User updated " + user.id)
     }, [user.id])
@@ -63,12 +66,17 @@ export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, 
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
-                            Username
+                            Email
                         </Label>
                         <Input
-                            id="username"
-                            defaultValue={user?.username}
-                            className="col-span-3"
+                            id="email"
+                            placeholder="Gavin@hooli.com"
+                            type="email"
+                            autoCapitalize="none"
+                            autoComplete="email"
+                            autoCorrect="off"
+                            onChange={(e) => SetUsername(e.target.value)}
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -87,7 +95,6 @@ export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, 
                             Roles
                         </Label>
                         <Select>
-
                             <SelectContent position="popper">
                                 <SelectItem value="next">Next.js</SelectItem>
                                 <SelectItem value="sveltekit">SvelteKit</SelectItem>
