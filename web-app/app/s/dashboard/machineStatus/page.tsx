@@ -1,86 +1,109 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Label } from "../../../../components/ui/label";
-import { getAllMachines } from "../../../../api/adminApi";
-import { machine } from "os";
-import { IMachine } from "../../../../util/MachinesInterfaces";
-import { useMachineContext } from "../../../../contexts/MachineContext";
 import { Card } from "../../../../components/ui/card";
-import { getCurrentOeeFromBatch } from "../../../../api/MachineApi";
-
+import { useMachineContext } from "../../../../contexts/MachineContext";
+import {
+  getCurrentOeeFromBatch,
+  getMostFrequentStatusForBatch,
+} from "../../../../api/MachineApi";
+type OeeData = {
+  [batchNo: number]: string | number;
+};
+// Definerer en type for den mest hyppige produktfejlstatus
+type FrequentProductErrorData = {
+  [batchNo: number]: {
+    errorLookUpId: string;
+    count: number;
+  };
+};
 export default function Page() {
   const { machines } = useMachineContext();
+  const [oeeData, setOeeData] = useState<OeeData>({});
+  const [frequentProductErrorData, setFrequentProductErrorData] =
+    useState<FrequentProductErrorData>({});
   const fail = "Ingen Aktive Ordre";
+
+  // Henter OEE-data og den mest hyppige produktfejlstatus for en batch
+  const fetchOeeData = async (batchNo: number) => {
+    try {
+      const oee = await getCurrentOeeFromBatch(batchNo);
+      const frequentProductError = await getMostFrequentStatusForBatch(batchNo);
+      setOeeData((prevData) => ({ ...prevData, [batchNo]: oee }));
+      setFrequentProductErrorData((prevData) => ({
+        ...prevData,
+        [batchNo]: frequentProductError,
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setOeeData((prevData) => ({ ...prevData, [batchNo]: fail }));
+      setFrequentProductErrorData((prevData) => ({
+        ...prevData,
+        [batchNo]: fail,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    machines.forEach((machine) => {
+      const batchNo = machine.batches?.[0]?.batchNo;
+      if (batchNo) {
+        fetchOeeData(batchNo);
+      }
+    });
+  }, [machines]);
+
   return (
     <div>
-      {machines &&
-        machines.length > 0 &&
-        machines?.map((machine) => (
-          <Card
-            key={machine.machineID}
-            className="p-4 mb-4"
-            style={{
-              borderColor: machine.status ? "lightgreen" : "red",
-            }}
-          >
-            <div style={{ display: "flex" }}>
-              <div>
-                <h2>{machine.machineName}</h2>
-                <p>Description: {machine.description}</p>
-                <p>Current OEE: {}</p>
-                <p>Most Frequent Product Error On Batch : Need API Er lavet</p>
-                <p>
-                  Current Batch:{" "}
-                  {machine.batches !== null ? machine.batches[0].batchNo : fail}
-                </p>
-
-                <p>
-                  {" "}
-                  Produced:{" "}
-                  {machine.batches !== null
-                    ? machine.batches[0].productsMade
-                    : fail}{" "}
-                </p>
-                <p>
-                  Need to produce :{" "}
-                  {machine.batches !== null
-                    ? machine.batches[0].batchSize
-                    : fail}
-                </p>
-                <button>Se mere</button>
-              </div>
+      {machines.map((machine) => (
+        <Card
+          key={machine.machineID}
+          className="p-4 mb-4"
+          style={{
+            borderColor: machine.status ? "lightgreen" : "red",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <div>
+              <h2>{machine.machineName}</h2>
+              <p>Description: {machine.description}</p>
+              <p>
+                Current OEE: {oeeData[machine.batches?.[0]?.batchNo] ?? fail}
+              </p>
+              <p>
+                Most Frequent Product Error On Batch:
+                {frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                  ? `${
+                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                        .errorLookUpId
+                    } (Count: ${
+                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                        .count
+                    })`
+                  : fail}
+              </p>
+              <p>
+                Current Batch:
+                {machine.batches?.length > 0
+                  ? machine.batches[0].batchNo
+                  : fail}
+              </p>
+              <p>
+                Produced:
+                {machine.batches?.length > 0
+                  ? machine.batches[0].productsMade
+                  : fail}
+              </p>
+              <p>
+                Need to produce:
+                {machine.batches?.length > 0
+                  ? machine.batches[0].batchSize
+                  : fail}
+              </p>
+              <button>Se mere</button>
             </div>
-          </Card>
-        ))}
+          </div>
+        </Card>
+      ))}
     </div>
   );
 }
-
-//return (
-//  <>
-//    <Card className="w-full p-2">
-//      <Label className="mb-2 text-lg ml-2">Machine 1</Label>
-//      <MachineCard
-//        isRunning={true}
-//        errorCount={5}
-//        acceptedCount={100}
-//        rejectCount={10}
-//        name={"test"}
-//        plannedProductionTime={100}
-//        totalPossibleCount={150}
-//      />
-//    </Card>
-//    <Card className="w-full p-2">
-//      <Label className="mb-2 text-lg ml-2"> name={"test2"}</Label>
-//      <MachineCard
-//        isRunning={false}
-//        errorCount={2}
-//        acceptedCount={150}
-//        rejectCount={5}
-//        plannedProductionTime={100}
-//        totalPossibleCount={100}
-//        name={""}
-//      />
-//    </Card>
-//  </>
-//);
