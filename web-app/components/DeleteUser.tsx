@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { deleteUser } from "../api/adminApi";
+import { toast } from "./ui/use-toast";
 
 interface DeleteUserProps {
   user: any; //Kender ikke user endnu
@@ -28,8 +29,21 @@ export function DeleteUser({
 }: DeleteUserProps) {
   const deletUserConfirm = useCallback(async () => {
     console.log("User deleted");
-    await deleteUser(user.userId);
-  }, [user]);
+    const resp = await deleteUser(user.userId);
+    if (resp === true) {
+      toast({
+        title: "Delted user successfully!",
+        description: "User has been deleted.",
+      })
+      onDelete && onDelete();
+    } else {
+      toast({
+        title: "Failed to delete user!",
+        description: "Please try again later.",
+      })
+    }
+
+  }, [onDelete, user.userId]);
 
   return (
     <AlertDialog>
@@ -51,7 +65,6 @@ export function DeleteUser({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              onDelete && onDelete();
               deletUserConfirm();
             }}
           >

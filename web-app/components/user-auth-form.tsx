@@ -10,6 +10,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { sha256 } from "../util/HelperInterfaces";
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -160,18 +161,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or register yourself at
+                Contact admins to gain access
               </span>
             </div>
           </div>
-          <Button
+          {/* <Button
             variant="outline"
             type="button"
             disabled={isLoading}
             onClick={() => Router.push("create")}
           >
             Request Access
-          </Button>
+          </Button> */}
         </div>
       </form>
     </div>

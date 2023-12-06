@@ -13,7 +13,7 @@ export default function RootLayout({
 
     useEffect(() => {
         if (!user) return;
-        setAccessAllowed(true) // user?.isAdmin //Placeholder for nu
+        setAccessAllowed(user.roles.some(e => e.roleName === "Admin"));
     }, [user])
 
     return (

@@ -5,6 +5,7 @@ import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../../components/ui/button";
 import { UserAuthForm } from "../../../components/user-auth-form";
 import React from "react";
+import Velux from "../../../assets/Velux_factory.jpg";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -16,14 +17,14 @@ export default function AuthenticationPage() {
     <>
       <div className="md:hidden">
         <Image
-          src="/examples/authentication-light.png"
+          src={Velux}
           width={1280}
           height={843}
           alt="Authentication"
           className="block dark:hidden"
         />
         <Image
-          src="/examples/authentication-dark.png"
+          src={Velux}
           width={1280}
           height={843}
           alt="Authentication"
@@ -32,7 +33,7 @@ export default function AuthenticationPage() {
       </div>
       <div className="container relative hidden min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
-          href="/examples/authentication"
+          href="/"
           className={cn(
             buttonVariants({ variant: "ghost" }),
             "absolute right-4 top-4 md:right-8 md:top-8"
@@ -58,14 +59,14 @@ export default function AuthenticationPage() {
             VELUX LIVEFEED
           </div>
           <div className="relative z-20 mt-auto">
-            <blockquote className="space-y-2">
+            {/* <blockquote className="space-y-2">
               <p className="text-lg">
                 &ldquo;This library has saved me countless hours of work and
                 helped me deliver stunning designs to my clients faster than
                 ever before.&rdquo;
               </p>
               <footer className="text-sm">Sofia Davis</footer>
-            </blockquote>
+            </blockquote> */}
           </div>
         </div>
         <div className="lg:p-8">

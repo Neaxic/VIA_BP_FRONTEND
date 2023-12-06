@@ -119,7 +119,7 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("createDate")}</div>,
+      cell: ({ row }) => <div className="lowercase">{new Date(row.getValue("createDate")).toLocaleString()}</div>,
     },
     {
       id: "actions",
@@ -149,8 +149,7 @@ export default function Page() {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <DeleteUser onDelete={() => {
-                  const newUsers = users.filter(e => e.id !== user.id);
-                  setUsers(newUsers);
+                  setUsers((prev) => prev.filter(e => e.userId !== user.userId));
                 }} buttonName="Delete user" user={user} />
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -202,7 +201,7 @@ export default function Page() {
         <div className="w-full">
           <div className="flex items-center justify-between py-4">
             <Input
-              placeholder="Filter machines..."
+              placeholder="Filter by email.."
               value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
               onChange={(event) =>
                 table.getColumn("username")?.setFilterValue(event.target.value)
