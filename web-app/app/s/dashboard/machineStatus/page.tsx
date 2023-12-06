@@ -74,11 +74,13 @@ export default function Page() {
               <p>
                 Most Frequent Product Error On Batch:
                 {frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                  ? `${frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                    .errorLookUpId
-                  } (Count: ${frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                    .count
-                  })`
+                  ? `${
+                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                        .errorLookUpId
+                    } (Count: ${
+                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                        .count
+                    })`
                   : fail}
               </p>
               <p>

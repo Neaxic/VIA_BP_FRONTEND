@@ -64,10 +64,10 @@ export const getMachineUpTime24HourProcentage = async (machineId: number) => {
   }
 };
 
-export const getMostFrequentStatusForMachine = async () => {
+export const getMostFrequentStatusForMachine = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getMostFrequentStatusForMachine`;
+    const apiUrl = `${URL}getMostFrequentStatusForMachine?machineId=${machineId}`;
     const response = await axios({
       method: "GET",
       url: apiUrl,
