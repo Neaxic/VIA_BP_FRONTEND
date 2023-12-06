@@ -15,7 +15,10 @@ import { GraphWrapper } from "../../../../../components/graph-wrapper";
 import { useUserContext } from "../../../../../contexts/UserContext";
 import { useMachineContext } from "../../../../../contexts/MachineContext";
 import Table from "../../../../../components/tableAdmin";
-import { getMostFrequentStatusForMachine } from "../../../../../api/MachineApi";
+import {
+  getMostFrequentStatusForMachine,
+  getHistoryBatchData,
+} from "../../../../../api/MachineApi";
 import React, { useEffect, useState } from "react";
 
 const dataRadar = [
@@ -59,11 +62,14 @@ const dataRadar = [
 
 export default function Page({ params }: { params: { slug: number } }) {
   const [frequentErrors, setFrequentErrors] = useState([]);
+  const [historyBatch, sethistoryBatch] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getMostFrequentStatusForMachine(params.slug);
+        const dataBatch = await getHistoryBatchData(params.slug);
         setFrequentErrors(data);
+        sethistoryBatch(dataBatch);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -90,6 +96,15 @@ export default function Page({ params }: { params: { slug: number } }) {
     frequentErrors.map((item, index) => ({
       productlookupid: item.productlookupid,
       count: item.count,
+    }));
+
+  const tableDataForBatch =
+    historyBatch &&
+    historyBatch.map((item, index) => ({
+      batchNo: item.batchNo,
+      oee: item.oee,
+      mostFreqent: item.mostFreqent,
+      endtime: item.endtime,
     }));
 
   return (
@@ -196,7 +211,7 @@ export default function Page({ params }: { params: { slug: number } }) {
       </div>
       <Card className="p-4 mt-2">
         <h1>All batches and OEE</h1>
-        <Table columns={tableColumns1} data={tableData} />
+        <Table columns={tableColumns1} data={tableDataForBatch} />
       </Card>
       <Card className="p-4 mt-2">
         <h1>All mistakes</h1>

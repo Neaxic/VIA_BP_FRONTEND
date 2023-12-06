@@ -81,3 +81,21 @@ export const getMostFrequentStatusForMachine = async (machineId: number) => {
     console.log(e);
   }
 };
+
+export const getHistoryBatchData = async (machineId: number) => {
+  reloadToken();
+  try {
+    const apiUrl = `${URL}getHistoryBatchData?machineId=${machineId}`;
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
