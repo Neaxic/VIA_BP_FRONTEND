@@ -32,6 +32,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "crypto": "^1.0.1",
     "date-fns": "^2.30.0",
     "daypilot-pro-react": "https://npm.daypilot.org/daypilot-pro-react/trial/2023.2.5582.tar.gz",
     "dotenv": "^16.3.1",
