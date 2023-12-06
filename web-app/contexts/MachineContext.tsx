@@ -1,9 +1,9 @@
 "use client";
+
 import * as React from "react";
-import { IMachine } from "../util/MachinesInterfaces";
+import { IMachine, IProblemMachine, initialMachine } from "../util/MachinesInterfaces";
 import { getAllMachines } from "../api/adminApi";
-import { getCurrentOeeFromBatch } from "../api/MachineApi";
-import { machine } from 'os';
+import { getCurrentOeeFromBatch, getMachineUpTime24HourProcentage, getMostProlematicMachine24hr } from "../api/MachineApi";
 
 interface MachineContextInterface {
   machines: IMachine[];
@@ -11,6 +11,7 @@ interface MachineContextInterface {
   updateMachine: (id: number) => Promise<void>;
   getCurrentOee: (batchNo: number) => Promise<number>;
   machine: IMachine | undefined;
+  mostProblematicMachine: IProblemMachine | undefined;
   setMachine: React.Dispatch<React.SetStateAction<IMachine | undefined>>;
 }
 
@@ -20,6 +21,7 @@ export const MachineContext = React.createContext<MachineContextInterface>({
   updateMachine: () => new Promise(() => { }),
   getCurrentOee: () => new Promise(() => { }),
   machine: undefined,
+  mostProblematicMachine: undefined,
   setMachine: () => { },
 });
 
@@ -31,17 +33,29 @@ export default function MachineProvider({
   const [machine, setMachine] = React.useState<IMachine>();
   const [machines, setMachines] = React.useState<IMachine[]>([]);
   const [qualityControl, setQualityControl] = React.useState<IMachine[]>([]);
+  const [mostProblematicMachine, setMostProblematicMachine] = React.useState<IProblemMachine>();
 
   const loadAllMachines = React.useCallback(async () => {
     try {
       const response = await getAllMachines();
       if (response) {
+        const problematicID = await getMostProlematicMachine24hr();
+        const uptimePercent = await getMachineUpTime24HourProcentage(problematicID);
+
+        let problematicMachine: IProblemMachine = {
+          ...initialMachine,
+          ...machines.find((machine) => machine.machineID === problematicID),
+          downtimePercentage: +(100 - +uptimePercent).toFixed(2),
+        };
+        setMostProblematicMachine(problematicMachine);
+
+
         setMachines(response);
       }
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [machines]);
 
   const loadAllQualityControl = React.useCallback(async () => {
     // Implement this function if needed
@@ -79,6 +93,7 @@ export default function MachineProvider({
     <MachineContext.Provider
       value={{
         machine,
+        mostProblematicMachine,
         setMachine,
         machines,
         qualityControl,

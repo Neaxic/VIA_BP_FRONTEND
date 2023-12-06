@@ -49,10 +49,10 @@ export const getMostFrequentStatusForBatch = async (batchNo: number) => {
 export const getMachineUpTime24HourProcentage = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getMachineUpTime24HourProcentage?machineId=${machineId}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `getMachineUpTime24HourProcentage?machineId=${machineId}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -71,6 +71,24 @@ export const getMostFrequentStatusForMachine = async () => {
     const response = await axios({
       method: "GET",
       url: apiUrl,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getMostProlematicMachine24hr = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getMostProblematicMachine24hr`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
