@@ -28,8 +28,8 @@ export function DeleteUser({
 }: DeleteUserProps) {
   const deletUserConfirm = useCallback(async () => {
     console.log("User deleted");
-    await deleteUser(user.id);
-  }, [user.id]);
+    await deleteUser(user.userId);
+  }, [user]);
 
   return (
     <AlertDialog>

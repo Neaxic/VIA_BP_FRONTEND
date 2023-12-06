@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { IUser } from "../contexts/UserContext"
-import { SelectContent, SelectItem } from "./ui/select"
+import { Select, SelectContent, SelectItem } from "./ui/select"
 
 const roles = [
     {
@@ -86,12 +86,14 @@ export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, 
                         <Label htmlFor="name" className="text-right">
                             Roles
                         </Label>
-                        <SelectContent position="popper">
-                            <SelectItem value="next">Next.js</SelectItem>
-                            <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                            <SelectItem value="astro">Astro</SelectItem>
-                            <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                        </SelectContent>
+                        <Select>
+                            <SelectContent position="popper">
+                                <SelectItem value="next">Next.js</SelectItem>
+                                <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                                <SelectItem value="astro">Astro</SelectItem>
+                                <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <DialogFooter>

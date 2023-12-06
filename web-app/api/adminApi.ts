@@ -345,12 +345,31 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getAllLookupRoles = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getAllLookupRoles`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const deleteUser = async (id: number) => {
   reloadToken();
   try {
     const response = await axios({
       method: "DELETE",
-      url: `/deleteUser?id=${id}`,
+      url: `/deleteUser?userId=${id}`,
       baseURL: URL,
       headers: {
         accept: "application/json",

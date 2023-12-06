@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   getAllUsers,
 } from "../../../../../api/adminApi";
@@ -12,9 +12,9 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { ArrowUpDown, ChevronDown, MoreHorizontal, Rows } from "lucide-react";
 import { UpdateUser } from "../../../../../components/UpdateUser";
 import { DeleteUser } from "../../../../../components/DeleteUser";
-import { IUser } from '../../../../../contexts/UserContext';
-
-
+import { IUser } from "../../../../../util/UserInterfaces";
+import { CreateUser } from "../../../../../components/CreateUser";
+import { titleCaseWord } from "../../../../../util/helpers";
 
 export default function Page() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -28,7 +28,7 @@ export default function Page() {
 
   const columns: ColumnDef<IUser>[] = [
     {
-      accessorKey: "id",
+      accessorKey: "userId",
       header: ({ column }) => {
         return (
           <Button
@@ -41,7 +41,7 @@ export default function Page() {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("id")}</div>
+        <div className="capitalize">{row.getValue("userId")}</div>
       ),
     },
     {
@@ -50,16 +50,15 @@ export default function Page() {
         return (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Roles
-            <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => {
-        const roles = row.getValue("roles") as IUser["roles"];
-        return <div className="capitalize">{roles ? roles[0] : 'N/A'}</div>
+        const roles = row.getValue("roles");
+        const roleNames = roles?.map(e => e.roleName);
+        return <div className="capitalize">{roleNames ? roleNames[0] : 'N/A'}</div>
       },
     },
     {
@@ -75,7 +74,52 @@ export default function Page() {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("username")}</div>,
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("username"))}</div>,
+    },
+    {
+      accessorKey: "firstname",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Firstname
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("firstname"))}</div>,
+    },
+    {
+      accessorKey: "lastname",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Lastname
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{titleCaseWord(row.getValue("lastname"))}</div>,
+    },
+    {
+      accessorKey: "createDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Created
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("createDate")}</div>,
     },
     {
       id: "actions",
@@ -116,19 +160,20 @@ export default function Page() {
     },
   ];
 
-  useEffect(() => {
-    async function fetchData() {
-      var users = await getAllUsers();
-      //Dummy
-      users.forEach((element: IUser, index: string | undefined) => {
-        element.id = index;
-        element.roles = ["Admin", "User"];
-      });
-      setUsers(users);
-    }
+  const reloadData = useCallback(async () => {
+    var users = await getAllUsers();
+    setUsers(users);
+  }, [])
 
-    fetchData();
+  useEffect(() => {
+    reloadData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(users)
+  }, [users])
 
   const table = useReactTable({
     data: users,
@@ -151,11 +196,11 @@ export default function Page() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24 }}>User access handling.</h1>
-      <Label>ALL REGISTERED MACHINES</Label>
+      <h1 style={{ fontSize: 24 }}>System acess handling.</h1>
+      <Label>ALL REGISTERED ACCOUNTS</Label>
       <>
         <div className="w-full">
-          <div className="flex items-center py-4">
+          <div className="flex items-center justify-between py-4">
             <Input
               placeholder="Filter machines..."
               value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
@@ -164,32 +209,35 @@ export default function Page() {
               }
               className="max-w-sm"
             />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value: any) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value: any) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <CreateUser onCreated={() => reloadData()} buttonName="Register new account" />
+            </div>
           </div>
           <div className="rounded-md border">
             <Table>
@@ -242,10 +290,6 @@ export default function Page() {
             </Table>
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
             <div className="space-x-2">
               <Button
                 variant="outline"
