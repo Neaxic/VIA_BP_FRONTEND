@@ -3,19 +3,24 @@ import * as React from "react";
 import { IMachine } from "../util/MachinesInterfaces";
 import { getAllMachines } from "../api/adminApi";
 import { getCurrentOeeFromBatch } from "../api/MachineApi";
+import { machine } from 'os';
 
 interface MachineContextInterface {
   machines: IMachine[];
   qualityControl: IMachine[];
   updateMachine: (id: number) => Promise<void>;
   getCurrentOee: (batchNo: number) => Promise<number>;
+  machine: IMachine | undefined;
+  setMachine: React.Dispatch<React.SetStateAction<IMachine | undefined>>;
 }
 
 export const MachineContext = React.createContext<MachineContextInterface>({
   machines: [],
   qualityControl: [],
-  updateMachine: () => new Promise(() => {}),
-  getCurrentOee: () => new Promise(() => {}),
+  updateMachine: () => new Promise(() => { }),
+  getCurrentOee: () => new Promise(() => { }),
+  machine: undefined,
+  setMachine: () => { },
 });
 
 export default function MachineProvider({
@@ -23,6 +28,7 @@ export default function MachineProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [machine, setMachine] = React.useState<IMachine>();
   const [machines, setMachines] = React.useState<IMachine[]>([]);
   const [qualityControl, setQualityControl] = React.useState<IMachine[]>([]);
 
@@ -72,6 +78,8 @@ export default function MachineProvider({
   return (
     <MachineContext.Provider
       value={{
+        machine,
+        setMachine,
         machines,
         qualityControl,
         updateMachine,

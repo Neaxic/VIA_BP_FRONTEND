@@ -207,7 +207,7 @@ export function Sidebar({ className }: SidebarProps) {
               Administrator control
             </h2>
             <div className="space-y-1">
-              <Button
+              {/* <Button
                 variant={
                   pathname.split("/")[2] == "machineStatus"
                     ? "secondary"
@@ -233,7 +233,7 @@ export function Sidebar({ className }: SidebarProps) {
                   <path d="M12 18H3" />
                 </svg>
                 Admin
-              </Button>
+              </Button> */}
               <Button
                 variant={
                   pathname.split("/")[4] == "users"
@@ -261,7 +261,7 @@ export function Sidebar({ className }: SidebarProps) {
                 </svg>
                 Syetem Access
               </Button>
-              <Button variant="ghost" className="w-full justify-start">
+              {/* <Button variant="ghost" className="w-full justify-start">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -279,7 +279,7 @@ export function Sidebar({ className }: SidebarProps) {
                   <path d="M12 18H3" />
                 </svg>
                 Error reports
-              </Button>
+              </Button> */}
             </div>
           </div>
         )}

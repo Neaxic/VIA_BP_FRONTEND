@@ -7,9 +7,11 @@ import { IMachine } from "../../../../util/MachinesInterfaces";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import { Card } from "../../../../components/ui/card";
 import { getCurrentOeeFromBatch } from "../../../../api/MachineApi";
+import Link from "next/link";
+import { Button } from "../../../../components/ui/button";
 
 export default function Page() {
-  const { machines } = useMachineContext();
+  const { machines, setMachine } = useMachineContext();
   const fail = "Ingen Aktive Ordre";
   return (
     <div>
@@ -27,7 +29,7 @@ export default function Page() {
               <div>
                 <h2>{machine.machineName}</h2>
                 <p>Description: {machine.description}</p>
-                <p>Current OEE: {}</p>
+                <p>Current OEE: { }</p>
                 <p>Most Frequent Product Error On Batch : Need API Er lavet</p>
                 <p>
                   Current Batch:{" "}
@@ -47,7 +49,12 @@ export default function Page() {
                     ? machine.batches[0].batchSize
                     : fail}
                 </p>
-                <button>Se mere</button>
+                <Button variant={"outline"} onClick={() => setMachine(machine)}>
+                  <Link href={"./machine/" + machine.machineID}>
+                    See more
+                  </Link>
+                </Button>
+
               </div>
             </div>
           </Card>
