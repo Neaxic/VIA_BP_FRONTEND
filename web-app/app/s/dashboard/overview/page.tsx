@@ -1,10 +1,19 @@
 "use client";
-
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts";
+import React, { useState, useEffect } from "react";
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import { GraphWrapper } from "../../../../components/graph-wrapper";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import { useUserContext } from "../../../../contexts/UserContext";
+import { getMostFrequentStatusForMachine } from "../../../../api/MachineApi";
 
 const dataRadar = [
   {
@@ -47,6 +56,20 @@ const dataRadar = [
 
 export default function Page() {
   const { user } = useUserContext();
+  const [machineData, setMachineData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getMostFrequentStatusForMachine();
+        setMachineData(data); // Antager, at data er i et passende format for RadarChart
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -59,7 +82,9 @@ export default function Page() {
         </Card>
         {!user?.isAdmin && (
           <Card className="p-4 w-full">
-            <h1 style={{ fontSize: 24 }}>Quick navigate (maybe gør den her selvalgt liste?, ku være cool)</h1>
+            <h1 style={{ fontSize: 24 }}>
+              Quick navigate (maybe gør den her selvalgt liste?, ku være cool)
+            </h1>
             <div className="flex gap-2">
               <div>
                 <Button className="w-full mb-2">Administrator tools</Button>
@@ -77,10 +102,12 @@ export default function Page() {
           </Card>
         )}
       </div>
-
-      <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>Heres todays current overview</h1>
+      <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
+        Heres todays current overview
+      </h1>
       <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
-        Attention! 1 machine is currently down. Error E201 was issued last 02:31 hr(s). <span style={{ textDecoration: "underline" }}>See more</span>
+        Attention! 1 machine is currently down. Error E201 was issued last 02:31
+        hr(s). <span style={{ textDecoration: "underline" }}>See more</span>
       </Card>
       <Card className="w-full mb-4 p-4 border-green-600 bg-green-700">
         Currently everything is running accordingly.
@@ -88,7 +115,6 @@ export default function Page() {
       <Card className="w-full mb-4 p-4 border-yellow-600 bg-yellow-700">
         Attention! 1 machine is currently under maintenence.
       </Card>
-
       <div className="flex gap-2">
         <Card className="w-full p-4">
           <h1 style={{ fontSize: 24 }}>Machine breakdown</h1>
@@ -104,17 +130,22 @@ export default function Page() {
           <p>A total downtime of 28%</p>
         </Card>
       </div>
-
+      //Overvej om der skal bruges et andet Chart
       <div className="flex gap-2 mt-4">
         <Card className="p-4 w-full">
           <GraphWrapper title={"The latests frequency of errors"}>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <RadarChart data={dataRadar}>
+              <RadarChart data={machineData[1]}>
                 <PolarGrid />
                 <PolarAngleAxis dataKey="subject" />
                 <PolarRadiusAxis />
                 <Tooltip />
-                <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
+                <Radar
+                  name="Mike"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
               </RadarChart>
             </ResponsiveContainer>
           </GraphWrapper>
@@ -127,7 +158,12 @@ export default function Page() {
                 <PolarAngleAxis dataKey="subject" />
                 <PolarRadiusAxis />
                 <Tooltip />
-                <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
+                <Radar
+                  name="Mike"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
               </RadarChart>
             </ResponsiveContainer>
           </GraphWrapper>
@@ -140,15 +176,17 @@ export default function Page() {
                 <PolarAngleAxis dataKey="subject" />
                 <PolarRadiusAxis />
                 <Tooltip />
-                <Radar name="Mike" dataKey="A" className="fill-primary stroke-primary" fillOpacity={0.5} />
+                <Radar
+                  name="Mike"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
               </RadarChart>
             </ResponsiveContainer>
           </GraphWrapper>
         </Card>
       </div>
-
-
-
       <Card className="p-4 mt-2">
         <h1>Latest OEE numbers</h1>
       </Card>

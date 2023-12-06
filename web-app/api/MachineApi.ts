@@ -12,7 +12,7 @@ export const reloadToken = () => {
 export const getCurrentOeeFromBatch = async (batchNo: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}/getCurrentOeeFromBatch?batchNo=${batchNo}`;
+    const apiUrl = `${URL}getCurrentOeeFromBatch?batchNo=${batchNo}`;
     const response = await axios({
       method: "GET",
       url: apiUrl,
@@ -21,6 +21,7 @@ export const getCurrentOeeFromBatch = async (batchNo: number) => {
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (e) {
     console.log(e);
@@ -30,7 +31,7 @@ export const getCurrentOeeFromBatch = async (batchNo: number) => {
 export const getMostFrequentStatusForBatch = async (batchNo: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}/getMostFrequentStatusForBatch?batchNo=${batchNo}`;
+    const apiUrl = `${URL}getMostFrequentStatusForBatch?batchNo=${batchNo}`;
     const response = await axios({
       method: "GET",
       url: apiUrl,
@@ -48,7 +49,25 @@ export const getMostFrequentStatusForBatch = async (batchNo: number) => {
 export const getMachineUpTime24HourProcentage = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}/getMachineUpTime24HourProcentage?machineId=${machineId}`;
+    const apiUrl = `${URL}getMachineUpTime24HourProcentage?machineId=${machineId}`;
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getMostFrequentStatusForMachine = async () => {
+  reloadToken();
+  try {
+    const apiUrl = `${URL}getMostFrequentStatusForMachine`;
     const response = await axios({
       method: "GET",
       url: apiUrl,

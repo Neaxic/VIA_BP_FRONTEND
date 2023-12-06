@@ -1,24 +1,20 @@
 export interface IMachine {
-    machineID: number;
-    machineName: string;
-    description: string;
-    statusCode: {
-        statusCodeID: number;
-        statusDescription: string;
-    };
-    currentBatch: {
-        batchNo: number;
-        machineID: number;
-        producedItems: number;
-        startTime: string;
-        endTime: string;
-    };
-    batches: [{
-        batchNo: number;
-        machineID: number;
-        producedItems: number;
-        startTime: string;
-        endTime: string;
-    }];
-    machineRunning: boolean;
+  status: string;
+  machineID: number;
+  machineName: string;
+  description: string;
+  statusCode: {
+    statusCodeID: number;
+    statusDescription: string;
+  };
+  batches: IBatch[];
+  machineRunning: boolean;
+}
+
+export interface IBatch {
+  batchNo: number;
+  batchSize: number;
+  startTime: string;
+  endTime: string;
+  productsMade: number; // Ændret fra productsMake
 }
