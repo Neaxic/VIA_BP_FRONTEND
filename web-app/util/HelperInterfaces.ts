@@ -13,7 +13,7 @@ export const initialLoginResponse: ILoginResponse = {
 };
 
 export async function sha256(password: string) {
-  const hash = crypto.createHash('sha256');
+  const hash = crypto.createHash("sha256");
   hash.update(password);
-  return hash.digest('hex');
+  return hash.digest("hex");
 }

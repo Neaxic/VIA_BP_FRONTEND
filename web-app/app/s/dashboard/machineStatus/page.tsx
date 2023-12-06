@@ -6,35 +6,7 @@ import { machine } from "os";
 import { IMachine } from "../../../../util/MachinesInterfaces";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import { Card } from "../../../../components/ui/card";
-
-function getHoursDifference(startTime: string, endTime: string | number) {
-  return null;
-}
-
-//
-// const availability =
-//   ((acceptedCount + rejectCount) * 60) / plannedProductionTime;
-// const performance = (acceptedCount - rejectCount) / totalPossibleCount;
-// const quality = (acceptedCount - rejectCount) / acceptedCount;
-//
-// const oee = (availability * performance * quality * 100).toFixed(2); // OEE i procet et eller andet er forkert
-
-//  return (
-//    <div style={cardStyle}>
-//      <Label className="mb-2 text-lg ml-2"></Label>
-//      <div style={runningStyle}></div>
-//      <div style={sectionStyle}>Errors: {errorCount}</div>
-//      <div style={sectionStyle}>Accepted: {acceptedCount}</div>
-//      <div style={sectionStyle}>Rejected: {rejectCount}</div>
-//      <div style={sectionStyle}>Machine Name: {name}</div>
-//      <div style={sectionStyle}>
-//        Planned Time in Houres : {plannedProductionTime}
-//      </div>
-//      <div style={sectionStyle}>OEE: {oee}%</div>
-//      <div style={sectionStyle}>Max antal produkter: {totalPossibleCount}</div>
-//    </div>
-//  );
-//}
+import { getCurrentOeeFromBatch } from "../../../../api/MachineApi";
 
 export default function Page() {
   const { machines } = useMachineContext();
@@ -48,34 +20,31 @@ export default function Page() {
             key={machine.machineID}
             className="p-4 mb-4"
             style={{
-              borderColor:
-                machine.statusCode.statusDescription === "Aktiv"
-                  ? "lightgreen"
-                  : "red",
+              borderColor: machine.status ? "lightgreen" : "red",
             }}
           >
             <div style={{ display: "flex" }}>
               <div>
                 <h2>{machine.machineName}</h2>
                 <p>Description: {machine.description}</p>
-                <p>Status: {machine.statusCode.statusDescription}</p>
+                <p>Current OEE: {}</p>
+                <p>Most Frequent Product Error On Batch : Need API Er lavet</p>
                 <p>
                   Current Batch:{" "}
-                  {machine.currentBatch !== null
-                    ? machine.currentBatch.batchNo
-                    : fail}
+                  {machine.batches !== null ? machine.batches[0].batchNo : fail}
                 </p>
+
                 <p>
                   {" "}
                   Produced:{" "}
-                  {machine.currentBatch !== null
-                    ? machine.currentBatch.producedItems
+                  {machine.batches !== null
+                    ? machine.batches[0].productsMade
                     : fail}{" "}
                 </p>
                 <p>
                   Need to produce :{" "}
-                  {machine.currentBatch !== null
-                    ? machine.currentBatch.producedItems
+                  {machine.batches !== null
+                    ? machine.batches[0].batchSize
                     : fail}
                 </p>
                 <button>Se mere</button>
