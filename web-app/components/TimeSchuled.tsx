@@ -1,4 +1,3 @@
-// TimeSchuled.tsx
 import React from "react";
 
 type MachineData = {
@@ -8,6 +7,11 @@ type MachineData = {
 const TimeSchedule: React.FC<{ machineData: MachineData }> = ({
   machineData,
 }) => {
+  if (!machineData) {
+    // Handle the case where machineData is undefined or null
+    return <div>No data available</div>;
+  }
+
   const formatNumber = (num: number) => (num < 10 ? `0${num}` : `${num}`);
 
   const getColor = (val: number) => {

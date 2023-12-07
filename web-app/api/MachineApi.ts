@@ -190,7 +190,7 @@ export const getMachineOverviewByMachineLast24 = async (machineId: number) => {
   }
 };
 
-export const getMachineOverviewAllMachineLast24 = async (machineId: number) => {
+export const getMachineOverviewAllMachineLast24 = async () => {
   reloadToken();
   try {
     const response = await axios({
