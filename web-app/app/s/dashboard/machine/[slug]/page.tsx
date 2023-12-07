@@ -21,6 +21,7 @@ import {
   getMachineUpTime24HourProcentage,
   getNumBreakdowns24hrByMachineId,
   getLastBreakdown,
+  getMostCommonMachineErrorsAndTheirFrequency,
 } from "../../../../../api/MachineApi";
 import React, { use, useEffect, useState } from "react";
 import { IProblemMachine } from "../../../../../util/MachinesInterfaces";
@@ -81,6 +82,7 @@ export default function Page({ params }: { params: { slug: number } }) {
   const [downtime, setDowntime] = useState(0);
   const [brekadownCnt, setBreakdownCount] = useState(0);
   const [lastBreakdown, setLastBreakdown] = useState<IProblemMachine["lastBreakdown"] | undefined>(undefined);
+  const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
   const { machine } = useMachineContext();
   const { user } = useUserContext();
 
@@ -110,8 +112,18 @@ export default function Page({ params }: { params: { slug: number } }) {
         const lastBreakdown: {
           statusCode: number;
           timesince: number;
-        }[] = await getLastBreakdown(params.slug);
+        }[] =
+          await getLastBreakdown(params.slug);
+        const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency(params.slug);
+        const transformed = errorcodefreq.map((error) => {
+          return {
+            subject: error.errorName,
+            A: error.frequency,
+            fullMark: 300,
+          }
+        });
 
+        setmachineerrorcodefreq(transformed);
         setFrequentErrors(data);
         sethistoryBatch(dataBatch);
         setDowntime(100 - +uptime);
@@ -152,7 +164,7 @@ export default function Page({ params }: { params: { slug: number } }) {
         <Card className="p-4 w-full">
           <GraphWrapper title={"The latests frequency of errors"}>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <RadarChart data={dataRadar}>
+              <RadarChart data={machineerrorcodefreq}>
                 <PolarGrid />
                 <PolarAngleAxis dataKey="subject" />
                 <PolarRadiusAxis />

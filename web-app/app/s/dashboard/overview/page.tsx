@@ -3,24 +3,38 @@ import React, { useState, useEffect } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import { useUserContext } from "../../../../contexts/UserContext";
-import { getMostFrequentStatusForMachine } from "../../../../api/MachineApi";
+import { getMostCommonMachineErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import Link from "next/link";
 import { MachineListView } from "../../../../components/MachineListView";
 import { Label } from "../../../../components/ui/label";
+import { GraphWrapper } from "../../../../components/graph-wrapper";
+import { Bar, BarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export default function Page() {
   const { machines, mostProblematicMachine, totalBreakdownCount, setMachine, runningCount } = useMachineContext();
   const { user } = useUserContext();
-  const [machineData, setMachineData] = useState([]);
   const [failingCount, setFailingCount] = useState(0);
-
+  const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
+  const [productsProducedPrDay, setProductsProducedPrDay] = useState<{ Date: string, ProductsMade: number }[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getMostFrequentStatusForMachine();
-        setMachineData(data);
+        const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency();
+        const transformed = errorcodefreq.map((error) => {
+          return {
+            subject: error.errorName,
+            A: error.frequency,
+            fullMark: 300,
+          }
+        });
+
+        setmachineerrorcodefreq(transformed);
+
+        const productsProducedPrDay: { Date: string, ProductsMade: number }[] = await getProductsMadeEachDay30DayInterval();
+        setProductsProducedPrDay(productsProducedPrDay)
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -85,6 +99,55 @@ export default function Page() {
           <p>A total downtime of {mostProblematicMachine?.downtimePercentage}%</p>
           <p>{mostProblematicMachine?.breakdownAmount} Breakdown(s) in the last 24hr</p>
           <p>Error {mostProblematicMachine?.lastBreakdown?.statusCode} was last seen {mostProblematicMachine?.lastBreakdown?.timesince} minutes ago.</p>
+        </Card>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <Card className="p-4 w-full">
+          <GraphWrapper title={"The latests frequency of errors for all machines"}>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <RadarChart data={machineerrorcodefreq}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Tooltip />
+                <Radar
+                  name="Mike"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
+        </Card>
+        <Card className="w-full p-4">
+          <GraphWrapper>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <BarChart data={productsProducedPrDay}>
+                <XAxis
+                  dataKey="name"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip />
+                <Bar
+                  dataKey="total"
+                  className="fill-primary"
+                  radius={[4, 4, 0, 0]}
+                />
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              </BarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
         </Card>
       </div>
       <div>

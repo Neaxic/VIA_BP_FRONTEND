@@ -12,7 +12,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { ArrowUpDown, ChevronDown, MoreHorizontal, Rows } from "lucide-react";
 import { UpdateUser } from "../../../../../components/UpdateUser";
 import { DeleteUser } from "../../../../../components/DeleteUser";
-import { IUser } from "../../../../../util/UserInterfaces";
+import { IUser } from '../../../../../util/UserInterfaces';
 import { CreateUser } from "../../../../../components/CreateUser";
 import { titleCaseWord } from "../../../../../util/helpers";
 
@@ -56,7 +56,7 @@ export default function Page() {
         );
       },
       cell: ({ row }) => {
-        const roles = row.getValue("roles");
+        const roles: IUser["roles"] = row.getValue("roles");
         const roleNames = roles?.map(e => e.roleName);
         return <div className="capitalize">{roleNames ? roleNames[0] : 'N/A'}</div>
       },

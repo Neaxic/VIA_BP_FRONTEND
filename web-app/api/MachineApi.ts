@@ -21,7 +21,6 @@ export const getCurrentOeeFromBatch = async (batchNo: number) => {
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (e) {
     console.log(e);
@@ -196,6 +195,42 @@ export const getMachineOverviewAllMachineLast24 = async (machineId: number) => {
     const response = await axios({
       method: "GET",
       url: `/getMachineOverviewAllMachineLast24`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getMostCommonMachineErrorsAndTheirFrequency = async (machineId?: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: machineId ? `/getMostCommonMachineErrorsAndTheirFrequencyForMachine?machineId=${machineId}` : `/getMostCommonMachineErrorsAndTheirFrequency`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getProductsMadeEachDay30DayInterval = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getProductsMadeEachDay30DayInterval`,
       baseURL: URL,
       headers: {
         accept: "application/json",
