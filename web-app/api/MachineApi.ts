@@ -117,3 +117,39 @@ export const getMostProlematicMachine24hr = async () => {
     console.log(e);
   }
 };
+
+export const getMostProlematicMachine24hr = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getMostProblematicMachine24hr`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getMachineOverviewAllMachineLast24 = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getMachineOverviewAllMachineLast24`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
