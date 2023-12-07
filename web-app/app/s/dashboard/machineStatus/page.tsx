@@ -1,7 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MachineListView } from "../../../../components/MachineListView";
 import { Label } from "../../../../components/ui/label";
+import {
+  FrequentProductErrorData,
+  OeeData,
+} from "../../../../util/HelperInterfaces";
+import { useMachineContext } from "../../../../contexts/MachineContext";
+import {
+  getCurrentOeeFromBatch,
+  getMostFrequentStatusForBatch,
+} from "../../../../api/MachineApi";
 
 export default function Page() {
   const { machines, setMachine } = useMachineContext();
