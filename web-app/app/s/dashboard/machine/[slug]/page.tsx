@@ -24,6 +24,8 @@ import {
 } from "../../../../../api/MachineApi";
 import React, { use, useEffect, useState } from "react";
 import { IProblemMachine } from "../../../../../util/MachinesInterfaces";
+import TimeSchedule from "../../../../../components/TimeSchuled";
+import { getMachineOverviewByMachineLast24 } from "../../../../../api/MachineApi";
 
 const dataRadar = [
   {
@@ -80,7 +82,10 @@ export default function Page({ params }: { params: { slug: number } }) {
   const [historyBatch, sethistoryBatch] = useState([]);
   const [downtime, setDowntime] = useState(0);
   const [brekadownCnt, setBreakdownCount] = useState(0);
-  const [lastBreakdown, setLastBreakdown] = useState<IProblemMachine["lastBreakdown"] | undefined>(undefined);
+  const [machineData, setMachineData] = useState({});
+  const [lastBreakdown, setLastBreakdown] = useState<
+    IProblemMachine["lastBreakdown"] | undefined
+  >(undefined);
   const { machine } = useMachineContext();
   const { user } = useUserContext();
 
@@ -107,12 +112,16 @@ export default function Page({ params }: { params: { slug: number } }) {
         const data = await getMostFrequentStatusForMachine(params.slug);
         const dataBatch = await getHistoryBatchData(params.slug);
         const brekadownCnt = await getNumBreakdowns24hrByMachineId(params.slug);
+        const machineData = await getMachineOverviewByMachineLast24(
+          params.slug
+        );
         const lastBreakdown: {
           statusCode: number;
           timesince: number;
         }[] = await getLastBreakdown(params.slug);
 
         setFrequentErrors(data);
+        setMachineData(machineData);
         sethistoryBatch(dataBatch);
         setDowntime(100 - +uptime);
         setBreakdownCount(brekadownCnt);
@@ -128,22 +137,26 @@ export default function Page({ params }: { params: { slug: number } }) {
   return (
     <>
       <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
-        Heres todays current overview for machine {`"`}{machine?.machineName}{`"`}
+        Heres todays current overview for machine {`"`}
+        {machine?.machineName}
+        {`"`}
       </h1>
 
       {machine && +machine.status != 1 && (
         <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
-          Attention! This machine is currently down. Error{" "}{machine.statusCode?.statusCodeID}.{" "}
-        </Card >
-      )
-      }
-
+          Attention! This machine is currently down. Error{" "}
+          {machine.statusCode?.statusCodeID}.{" "}
+        </Card>
+      )}
 
       <div className="flex gap-2">
         <Card className="w-full p-4">
           <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
           <p>{brekadownCnt} Breakdown(s) in the last 24hr</p>
-          <p>Error {lastBreakdown?.statusCode} was last seen {lastBreakdown?.timesince} minutes ago</p>
+          <p>
+            Error {lastBreakdown?.statusCode} was last seen{" "}
+            {lastBreakdown?.timesince} minutes ago
+          </p>
           <p>A total downtime of {downtime.toFixed(2)}%</p>
         </Card>
       </div>
@@ -204,6 +217,10 @@ export default function Page({ params }: { params: { slug: number } }) {
           </GraphWrapper>
         </Card>
       </div>
+      <Card className="p-4 mt-2">
+        <h1>Machine Uptime Last 24 Hours</h1>
+        <TimeSchedule machineData={machineData} />
+      </Card>
       <Card className="p-4 mt-2">
         <h1>All batches and OEE</h1>
         <Table columns={tableColumns1} data={tableDataForBatch} />
