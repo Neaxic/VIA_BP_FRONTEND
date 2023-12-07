@@ -186,7 +186,7 @@ export function CreateUser({ buttonName = "Open", onCreated, ...props }: CreateU
                                     <SelectValue placeholder="Roles" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {allRoles.map((role, index) => (
+                                    {allRoles && allRoles.map((role, index) => (
                                         <SelectItem key={index + ", " + role.roleName} value={role.roleName}>
                                             {role.roleName}
                                         </SelectItem>

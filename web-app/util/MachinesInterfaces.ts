@@ -22,6 +22,10 @@ export interface IBatch {
 export interface IProblemMachine extends IMachine {
   downtimePercentage?: number;
   breakdownAmount?: number;
+  lastBreakdown?: {
+    statusCode: number;
+    timesince: number; // in minutes
+  }
 }
 
 export const initialMachine: IMachine = {

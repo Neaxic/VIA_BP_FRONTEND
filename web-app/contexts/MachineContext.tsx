@@ -3,7 +3,7 @@
 import * as React from "react";
 import { IMachine, IProblemMachine, initialMachine } from "../util/MachinesInterfaces";
 import { getAllMachines } from "../api/adminApi";
-import { getCurrentOeeFromBatch, getMachineUpTime24HourProcentage, getMostProlematicMachine24hr } from "../api/MachineApi";
+import { getCurrentOeeFromBatch, getLastBreakdown, getMachineUpTime24HourProcentage, getMostProlematicMachine24hr, getNumBreakdowns24hr, getNumBreakdowns24hrByMachineId } from "../api/MachineApi";
 
 interface MachineContextInterface {
   machines: IMachine[];
@@ -12,6 +12,7 @@ interface MachineContextInterface {
   getCurrentOee: (batchNo: number) => Promise<number>;
   machine: IMachine | undefined;
   runningCount: number;
+  totalBreakdownCount: number;
   mostProblematicMachine: IProblemMachine | undefined;
   setMachine: React.Dispatch<React.SetStateAction<IMachine | undefined>>;
 }
@@ -23,6 +24,7 @@ export const MachineContext = React.createContext<MachineContextInterface>({
   getCurrentOee: () => new Promise(() => { }),
   machine: undefined,
   runningCount: 0,
+  totalBreakdownCount: 0,
   mostProblematicMachine: undefined,
   setMachine: () => { },
 });
@@ -37,6 +39,14 @@ export default function MachineProvider({
   const [machines, setMachines] = React.useState<IMachine[]>([]);
   const [qualityControl, setQualityControl] = React.useState<IMachine[]>([]);
   const [mostProblematicMachine, setMostProblematicMachine] = React.useState<IProblemMachine>();
+  const [totalBreakdownCount, setTotalBreakdownCount] = React.useState<number>(0);
+
+  const loadTotalBreakdowns = React.useCallback(async () => {
+    const resp = await getNumBreakdowns24hr();
+    if (resp) {
+      setTotalBreakdownCount(resp);
+    }
+  }, []);
 
   const loadAllMachines = React.useCallback(async () => {
     try {
@@ -44,11 +54,18 @@ export default function MachineProvider({
       if (response) {
         const problematicID = await getMostProlematicMachine24hr();
         const uptimePercent = await getMachineUpTime24HourProcentage(problematicID);
+        const brekadownCnt = await getNumBreakdowns24hrByMachineId(problematicID);
+        const lastBreakdown: {
+          statusCode: number;
+          timesince: number;
+        }[] = await getLastBreakdown(problematicID);
 
         let problematicMachine: IProblemMachine = {
           ...initialMachine,
           ...response.find((machine: IMachine) => machine.machineID === problematicID),
           downtimePercentage: +(100 - +uptimePercent).toFixed(2),
+          breakdownAmount: brekadownCnt,
+          lastBreakdown: lastBreakdown[0],
         };
         setMostProblematicMachine(problematicMachine);
         setMachines(response);
@@ -114,6 +131,7 @@ export default function MachineProvider({
   // Fetch everything needed useEffect
   React.useEffect(() => {
     loadAllMachines();
+    loadTotalBreakdowns();
     // loadAllQualityControl()
   }, []);
 
@@ -122,6 +140,7 @@ export default function MachineProvider({
       value={{
         machine,
         runningCount,
+        totalBreakdownCount,
         mostProblematicMachine,
         setMachine,
         machines,

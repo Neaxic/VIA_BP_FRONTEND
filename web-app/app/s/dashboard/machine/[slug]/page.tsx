@@ -18,8 +18,9 @@ import Table from "../../../../../components/tableAdmin";
 import {
   getMostFrequentStatusForMachine,
   getHistoryBatchData,
+  getMachineUpTime24HourProcentage,
 } from "../../../../../api/MachineApi";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
 const dataRadar = [
   {
@@ -60,36 +61,23 @@ const dataRadar = [
   },
 ];
 
+const tableColumns = [
+  { field: "productlookupid", headerName: "productlookupid" },
+  { field: "count", headerName: "count" },
+];
+const tableColumns1 = [
+  { field: "batchNo", headerName: "batchNo" },
+  { field: "oee", headerName: "oee" },
+  { field: "mostFreqent", headerName: "mostFreqentMistakeOnProduct" },
+  { field: "endtime", headerName: "endtime" },
+];
+
 export default function Page({ params }: { params: { slug: number } }) {
   const [frequentErrors, setFrequentErrors] = useState([]);
   const [historyBatch, sethistoryBatch] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getMostFrequentStatusForMachine(params.slug);
-        const dataBatch = await getHistoryBatchData(params.slug);
-        setFrequentErrors(data);
-        sethistoryBatch(dataBatch);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [params.slug]);
-
+  const [downtime, setDowntime] = useState(0);
   const { machine } = useMachineContext();
   const { user } = useUserContext();
-  const tableColumns = [
-    { field: "productlookupid", headerName: "productlookupid" },
-    { field: "count", headerName: "count" },
-  ];
-  const tableColumns1 = [
-    { field: "batchNo", headerName: "batchNo" },
-    { field: "oee", headerName: "oee" },
-    { field: "mostFreqent", headerName: "mostFreqentMistakeOnProduct" },
-    { field: "endtime", headerName: "endtime" },
-  ];
 
   const tableData =
     frequentErrors &&
@@ -107,49 +95,43 @@ export default function Page({ params }: { params: { slug: number } }) {
       endtime: item.endtime,
     }));
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const uptime = await getMachineUpTime24HourProcentage(params.slug);
+        const data = await getMostFrequentStatusForMachine(params.slug);
+        const dataBatch = await getHistoryBatchData(params.slug);
+        setFrequentErrors(data);
+        sethistoryBatch(dataBatch);
+        setDowntime(100 - +uptime);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [params.slug]);
+
   return (
     <>
       <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
-        Heres todays current overview
+        Heres todays current overview for machine {`"`}{machine?.machineName}{`"`}
       </h1>
-      <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
-        Attention! 1 machine is currently down. Error E201 was issued last 02:31
-        hr(s). <span style={{ textDecoration: "underline" }}>See more</span>
-      </Card>
-      <Card className="w-full mb-4 p-4 border-green-600 bg-green-700">
-        Currently everything is running accordingly.
-      </Card>
-      <Card className="w-full mb-4 p-4 border-yellow-600 bg-yellow-700">
-        Attention! 1 machine is currently under maintenence.
-      </Card>
 
-      <div style={{ display: "flex", gap: 8 }}>
-        <Card className="p-4">
-          <h1 style={{ fontSize: 24 }}>Welcome back!</h1>
-          <h1 style={{ fontSize: 32, fontWeight: "bold" }}>{user?.username}</h1>
-          <p style={{ fontSize: 14 }}>Last seen: 21/02/2020 13:30 GMT+1</p>
-          <p style={{ fontSize: 14 }}>
-            Your role:{" "}
-            {user &&
-              user?.userRoles &&
-              user.userRoles[user?.userRoles?.length - 1].roleName}
-          </p>
-        </Card>
-      </div>
+      {machine && +machine.status != 1 && (
+        <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
+          Attention! This machine is currently down. Error{" "}{machine.statusCode?.statusCodeID}.{" "}
+        </Card >
+      )
+      }
+
 
       <div className="flex gap-2">
         <Card className="w-full p-4">
-          <h1 style={{ fontSize: 24 }}>Machine breakdown</h1>
-          <p>Currently 3 of 4 machines running</p>
-          <p>3 Breakdown(s) in the last 24hr</p>
-          <p>Error x was last seen y</p>
-        </Card>
-        <Card className="w-full p-4">
-          <h1 style={{ fontSize: 24 }}>The most problematic machine</h1>
-          <p>Machine 002 is the most problematic</p>
-          <p>2 Breakdown(s) in the last 24hr</p>
+          <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
+          <p>x Breakdown(s) in the last 24hr</p>
           <p>Error x was last seen y times</p>
-          <p>A total downtime of 28%</p>
+          <p>A total downtime of {downtime.toFixed(2)}%</p>
         </Card>
       </div>
 

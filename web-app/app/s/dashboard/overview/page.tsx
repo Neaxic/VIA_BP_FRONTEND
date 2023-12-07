@@ -10,10 +10,11 @@ import { MachineListView } from "../../../../components/MachineListView";
 import { Label } from "../../../../components/ui/label";
 
 export default function Page() {
-  const { machines, mostProblematicMachine, setMachine, runningCount } = useMachineContext();
+  const { machines, mostProblematicMachine, totalBreakdownCount, setMachine, runningCount } = useMachineContext();
   const { user } = useUserContext();
   const [machineData, setMachineData] = useState([]);
   const [failingCount, setFailingCount] = useState(0);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -73,18 +74,17 @@ export default function Page() {
 
       <div className="flex gap-2">
         <Card className="w-full p-4">
-          <h1 style={{ fontSize: 24 }}>Machines breakdown</h1>
+          <h1 style={{ fontSize: 24 }}>All machines breakdown</h1>
           <p>Currently {runningCount} of {machines.length} machines running</p>
-          <p>x Breakdown(s) in the last 24hr</p>
-          <p>Error x was last seen y</p>
+          <p>{totalBreakdownCount} Breakdown(s) in the last 24hr</p>
         </Card>
 
         <Card className="w-full p-4">
           <h1 style={{ fontSize: 24 }}>The most problematic machine</h1>
           <p>Machine {`"`}{mostProblematicMachine?.machineName}{`"`} is the most problematic</p>
           <p>A total downtime of {mostProblematicMachine?.downtimePercentage}%</p>
-          <p>x Breakdown(s) in the last 24hr</p>
-          <p>Error x was last seen y times</p>
+          <p>{mostProblematicMachine?.breakdownAmount} Breakdown(s) in the last 24hr</p>
+          <p>Error {mostProblematicMachine?.lastBreakdown?.statusCode} was last seen {mostProblematicMachine?.lastBreakdown?.timesince} minutes ago.</p>
         </Card>
       </div>
       <div>

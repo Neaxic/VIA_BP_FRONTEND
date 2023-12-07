@@ -12,10 +12,10 @@ export const reloadToken = () => {
 export const getCurrentOeeFromBatch = async (batchNo: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getCurrentOeeFromBatch?batchNo=${batchNo}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `getCurrentOeeFromBatch?batchNo=${batchNo}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -31,10 +31,10 @@ export const getCurrentOeeFromBatch = async (batchNo: number) => {
 export const getMostFrequentStatusForBatch = async (batchNo: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getMostFrequentStatusForBatch?batchNo=${batchNo}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `getMostFrequentStatusForBatch?batchNo=${batchNo}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -67,10 +67,10 @@ export const getMachineUpTime24HourProcentage = async (machineId: number) => {
 export const getMostFrequentStatusForMachine = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getMostFrequentStatusForMachine?machineId=${machineId}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `getMostFrequentStatusForMachine?machineId=${machineId}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -85,10 +85,10 @@ export const getMostFrequentStatusForMachine = async (machineId: number) => {
 export const getHistoryBatchData = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getHistoryBatchData?machineId=${machineId}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `getHistoryBatchData?machineId=${machineId}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
@@ -106,6 +106,60 @@ export const getMostProlematicMachine24hr = async () => {
     const response = await axios({
       method: "GET",
       url: `/getMostProblematicMachine24hr`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getNumBreakdowns24hr = async () => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/amountOfBreakdowns24hr`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getNumBreakdowns24hrByMachineId = async (machineId: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/amountOfBreakdowns24hrByMachine?machineId=${machineId}`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getLastBreakdown = async (machineId: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getLastBreakdown?machineId=${machineId}`,
       baseURL: URL,
       headers: {
         accept: "application/json",
