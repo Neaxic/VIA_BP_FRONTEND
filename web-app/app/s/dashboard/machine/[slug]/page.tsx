@@ -160,6 +160,10 @@ export default function Page({ params }: { params: { slug: number } }) {
           <p>A total downtime of {downtime.toFixed(2)}%</p>
         </Card>
       </div>
+      <Card className="p-4 mt-2">
+        <h1>Machine Uptime Last 24 Hours</h1>
+        <TimeSchedule machineData={machineData} />
+      </Card>
 
       <div className="flex gap-2 mt-4">
         <Card className="p-4 w-full">
@@ -217,10 +221,6 @@ export default function Page({ params }: { params: { slug: number } }) {
           </GraphWrapper>
         </Card>
       </div>
-      <Card className="p-4 mt-2">
-        <h1>Machine Uptime Last 24 Hours</h1>
-        <TimeSchedule machineData={machineData} />
-      </Card>
       <Card className="p-4 mt-2">
         <h1>All batches and OEE</h1>
         <Table columns={tableColumns1} data={tableDataForBatch} />

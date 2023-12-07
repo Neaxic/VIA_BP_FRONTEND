@@ -51,6 +51,16 @@ const TimeSchedule: React.FC<{ machineData: MachineData }> = ({
           ))}
         </tbody>
       </table>
+      <style jsx>{`
+        table {
+          border-collapse: collapse;
+        }
+        th,
+        td {
+          border: 1px solid black;
+          padding: 5px;
+        }
+      `}</style>
     </div>
   );
 };
