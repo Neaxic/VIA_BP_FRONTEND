@@ -225,12 +225,48 @@ export const getMostCommonMachineErrorsAndTheirFrequency = async (machineId?: nu
   }
 };
 
-export const getProductsMadeEachDay30DayInterval = async () => {
+export const getMostCommonProductErrorsAndTheirFrequency = async (machineId?: number) => {
   reloadToken();
   try {
     const response = await axios({
       method: "GET",
-      url: `/getProductsMadeEachDay30DayInterval`,
+      url: machineId ? `/getMostCommonProductErrorsAndTheirFrequencyForMachine?machineId=${machineId}` : `/getMostCommonProductErrorsAndTheirFrequency`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getNumberOfProductsMadeInTheLast24HoursPrHour = async (machineId?: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: machineId ? `` : `/getNumberOfProductsMadeInTheLast24HoursPrHour`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getProductsMadeEachDay30DayInterval = async (machineId?: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: machineId ? `` : `/getProductsMadeEachDay30DayInterval`,
       baseURL: URL,
       headers: {
         accept: "application/json",

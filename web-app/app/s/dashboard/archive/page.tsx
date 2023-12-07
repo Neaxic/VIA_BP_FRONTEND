@@ -235,7 +235,7 @@ export default function Page() {
 
       <div className="flex w-full gap-4 mt-6">
         <Card className="w-full p-2">
-          <GraphWrapper>
+          <GraphWrapper enableSettings>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <BarChart data={data}>
                 <XAxis

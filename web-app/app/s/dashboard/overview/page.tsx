@@ -3,37 +3,63 @@ import React, { useState, useEffect } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import { useUserContext } from "../../../../contexts/UserContext";
-import { getMostCommonMachineErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
+import { getAllProductsMadeInTheLast24Hours, getMostCommonMachineErrorsAndTheirFrequency, getMostCommonProductErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getNumberOfProductsMadeInTheLast24HoursPrHour, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import Link from "next/link";
 import { MachineListView } from "../../../../components/MachineListView";
 import { Label } from "../../../../components/ui/label";
 import { GraphWrapper } from "../../../../components/graph-wrapper";
 import { Bar, BarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { IErrorFreq, IProductErrorFreq, IProductProduced } from "../../../../util/MachinesInterfaces";
 
 export default function Page() {
   const { machines, mostProblematicMachine, totalBreakdownCount, setMachine, runningCount } = useMachineContext();
   const { user } = useUserContext();
-  const [failingCount, setFailingCount] = useState(0);
-  const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
-  const [productsProducedPrDay, setProductsProducedPrDay] = useState<{ Date: string, ProductsMade: number }[]>([]);
+  const [machineerrorcodefreq, setMachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
+  const [productErrorFreq, setProductErrorFreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
+  const [calculateAvgErrorFeq, setCalculateAvgErrorFeq] = useState<number>(0);
+  const [productsProducedPrDay, setProductsProducedPrDay] = useState<IProductProduced[]>([]);
+  const [productsProduced24hr, setProductsProduced24hr] = useState<IProductProduced[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency();
-        const transformed = errorcodefreq.map((error) => {
+        const errorcodefreq: IErrorFreq[] = await getMostCommonMachineErrorsAndTheirFrequency();
+        const calculateAvgErrorFeqTmp = errorcodefreq.reduce((acc, curr) => {
+          return acc + curr.frequency;
+        }, 0) / errorcodefreq.length;
+
+        setCalculateAvgErrorFeq(calculateAvgErrorFeqTmp)
+
+        const transformedError = errorcodefreq.map((error) => {
           return {
             subject: error.errorName,
             A: error.frequency,
+            B: calculateAvgErrorFeqTmp,
             fullMark: 300,
           }
         });
 
-        setmachineerrorcodefreq(transformed);
 
-        const productsProducedPrDay: { Date: string, ProductsMade: number }[] = await getProductsMadeEachDay30DayInterval();
+
+        const productErrorFreqtmp: IProductErrorFreq[] = await getMostCommonProductErrorsAndTheirFrequency();
+        const transformedProduct = productErrorFreqtmp.map((error) => {
+          return {
+            subject: error.productErrorname,
+            A: error.frequency,
+            fullMark: 300,
+          }
+        });
+        setProductErrorFreq(transformedProduct)
+        setMachineerrorcodefreq(transformedError);
+
+
+        //Bar charts data
+        const productsProducedPrDay: IProductProduced[] = await getProductsMadeEachDay30DayInterval();
         setProductsProducedPrDay(productsProducedPrDay)
+
+        const productsProduced24hr: IProductProduced[] = await getNumberOfProductsMadeInTheLast24HoursPrHour();
+        setProductsProduced24hr(productsProduced24hr)
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -111,6 +137,30 @@ export default function Page() {
                 <PolarRadiusAxis />
                 <Tooltip />
                 <Radar
+                  name="Actual amount"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
+                <Radar
+                  name="Avarage"
+                  dataKey="B"
+                  className="fill-red-300 stroke-red-300"
+                  fillOpacity={0.5}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
+        </Card>
+        <Card className="p-4 w-full">
+          <GraphWrapper title={"The latests frequency of errors for all machines"}>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <RadarChart data={productErrorFreq}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Tooltip />
+                <Radar
                   name="Mike"
                   dataKey="A"
                   className="fill-primary stroke-primary"
@@ -120,12 +170,15 @@ export default function Page() {
             </ResponsiveContainer>
           </GraphWrapper>
         </Card>
+
+      </div>
+      <div className="flex gap-2 mt-4">
         <Card className="w-full p-4">
-          <GraphWrapper>
+          <GraphWrapper title="Products produced for entire production last month ">
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <BarChart data={productsProducedPrDay}>
                 <XAxis
-                  dataKey="name"
+                  dataKey="Date"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
@@ -136,11 +189,40 @@ export default function Page() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `${value}`}
                 />
                 <Tooltip />
                 <Bar
-                  dataKey="total"
+                  dataKey="ProductsMade"
+                  className="fill-primary"
+                  radius={[4, 4, 0, 0]}
+                />
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+              </BarChart>
+            </ResponsiveContainer>
+          </GraphWrapper>
+        </Card>
+        <Card className="w-full p-4">
+          <GraphWrapper title="Products produced for entire production last 24hr">
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <BarChart data={productsProduced24hr}>
+                <XAxis
+                  dataKey="Date"
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${value}`}
+                />
+                <Tooltip />
+                <Bar
+                  dataKey="ProductsMade"
                   className="fill-primary"
                   radius={[4, 4, 0, 0]}
                 />

@@ -40,3 +40,17 @@ export const initialMachine: IMachine = {
   batches: [],
   machineRunning: false,
 };
+
+export interface IProductErrorFreq {
+  productErrorname: string;
+  frequency: number;
+}
+export interface IErrorFreq {
+  date: string;
+  ProductsMade: number;
+}
+
+export interface IProductProduced {
+  date: string;
+  ProductsMade: number;
+}
