@@ -10,10 +10,9 @@ import { MachineListView } from "../../../../components/MachineListView";
 import { Label } from "../../../../components/ui/label";
 
 export default function Page() {
-  const { machines, mostProblematicMachine, setMachine } = useMachineContext();
+  const { machines, mostProblematicMachine, setMachine, runningCount } = useMachineContext();
   const { user } = useUserContext();
   const [machineData, setMachineData] = useState([]);
-  const [runningCount, setRunningCount] = useState(0);
   const [failingCount, setFailingCount] = useState(0);
 
   useEffect(() => {
@@ -43,20 +42,16 @@ export default function Page() {
       </h1>
 
       {machines && machines.map((machine, index) => {
-        if (machine.statusCode?.statusCodeID != 1) {
+        if (+machine.status != 1) {
           return (
             <Card key={"i: " + index + "m" + machine.status} className="w-full mb-4 p-4 border-red-600 bg-red-700">
               Attention! {machine.machineName} machine is currently down. Error{" "}
-              {machine.statusCode?.statusCodeID}
-              <Button >
-                <Link href={"./machine/" + machine.machineID}>
-                  See more
-                </Link>
-              </Button>
+              {machine.statusCode?.statusCodeID}.{" "}
+              <Link className="underline" onClick={() => setMachine(machine)} href={"./machine/" + machine.machineID}>
+                See more
+              </Link>
             </Card >
           );
-        } else {
-          setRunningCount(runningCount + 1)
         }
         return (<></>)
       })}
@@ -67,17 +62,18 @@ export default function Page() {
         </Card>
       )}
 
-      <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
+      {/* <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
         Attention! 1 machine is currently down. Error E201 was issued last 02:31
         hr(s). <span style={{ textDecoration: "underline" }}>See more</span>
-      </Card>
+      </Card> */}
 
-      <Card className="w-full mb-4 p-4 border-yellow-600 bg-yellow-700">
+      {/* <Card className="w-full mb-4 p-4 border-yellow-600 bg-yellow-700">
         Attention! 1 machine is currently under maintenence.
-      </Card>
+      </Card> */}
+
       <div className="flex gap-2">
         <Card className="w-full p-4">
-          <h1 style={{ fontSize: 24 }}>Machine breakdown</h1>
+          <h1 style={{ fontSize: 24 }}>Machines breakdown</h1>
           <p>Currently {runningCount} of {machines.length} machines running</p>
           <p>x Breakdown(s) in the last 24hr</p>
           <p>Error x was last seen y</p>
@@ -85,10 +81,10 @@ export default function Page() {
 
         <Card className="w-full p-4">
           <h1 style={{ fontSize: 24 }}>The most problematic machine</h1>
-          <p>Machine {mostProblematicMachine?.machineName} is the most problematic</p>
+          <p>Machine {`"`}{mostProblematicMachine?.machineName}{`"`} is the most problematic</p>
+          <p>A total downtime of {mostProblematicMachine?.downtimePercentage}%</p>
           <p>x Breakdown(s) in the last 24hr</p>
           <p>Error x was last seen y times</p>
-          <p>A total downtime of {mostProblematicMachine?.downtimePercentage}%</p>
         </Card>
       </div>
       <div>

@@ -1,5 +1,5 @@
 export interface IMachine {
-  status: string;
+  status: number;
   machineID: number;
   machineName: string;
   description: string;
@@ -25,7 +25,7 @@ export interface IProblemMachine extends IMachine {
 }
 
 export const initialMachine: IMachine = {
-  status: "",
+  status: 0,
   machineID: 0,
   machineName: "",
   description: "",

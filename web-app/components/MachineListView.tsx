@@ -59,9 +59,12 @@ export function MachineListView({ totalAmount, ...props }: MachineListViewProps)
                         key={machine.machineID}
                         className="p-4 mb-4"
                         style={{
-                            borderColor: machine.status ? "lightgreen" : "red",
+                            borderColor: machine.status === 1 ? "lightgreen" : "red",
                         }}
                     >
+                        <div className="float-right">
+                            <h1 style={{ fontSize: 18 }}>{machine.status === 1 ? "Running" : "Stopped"}</h1>
+                        </div>
                         <div style={{ display: "flex" }}>
                             <div>
                                 <h2>Machine Name: {machine.machineName}</h2>
