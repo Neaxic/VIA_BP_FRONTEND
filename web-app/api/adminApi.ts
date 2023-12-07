@@ -185,7 +185,7 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
 export const getMachineByIdApi = async (id: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}/getMachine?id=${id}`;
+    const apiUrl = `${URL}/getMachineById?id=${id}`;
     const response = await axios({
       method: "GET",
       url: apiUrl,

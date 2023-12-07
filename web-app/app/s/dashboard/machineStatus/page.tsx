@@ -1,23 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Card } from "../../../../components/ui/card";
-import { useMachineContext } from "../../../../contexts/MachineContext";
-import {
-  getCurrentOeeFromBatch,
-  getMostFrequentStatusForBatch,
-} from "../../../../api/MachineApi";
-import { Button } from "../../../../components/ui/button";
-import Link from "next/link";
-type OeeData = {
-  [batchNo: number]: string | number;
-};
-// Definerer en type for den mest hyppige produktfejlstatus
-type FrequentProductErrorData = {
-  [batchNo: number]: {
-    errorLookUpId: string;
-    count: number;
-  };
-};
+import React from "react";
+import { MachineListView } from "../../../../components/MachineListView";
+import { Label } from "../../../../components/ui/label";
+
 export default function Page() {
   const { machines, setMachine } = useMachineContext();
   const [oeeData, setOeeData] = useState<OeeData>({});
@@ -55,60 +40,11 @@ export default function Page() {
   }, [machines]);
 
   return (
-    <div>
-      {machines.map((machine) => (
-        <Card
-          key={machine.machineID}
-          className="p-4 mb-4"
-          style={{
-            borderColor: machine.status ? "lightgreen" : "red",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <div>
-              <h2>{machine.machineName}</h2>
-              <p>Description: {machine.description}</p>
-              <p>
-                Current OEE: {oeeData[machine.batches?.[0]?.batchNo] ?? fail}
-              </p>
-              <p>
-                Most Frequent Product Error On Batch:
-                {frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                  ? `${
-                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                        .errorLookUpId
-                    } (Count: ${
-                      frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                        .count
-                    })`
-                  : fail}
-              </p>
-              <p>
-                Current Batch:
-                {machine.batches?.length > 0
-                  ? machine.batches[0].batchNo
-                  : fail}
-              </p>
-              <p>
-                Produced:
-                {machine.batches?.length > 0
-                  ? machine.batches[0].productsMade
-                  : fail}
-              </p>
-              <p>
-                Need to produce:
-                {machine.batches?.length > 0
-                  ? machine.batches[0].batchSize
-                  : fail}
-              </p>
-              <Button variant={"outline"} onClick={() => setMachine(machine)}>
-                <Link href={"./machine/" + machine.machineID}>See more</Link>
-              </Button>
-              <button>Se mere</button>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
+    <>
+      <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
+        Total list all of machines
+      </h1>
+      <MachineListView />
+    </>
   );
 }
