@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import { useUserContext } from "../../../../contexts/UserContext";
-import { getAllProductsMadeInTheLast24Hours, getMostCommonMachineErrorsAndTheirFrequency, getMostCommonProductErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getNumberOfProductsMadeInTheLast24HoursPrHour, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
+import { getMostCommonMachineErrorsAndTheirFrequency, getMostCommonProductErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getNumberOfProductsMadeInTheLast24HoursPrHour, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import Link from "next/link";
 import { MachineListView } from "../../../../components/MachineListView";
@@ -11,6 +11,7 @@ import { Label } from "../../../../components/ui/label";
 import { GraphWrapper } from "../../../../components/graph-wrapper";
 import { Bar, BarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { IErrorFreq, IProductErrorFreq, IProductProduced } from "../../../../util/MachinesInterfaces";
+import { Badge } from "../../../../components/ui/badge";
 
 export default function Page() {
   const { machines, mostProblematicMachine, totalBreakdownCount, setMachine, runningCount } = useMachineContext();
@@ -75,7 +76,7 @@ export default function Page() {
         <Card className="p-4">
           <h1 style={{ fontSize: 24 }}>Welcome back!</h1>
           <h1 style={{ fontSize: 32, fontWeight: "bold" }}>{user?.firstname} {user?.lastname}</h1>
-          <p style={{ fontSize: 14 }}>Access since: {new Date(user?.createDate).toLocaleString()}</p>
+          <p style={{ fontSize: 14 }}>Access since: {new Date(user?.createDate || "01/01/2000").toLocaleString()}</p>
         </Card>
       </div>
       <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
@@ -130,6 +131,10 @@ export default function Page() {
       <div className="flex gap-2 mt-4">
         <Card className="p-4 w-full">
           <GraphWrapper title={"The latests frequency of errors for all machines"}>
+            <div className="pl-4">
+              <Badge className="mr-2 bg-primary">Error frequency</Badge>
+              <Badge className="mr-2 bg-blue-500">Avarage</Badge>
+            </div>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <RadarChart data={machineerrorcodefreq}>
                 <PolarGrid />
@@ -145,7 +150,7 @@ export default function Page() {
                 <Radar
                   name="Avarage"
                   dataKey="B"
-                  className="fill-red-300 stroke-red-300"
+                  className="fill-blue-500 stroke-blue-500"
                   fillOpacity={0.5}
                 />
               </RadarChart>
