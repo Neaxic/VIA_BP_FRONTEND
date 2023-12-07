@@ -133,6 +133,8 @@ export default function MachineProvider({
     loadAllMachines();
     loadTotalBreakdowns();
     // loadAllQualityControl()
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

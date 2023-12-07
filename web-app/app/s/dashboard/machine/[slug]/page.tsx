@@ -19,8 +19,11 @@ import {
   getMostFrequentStatusForMachine,
   getHistoryBatchData,
   getMachineUpTime24HourProcentage,
+  getNumBreakdowns24hrByMachineId,
+  getLastBreakdown,
 } from "../../../../../api/MachineApi";
 import React, { use, useEffect, useState } from "react";
+import { IProblemMachine } from "../../../../../util/MachinesInterfaces";
 
 const dataRadar = [
   {
@@ -76,6 +79,8 @@ export default function Page({ params }: { params: { slug: number } }) {
   const [frequentErrors, setFrequentErrors] = useState([]);
   const [historyBatch, sethistoryBatch] = useState([]);
   const [downtime, setDowntime] = useState(0);
+  const [brekadownCnt, setBreakdownCount] = useState(0);
+  const [lastBreakdown, setLastBreakdown] = useState<IProblemMachine["lastBreakdown"] | undefined>(undefined);
   const { machine } = useMachineContext();
   const { user } = useUserContext();
 
@@ -101,9 +106,17 @@ export default function Page({ params }: { params: { slug: number } }) {
         const uptime = await getMachineUpTime24HourProcentage(params.slug);
         const data = await getMostFrequentStatusForMachine(params.slug);
         const dataBatch = await getHistoryBatchData(params.slug);
+        const brekadownCnt = await getNumBreakdowns24hrByMachineId(params.slug);
+        const lastBreakdown: {
+          statusCode: number;
+          timesince: number;
+        }[] = await getLastBreakdown(params.slug);
+
         setFrequentErrors(data);
         sethistoryBatch(dataBatch);
         setDowntime(100 - +uptime);
+        setBreakdownCount(brekadownCnt);
+        setLastBreakdown(lastBreakdown[0]);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -129,8 +142,8 @@ export default function Page({ params }: { params: { slug: number } }) {
       <div className="flex gap-2">
         <Card className="w-full p-4">
           <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
-          <p>x Breakdown(s) in the last 24hr</p>
-          <p>Error x was last seen y times</p>
+          <p>{brekadownCnt} Breakdown(s) in the last 24hr</p>
+          <p>Error {lastBreakdown?.statusCode} was last seen {lastBreakdown?.timesince} minutes ago</p>
           <p>A total downtime of {downtime.toFixed(2)}%</p>
         </Card>
       </div>
