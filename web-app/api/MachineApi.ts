@@ -171,3 +171,39 @@ export const getLastBreakdown = async (machineId: number) => {
     console.log(e);
   }
 };
+
+export const getMachineOverviewByMachineLast24 = async (machineId: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getMachineOverviewByMachineLast24?machineId=${machineId}`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getMachineOverviewAllMachineLast24 = async (machineId: number) => {
+  reloadToken();
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `/getMachineOverviewAllMachineLast24`,
+      baseURL: URL,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
