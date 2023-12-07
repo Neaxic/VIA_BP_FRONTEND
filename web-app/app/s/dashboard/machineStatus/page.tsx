@@ -23,7 +23,7 @@ export default function Page() {
   const [oeeData, setOeeData] = useState<OeeData>({});
   const [frequentProductErrorData, setFrequentProductErrorData] =
     useState<FrequentProductErrorData>({});
-  const fail = "Ingen Aktive Ordre";
+  const fail = "Fejl På maskinen";
 
   // Henter OEE-data og den mest hyppige produktfejlstatus for en batch
   const fetchOeeData = async (batchNo: number) => {
