@@ -1,5 +1,5 @@
 export interface IMachine {
-  status: string;
+  status: number;
   machineID: number;
   machineName: string;
   description: string;
@@ -22,10 +22,14 @@ export interface IBatch {
 export interface IProblemMachine extends IMachine {
   downtimePercentage?: number;
   breakdownAmount?: number;
+  lastBreakdown?: {
+    statusCode: number;
+    timesince: number; // in minutes
+  }
 }
 
 export const initialMachine: IMachine = {
-  status: "",
+  status: 0,
   machineID: 0,
   machineName: "",
   description: "",

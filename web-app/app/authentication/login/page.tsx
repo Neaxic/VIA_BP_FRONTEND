@@ -5,7 +5,6 @@ import { cn } from "../../../lib/utils";
 import { buttonVariants } from "../../../components/ui/button";
 import { UserAuthForm } from "../../../components/user-auth-form";
 import React from "react";
-import Velux from "../../../assets/Velux_factory.jpg";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -16,20 +15,20 @@ export default function AuthenticationPage() {
   return (
     <>
       <div className="md:hidden">
-        <Image
-          src={Velux}
+        {/* <Image
+          src="/velux.jpeg"
           width={1280}
           height={843}
           alt="Authentication"
           className="block dark:hidden"
         />
         <Image
-          src={Velux}
+          src="/velux.jpeg"
           width={1280}
           height={843}
           alt="Authentication"
           className="hidden dark:block"
-        />
+        /> */}
       </div>
       <div className="container relative hidden min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
