@@ -123,7 +123,7 @@ export const getNumBreakdowns24hr = async () => {
   try {
     const response = await axios({
       method: "GET",
-      url: `/amountOfBreakdowns24hr`,
+      url: `/amountOfBreakdowns24hrForAllMachines`,
       baseURL: URL,
       headers: {
         accept: "application/json",
