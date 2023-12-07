@@ -51,20 +51,6 @@ const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          {columns.map((column, colIndex) => (
-            <TableCell key={colIndex} className={column.className}>
-              <input
-                type="text"
-                value={newRowData[column.field]}
-                onChange={(e) =>
-                  handleInputChange(column.field, e.target.value)
-                }
-                className="input-class"
-              />
-            </TableCell>
-          ))}
-        </TableRow>
         {data.map((row, rowIndex) => (
           <TableRow key={rowIndex}>
             {columns.map((column, colIndex) => (
@@ -74,11 +60,6 @@ const Table: React.FC<TableProps> = ({ caption, columns, data = [] }) => {
             ))}
           </TableRow>
         ))}
-        <TableRow>
-          <TableCell >
-            <button>lol</button>
-          </TableCell>
-        </TableRow>
       </TableBody>
     </UITable>
   );
