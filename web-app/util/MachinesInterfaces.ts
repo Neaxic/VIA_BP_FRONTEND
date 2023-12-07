@@ -46,8 +46,8 @@ export interface IProductErrorFreq {
   frequency: number;
 }
 export interface IErrorFreq {
-  date: string;
-  ProductsMade: number;
+  errorName: string;
+  frequency: number;
 }
 
 export interface IProductProduced {

@@ -1,12 +1,11 @@
 "use client"
 
-import { useCallback } from "react"
 import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
-import { IUser } from "../contexts/UserContext"
 import { Select, SelectContent, SelectItem } from "./ui/select"
+import { IUser } from "../util/UserInterfaces"
 
 const roles = [
     {
@@ -39,10 +38,6 @@ interface UpdateUserProps {
 }
 
 export function UpdateUser({ user, buttonName = "Open", avaliableRoles = roles, ...props }: UpdateUserProps) {
-    const updateUser = useCallback(async () => {
-        console.log("User updated " + user.id)
-    }, [user.id])
-
     return (
         <Dialog>
             <DialogTrigger

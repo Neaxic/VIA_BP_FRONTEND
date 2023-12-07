@@ -1,13 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
 import { useUserContext } from "../../../../contexts/UserContext";
 import { getMostCommonMachineErrorsAndTheirFrequency, getMostCommonProductErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getNumberOfProductsMadeInTheLast24HoursPrHour, getProductsMadeEachDay30DayInterval } from "../../../../api/MachineApi";
 import { useMachineContext } from "../../../../contexts/MachineContext";
 import Link from "next/link";
 import { MachineListView } from "../../../../components/MachineListView";
-import { Label } from "../../../../components/ui/label";
 import { GraphWrapper } from "../../../../components/graph-wrapper";
 import { Bar, BarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { IErrorFreq, IProductErrorFreq, IProductProduced } from "../../../../util/MachinesInterfaces";
@@ -18,7 +16,6 @@ export default function Page() {
   const { user } = useUserContext();
   const [machineerrorcodefreq, setMachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
   const [productErrorFreq, setProductErrorFreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
-  const [calculateAvgErrorFeq, setCalculateAvgErrorFeq] = useState<number>(0);
   const [productsProducedPrDay, setProductsProducedPrDay] = useState<IProductProduced[]>([]);
   const [productsProduced24hr, setProductsProduced24hr] = useState<IProductProduced[]>([]);
 
@@ -29,8 +26,6 @@ export default function Page() {
         const calculateAvgErrorFeqTmp = errorcodefreq.reduce((acc, curr) => {
           return acc + curr.frequency;
         }, 0) / errorcodefreq.length;
-
-        setCalculateAvgErrorFeq(calculateAvgErrorFeqTmp)
 
         const transformedError = errorcodefreq.map((error) => {
           return {
@@ -87,8 +82,8 @@ export default function Page() {
         if (+machine.status != 1) {
           return (
             <Card key={"i: " + index + "m" + machine.status} className="w-full mb-4 p-4 border-red-600 bg-red-700">
-              Attention! {machine.machineName} machine is currently down. Error{" "}
-              {machine.statusCode?.statusCodeID}.{" "}
+              Attention! {machine.machineName} machine is currently down. Status code {" "}
+              {machine.status}.{" "}
               <Link className="underline" onClick={() => setMachine(machine)} href={"./machine/" + machine.machineID}>
                 See more
               </Link>
@@ -212,6 +207,7 @@ export default function Page() {
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <BarChart data={productsProduced24hr}>
                 <XAxis
+                  name="Time"
                   dataKey="Date"
                   stroke="#888888"
                   fontSize={12}

@@ -1,11 +1,11 @@
 "use client"
 import * as React from 'react'
 import { loginApi, verifyTokenApi } from '../api/AuthAPI'
-import { ILoginResponse, IThrowError } from '../util/HelperInterfaces';
+import { IThrowError } from '../util/HelperInterfaces';
 import { useToast } from '../components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation'
-import { IUser } from '../util/UserInterfaces';
+import { ILoginResponse, IUser } from '../util/UserInterfaces';
 
 interface UserContextInterface {
     user?: IUser
@@ -47,7 +47,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                 })
                 setIsLoggedIn(true)
                 savingDataToLocalStorage(
-                    user
+                    user.userData
                 )
 
                 localStorage.setItem("token", JSON.stringify(user.token));
@@ -85,7 +85,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
                     token: user.token,
                 })
                 setIsLoggedIn(true)
-                savingDataToLocalStorage(user)
+                savingDataToLocalStorage(user.userData)
                 localStorage.setItem("token", JSON.stringify(user.token));
                 if (pathname === "/") router.push("/s/dashboard/overview")
             } else {
@@ -107,6 +107,7 @@ export default function UserProvider({ children, }: { children: React.ReactNode 
 
     const signOut = () => {
         localStorage.removeItem("user")
+        localStorage.removeItem("token")
         setIsLoggedIn(false)
     }
 

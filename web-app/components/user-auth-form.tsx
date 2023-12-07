@@ -4,7 +4,6 @@ import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { createUserApi } from "../api/AuthAPI";
 import { usePathname } from "next/navigation";
 import { useUserContext } from "../contexts/UserContext";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { login } = useUserContext();
-  const [loginErr, setLoginErr] = React.useState();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, SetUsername] = React.useState<string>("");
   const [password, SetPassword] = React.useState<string>("");
@@ -35,10 +33,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
   }, [pathname]);
 
-  const create = async () => {
-    const data = await createUserApi(username, password, isAdmin);
-  };
-
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
@@ -46,13 +40,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const hashedPassword = await sha256(password);
     console.log("Hashed Password:", hashedPassword);
 
-    if (isCreateURL) {
-      await createUserApi(username, hashedPassword, isAdmin);
-    } else {
-      const isAuthed = await login(username, hashedPassword); //Retunere bool
-      if (isAuthed) {
-        Router.push("/s/dashboard/overview");
-      }
+
+    const isAuthed = await login(username, hashedPassword); //Retunere bool
+    if (isAuthed) {
+      Router.push("/s/dashboard/overview");
     }
 
     setIsLoading(false);

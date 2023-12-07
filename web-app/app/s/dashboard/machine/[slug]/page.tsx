@@ -9,10 +9,8 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { useRouter } from "next/router";
 import { Card } from "../../../../../components/ui/card";
 import { GraphWrapper } from "../../../../../components/graph-wrapper";
-import { useUserContext } from "../../../../../contexts/UserContext";
 import { useMachineContext } from "../../../../../contexts/MachineContext";
 import Table from "../../../../../components/tableAdmin";
 import {
@@ -23,49 +21,11 @@ import {
   getLastBreakdown,
   getMostCommonMachineErrorsAndTheirFrequency,
 } from "../../../../../api/MachineApi";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IProblemMachine } from "../../../../../util/MachinesInterfaces";
 import TimeSchedule from "../../../../../components/TimeSchuled";
 import { getMachineOverviewByMachineLast24 } from "../../../../../api/MachineApi";
-
-const dataRadar = [
-  {
-    subject: "Error 1",
-    A: 120,
-    B: 110,
-    fullMark: 150,
-  },
-  {
-    subject: "Error 2",
-    A: 98,
-    B: 130,
-    fullMark: 150,
-  },
-  {
-    subject: "Error 3",
-    A: 86,
-    B: 130,
-    fullMark: 150,
-  },
-  {
-    subject: "Error 4",
-    A: 99,
-    B: 100,
-    fullMark: 150,
-  },
-  {
-    subject: "Error 5",
-    A: 85,
-    B: 90,
-    fullMark: 150,
-  },
-  {
-    subject: "Error 6",
-    A: 65,
-    B: 85,
-    fullMark: 150,
-  },
-];
+import { Badge } from "../../../../../components/ui/badge";
 
 const tableColumns = [
   { field: "productlookupid", headerName: "productlookupid" },
@@ -87,18 +47,17 @@ export default function Page({ params }: { params: { slug: number } }) {
   const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
   const [machineData, setMachineData] = useState({});
   const { machine } = useMachineContext();
-  const { user } = useUserContext();
 
   const tableData =
     frequentErrors &&
-    frequentErrors.map((item, index) => ({
+    frequentErrors.map((item: any, index) => ({
       productlookupid: item.productlookupid,
       count: item.count,
     }));
 
   const tableDataForBatch =
     historyBatch &&
-    historyBatch.map((item, index) => ({
+    historyBatch.map((item: any, index) => ({
       batchNo: item.batchNo,
       oee: item.oee,
       mostFreqent: item.mostFreqent,
@@ -121,10 +80,14 @@ export default function Page({ params }: { params: { slug: number } }) {
         }[] =
           await getLastBreakdown(params.slug);
         const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency(params.slug);
+        const calculateAvgErrorFeqTmp = errorcodefreq.reduce((acc, curr) => {
+          return acc + curr.frequency;
+        }, 0) / errorcodefreq.length;
         const transformed = errorcodefreq.map((error) => {
           return {
             subject: error.errorName,
             A: error.frequency,
+            B: calculateAvgErrorFeqTmp,
             fullMark: 300,
           }
         });
@@ -152,15 +115,19 @@ export default function Page({ params }: { params: { slug: number } }) {
         {`"`}
       </h1>
 
-      {machine && +machine.status != 1 && (
+      {machine && +machine.status != 1 ? (
         <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
           Attention! This machine is currently down. Error{" "}
           {machine.statusCode?.statusCodeID}.{" "}
         </Card>
+      ) : (
+        <Card className="w-full mb-4 p-4 border-green-600 bg-green-700">
+          Currently everything is running accordingly.
+        </Card>
       )}
 
-      <div className="flex gap-2">
-        <Card className="w-full p-4">
+      <div className="flex gap-2 ">
+        <Card className="w-5/12 p-4">
           <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
           <p>{brekadownCnt} Breakdown(s) in the last 24hr</p>
           <p>
@@ -169,15 +136,20 @@ export default function Page({ params }: { params: { slug: number } }) {
           </p>
           <p>A total downtime of {downtime.toFixed(2)}%</p>
         </Card>
+        <Card className="w-full h-full p-4">
+          <h1 style={{ fontSize: 24 }}>Machine Uptime Last 24 Hours</h1>
+          <TimeSchedule machineData={machineData} />
+        </Card>
       </div>
-      <Card className="p-4 mt-2">
-        <h1>Machine Uptime Last 24 Hours</h1>
-        <TimeSchedule machineData={machineData} />
-      </Card>
+
 
       <div className="flex gap-2 mt-4">
         <Card className="p-4 w-full">
           <GraphWrapper title={"The latests frequency of errors"}>
+            <div className="pl-4">
+              <Badge className="mr-2 bg-primary">Error frequency</Badge>
+              <Badge className="mr-2 bg-blue-500">Avarage</Badge>
+            </div>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <RadarChart data={machineerrorcodefreq}>
                 <PolarGrid />
@@ -185,45 +157,15 @@ export default function Page({ params }: { params: { slug: number } }) {
                 <PolarRadiusAxis />
                 <Tooltip />
                 <Radar
-                  name="Mike"
+                  name="Actual amount"
                   dataKey="A"
                   className="fill-primary stroke-primary"
                   fillOpacity={0.5}
                 />
-              </RadarChart>
-            </ResponsiveContainer>
-          </GraphWrapper>
-        </Card>
-        <Card className="p-4 w-full">
-          <GraphWrapper title={"Production from the last 24hr"}>
-            <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <RadarChart data={dataRadar}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
-                <Tooltip />
                 <Radar
-                  name="Mike"
-                  dataKey="A"
-                  className="fill-primary stroke-primary"
-                  fillOpacity={0.5}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </GraphWrapper>
-        </Card>
-        <Card className="p-4 w-full">
-          <GraphWrapper title={"Production from the last 24hr"}>
-            <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <RadarChart data={dataRadar}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
-                <Tooltip />
-                <Radar
-                  name="Mike"
-                  dataKey="A"
-                  className="fill-primary stroke-primary"
+                  name="Avarage"
+                  dataKey="B"
+                  className="fill-blue-500 stroke-blue-500"
                   fillOpacity={0.5}
                 />
               </RadarChart>

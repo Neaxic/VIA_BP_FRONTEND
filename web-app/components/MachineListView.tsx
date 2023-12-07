@@ -31,10 +31,9 @@ export function MachineListView({ totalAmount, ...props }: MachineListViewProps)
         } catch (error) {
             console.error("Error fetching data:", error);
             setOeeData((prevData) => ({ ...prevData, [batchNo]: fail }));
-            setFrequentProductErrorData((prevData) => ({
-                ...prevData,
-                [batchNo]: fail,
-            }));
+            setFrequentProductErrorData((prevData: any) => {
+                return { ...prevData, [batchNo]: fail };
+            });
         }
     };
 
