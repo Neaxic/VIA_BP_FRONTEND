@@ -181,7 +181,7 @@ export function CreateUser({ buttonName = "Open", onCreated, ...props }: CreateU
                             Roles
                         </Label>
                         <div className="col-span-3">
-                            <Select onValueChange={(e) => setSelectedRole(allRoles.find(a => a.roleName === e))} defaultValue={allRoles[allRoles.length - 1].roleName}>
+                            <Select onValueChange={(e) => setSelectedRole(allRoles.find(a => a.roleName === e))} defaultValue={allRoles && allRoles.length > 0 ? allRoles[allRoles.length - 1].roleName : "User"}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Roles" />
                                 </SelectTrigger>
