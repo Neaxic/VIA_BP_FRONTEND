@@ -64,10 +64,28 @@ export const getMachineUpTime24HourProcentage = async (machineId: number) => {
   }
 };
 
-export const getMostFrequentStatusForMachine = async () => {
+export const getMostFrequentStatusForMachine = async (machineId: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}getMostFrequentStatusForMachine`;
+    const apiUrl = `${URL}getMostFrequentStatusForMachine?machineId=${machineId}`;
+    const response = await axios({
+      method: "GET",
+      url: apiUrl,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
+      },
+    });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getHistoryBatchData = async (machineId: number) => {
+  reloadToken();
+  try {
+    const apiUrl = `${URL}getHistoryBatchData?machineId=${machineId}`;
     const response = await axios({
       method: "GET",
       url: apiUrl,
