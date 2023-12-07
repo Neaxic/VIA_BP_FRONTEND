@@ -16,7 +16,7 @@ const App = () => {
   }, []);
   return (
     <div>
-      <h1>Machine Performance</h1>
+      <h1>Machine Uptime Overview</h1>
       <TimeSchedule machineData={machineData} />
     </div>
   );

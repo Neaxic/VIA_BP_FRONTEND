@@ -34,7 +34,7 @@ const TimeSchedule: React.FC<{ machineData: MachineData }> = ({
           <tr>
             <th>Machine/Time</th>
             {Array.from({ length: 24 }).map((_, index) => (
-              <th key={index}>{formatNumber(index)}:00</th>
+              <th key={index}>{formatNumber(index)}:Hours ago</th>
             ))}
           </tr>
         </thead>
@@ -51,6 +51,16 @@ const TimeSchedule: React.FC<{ machineData: MachineData }> = ({
           ))}
         </tbody>
       </table>
+      <style jsx>{`
+        table {
+          border-collapse: collapse;
+        }
+        th,
+        td {
+          border: 1px solid black;
+          padding: 5px;
+        }
+      `}</style>
     </div>
   );
 };
