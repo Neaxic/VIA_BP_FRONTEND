@@ -19,7 +19,7 @@ const TimeSchedule: React.FC<{ machineData: MachineData }> = ({
       case 1:
         return "green";
       case 2:
-        return "yellow";
+        return "#ffcc00"; // "
       case 3:
         return "red";
       default:

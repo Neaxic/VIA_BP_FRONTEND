@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { slug: number } }) {
     machineStatistics && machineStatistics.historyBatch &&
     machineStatistics.historyBatch.map((item: any, index) => ({
       batchNo: item.batchNo,
-      oee: item.oee,
+      oee: item.oee.toFixed(3),
       mostFreqent: item.mostFreqent,
       endtime: item.endtime,
     }));
@@ -151,11 +151,11 @@ export default function Page({ params }: { params: { slug: number } }) {
           </GraphWrapper>
         </Card>
       </div >
-      <Card className="p-4 mt-2">
+      <Card className="p-4 mt-4">
         <h1>All batches and OEE</h1>
         <Table columns={tableColumns1} data={tableDataForBatch || []} />
       </Card>
-      <Card className="p-4 mt-2">
+      <Card className="p-4 mt-4">
         <h1>All mistakes</h1>
         <Table columns={tableColumns} data={tableData || []} />
       </Card>
