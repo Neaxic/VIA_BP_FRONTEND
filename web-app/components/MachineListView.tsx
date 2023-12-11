@@ -16,7 +16,7 @@ interface MachineListViewProps {
 }
 
 export function MachineListView({ totalAmount }: MachineListViewProps) {
-  const { machines, setMachine } = useMachineContext();
+  const { machines, setMachineId } = useMachineContext();
   const [oeeData, setOeeData] = React.useState<OeeData>({});
   const [uptime, setUptime] = React.useState<Record<string, number>>({});
   const [frequentProductErrorData, setFrequentProductErrorData] =
@@ -150,7 +150,9 @@ export function MachineListView({ totalAmount }: MachineListViewProps) {
                 <Button
                   className="mt-2"
                   variant={"outline"}
-                  onClick={() => setMachine(machine)}
+                  onClick={() => {
+                    setMachineId(machine.machineID)
+                  }}
                 >
                   <Link href={"./machine/" + machine.machineID}>See more</Link>
                 </Button>

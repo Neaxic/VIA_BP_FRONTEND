@@ -219,20 +219,6 @@ export default function MachineProvider({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //Fetcher noget ekstra data til machine view
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (machine?.machineID) {
-  //       const response: IMachineStatistics | undefined = await fetchMachineStatistics(machine?.machineID);
-  //       if (response)
-  //         setMachineStatistics(response);
-  //     }
-  //   };
-
-  //   fetchData();
-
-  // }, [fetchMachineStatistics]);
-
   return (
     <MachineContext.Provider
       value={{

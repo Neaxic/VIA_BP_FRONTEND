@@ -42,7 +42,7 @@ export const initialMachine: IMachine = {
 };
 
 export interface IProductErrorFreq {
-  productErrorname: string;
+  productErrorName: string;
   frequency: number;
 }
 export interface IErrorFreq {

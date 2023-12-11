@@ -12,7 +12,7 @@ import { IErrorFreq, IProductErrorFreq, IProductProduced } from "../../../../uti
 import { Badge } from "../../../../components/ui/badge";
 
 export default function Page() {
-  const { machines, mostProblematicMachine, totalBreakdownCount, setMachine, runningCount } = useMachineContext();
+  const { machines, mostProblematicMachine, totalBreakdownCount, setMachineId, runningCount } = useMachineContext();
   const { user } = useUserContext();
   const [machineerrorcodefreq, setMachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
   const [productErrorFreq, setProductErrorFreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
@@ -39,10 +39,15 @@ export default function Page() {
 
 
         const productErrorFreqtmp: IProductErrorFreq[] = await getMostCommonProductErrorsAndTheirFrequency();
+        const calculateAvgProductErrorFeqTmp = productErrorFreqtmp.reduce((acc, curr) => {
+          return acc + curr.frequency;
+        }, 0) / productErrorFreqtmp.length;
+
         const transformedProduct = productErrorFreqtmp.map((error) => {
           return {
-            subject: error.productErrorname,
+            subject: error.productErrorName,
             A: error.frequency,
+            B: calculateAvgProductErrorFeqTmp,
             fullMark: 300,
           }
         });
@@ -84,7 +89,7 @@ export default function Page() {
             <Card key={"i: " + index + "m" + machine.status} className="w-full mb-4 p-4 border-red-600 bg-red-700">
               Attention! {machine.machineName} machine is currently down. Status code {" "}
               {machine.status}.{" "}
-              <Link className="underline" onClick={() => setMachine(machine)} href={"./machine/" + machine.machineID}>
+              <Link className="underline" onClick={() => setMachineId(machine.machineID)} href={"./machine/" + machine.machineID}>
                 See more
               </Link>
             </Card >
@@ -146,14 +151,18 @@ export default function Page() {
                   name="Avarage"
                   dataKey="B"
                   className="fill-blue-500 stroke-blue-500"
-                  fillOpacity={0.5}
+                  fillOpacity={0.2}
                 />
               </RadarChart>
             </ResponsiveContainer>
           </GraphWrapper>
         </Card>
         <Card className="p-4 w-full">
-          <GraphWrapper title={"The latests frequency of errors for all machines"}>
+          <GraphWrapper title={"The latests frequency of product errors for all machines"}>
+            <div className="pl-4">
+              <Badge className="mr-2 bg-primary">Error frequency</Badge>
+              <Badge className="mr-2 bg-blue-500">Avarage</Badge>
+            </div>
             <ResponsiveContainer width="100%" className="mt-4" height={350}>
               <RadarChart data={productErrorFreq}>
                 <PolarGrid />
@@ -161,10 +170,16 @@ export default function Page() {
                 <PolarRadiusAxis />
                 <Tooltip />
                 <Radar
-                  name="Mike"
+                  name="Actual amount"
                   dataKey="A"
                   className="fill-primary stroke-primary"
                   fillOpacity={0.5}
+                />
+                <Radar
+                  name="Avarage"
+                  dataKey="B"
+                  className="fill-blue-500 stroke-blue-500"
+                  fillOpacity={0.2}
                 />
               </RadarChart>
             </ResponsiveContainer>

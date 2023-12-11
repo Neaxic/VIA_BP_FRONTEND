@@ -13,18 +13,8 @@ import { Card } from "../../../../../components/ui/card";
 import { GraphWrapper } from "../../../../../components/graph-wrapper";
 import { useMachineContext } from "../../../../../contexts/MachineContext";
 import Table from "../../../../../components/tableAdmin";
-import {
-  getMostFrequentStatusForMachine,
-  getHistoryBatchData,
-  getMachineUpTime24HourProcentage,
-  getNumBreakdowns24hrByMachineId,
-  getLastBreakdown,
-  getMostCommonMachineErrorsAndTheirFrequency,
-} from "../../../../../api/MachineApi";
-import React, { useEffect, useState } from "react";
-import { IProblemMachine, initialMachine } from "../../../../../util/MachinesInterfaces";
+import React, { useEffect } from "react";
 import TimeSchedule from "../../../../../components/TimeSchuled";
-import { getMachineOverviewByMachineLast24 } from "../../../../../api/MachineApi";
 import { Badge } from "../../../../../components/ui/badge";
 
 const tableColumns = [
@@ -83,8 +73,8 @@ export default function Page({ params }: { params: { slug: number } }) {
 
       {machine && +machine.status != 1 ? (
         <Card className="w-full mb-4 p-4 border-red-600 bg-red-700">
-          Attention! This machine is currently down. Error{" "}
-          {machine.statusCode?.statusCodeID}.{" "}
+          Attention! This machine is currently down. Status code{" "}
+          {machine.status}.{" "}
         </Card>
       ) : (
         <Card className="w-full mb-4 p-4 border-green-600 bg-green-700">
@@ -125,7 +115,7 @@ export default function Page({ params }: { params: { slug: number } }) {
               <Badge className="mr-2 bg-blue-500">Avarage</Badge>
             </div>
             {machineStatistics ? (
-              < ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <ResponsiveContainer width="100%" className="mt-4" height={350}>
                 <RadarChart data={machineStatistics?.errorCodeFrequency}>
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" />
@@ -156,7 +146,7 @@ export default function Page({ params }: { params: { slug: number } }) {
         <Table columns={tableColumns1} data={tableDataForBatch || []} />
       </Card>
       <Card className="p-4 mt-4">
-        <h1>All mistakes</h1>
+        <h1>All product mistakes</h1>
         <Table columns={tableColumns} data={tableData || []} />
       </Card>
     </>
