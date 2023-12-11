@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { IMachine, IProblemMachine, initialMachine } from "../util/MachinesInterfaces";
-import { getAllMachines } from "../api/adminApi";
-import { getCurrentOeeFromBatch, getLastBreakdown, getMachineUpTime24HourProcentage, getMostProlematicMachine24hr, getNumBreakdowns24hr, getNumBreakdowns24hrByMachineId } from "../api/MachineApi";
+import { IMachine, IMachineStatistics, IProblemMachine, initialMachine } from "../util/MachinesInterfaces";
+import { getAllMachines, getMachineByIdApi } from "../api/adminApi";
+import { getCurrentOeeFromBatch, getHistoryBatchData, getLastBreakdown, getMachineOverviewByMachineLast24, getMachineUpTime24HourProcentage, getMostCommonMachineErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getMostProlematicMachine24hr, getNumBreakdowns24hr, getNumBreakdowns24hrByMachineId } from "../api/MachineApi";
 
 interface MachineContextInterface {
   machines: IMachine[];
@@ -11,14 +11,17 @@ interface MachineContextInterface {
   updateMachine: (id: number) => Promise<void>;
   getCurrentOee: (batchNo: number) => Promise<number>;
   machine: IMachine | undefined;
+  machineStatistics: IMachineStatistics | undefined;
   runningCount: number;
   totalBreakdownCount: number;
   mostProblematicMachine: IProblemMachine | undefined;
   setMachine: React.Dispatch<React.SetStateAction<IMachine | undefined>>;
+  setMachineId: (machineId: number) => void;
 }
 
 export const MachineContext = React.createContext<MachineContextInterface>({
   machines: [],
+  machineStatistics: undefined,
   qualityControl: [],
   updateMachine: () => new Promise(() => { }),
   getCurrentOee: () => new Promise(() => { }),
@@ -27,6 +30,7 @@ export const MachineContext = React.createContext<MachineContextInterface>({
   totalBreakdownCount: 0,
   mostProblematicMachine: undefined,
   setMachine: () => { },
+  setMachineId: () => { },
 });
 
 export default function MachineProvider({
@@ -35,6 +39,7 @@ export default function MachineProvider({
   children: React.ReactNode;
 }) {
   const [machine, setMachine] = React.useState<IMachine>();
+  const [machineStatistics, setMachineStatistics] = React.useState<IMachineStatistics | undefined>(undefined); // [
   const [runningCount, setRunningCount] = React.useState<number>(0);
   const [machines, setMachines] = React.useState<IMachine[]>([]);
   const [qualityControl, setQualityControl] = React.useState<IMachine[]>([]);
@@ -109,6 +114,25 @@ export default function MachineProvider({
     });
   }, [machines]);
 
+  const setMachineId = React.useCallback(async (machineId: number) => {
+    const machinetmp: IMachine = await getMachineByIdApi(machineId);
+    if (machinetmp) {
+      setMachine(machinetmp);
+      if (machines.length > 0) {
+        //Update machine in the array
+        setMachines((machines) => {
+          const index = machines.findIndex(
+            (machine) => machine.machineID === machineId
+          );
+          if (index !== -1) {
+            machines[index] = machinetmp;
+          }
+          return machines;
+        });
+      }
+    }
+  }, [machines]);
+
   React.useEffect(() => {
     if (machines.length > 0) {
       setRunningCount(0);
@@ -137,10 +161,64 @@ export default function MachineProvider({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchMachineStatistics = React.useCallback(async (machineId: number) => {
+    try {
+      const uptime = await getMachineUpTime24HourProcentage(machineId);
+      const data = await getMostFrequentStatusForMachine(machineId);
+      const dataBatch = await getHistoryBatchData(machineId);
+      const brekadownCnt = await getNumBreakdowns24hrByMachineId(machineId);
+      const machineData = await getMachineOverviewByMachineLast24(
+        machineId
+      );
+      const lastBreakdown: {
+        statusCode: number;
+        timesince: number;
+      }[] = await getLastBreakdown(machineId);
+      const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency(machineId);
+      const calculateAvgErrorFeqTmp = errorcodefreq.reduce((acc, curr) => {
+        return acc + curr.frequency;
+      }, 0) / errorcodefreq.length;
+
+      const transformed = errorcodefreq.map((error) => {
+        return {
+          subject: error.errorName,
+          A: error.frequency,
+          B: calculateAvgErrorFeqTmp,
+          fullMark: 300,
+        }
+      });
+
+      return {
+        downtimePercent: 100 - +uptime,
+        breakdownCount: brekadownCnt,
+        lastBreakdown: lastBreakdown[0],
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+    return undefined;
+  }, [])
+
+  //Fetcher noget ekstra data til machine view
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (machine?.machineID) {
+        const response: IMachineStatistics | undefined = await fetchMachineStatistics(machine?.machineID);
+        if (response)
+          setMachineStatistics(response);
+      }
+    };
+
+    fetchData();
+
+  }, [fetchMachineStatistics, machine]);
+
   return (
     <MachineContext.Provider
       value={{
         machine,
+        machineStatistics,
         runningCount,
         totalBreakdownCount,
         mostProblematicMachine,
@@ -157,6 +235,7 @@ export default function MachineProvider({
             return 0; // You can handle errors appropriately, here returning 0 as a placeholder
           }
         },
+        setMachineId,
       }}
     >
       {children}

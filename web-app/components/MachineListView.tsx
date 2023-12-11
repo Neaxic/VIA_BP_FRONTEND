@@ -115,10 +115,10 @@ export function MachineListView({ totalAmount }: MachineListViewProps) {
                 <p>Description: {machine.description}</p>
                 <p>
                   Current Quality % :{" "}
-                  {oeeData[machine.batches?.[0]?.batchNo].toFixed(3) ?? fail}
+                  {oeeData[machine.batches?.[0]?.batchNo]?.toFixed(3) ?? fail}
                 </p>
-                <p>Current Uptime % : {uptime[machine.machineID].toFixed(3) ?? fail}</p>
-                <p>Current OEE % : {oeereal.toFixed(3)}</p>
+                <p>Current Uptime % : {uptime[machine.machineID]?.toFixed(3) ?? fail}</p>
+                <p>Current OEE % : {oeereal?.toFixed(3)}</p>
                 <p>
                   Most Frequent Product Error On Batch:{" "}
                   {frequentProductErrorData[machine.batches?.[0]?.batchNo]

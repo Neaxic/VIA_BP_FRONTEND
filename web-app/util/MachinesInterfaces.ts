@@ -54,3 +54,9 @@ export interface IProductProduced {
   date: string;
   ProductsMade: number;
 }
+
+export interface IMachineStatistics {
+  downtimePercent: number;
+  breakdownCount: number;
+  lastBreakdown: { statusCode: number, timesince: number };
+}

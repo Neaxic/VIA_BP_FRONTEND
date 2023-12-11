@@ -22,7 +22,7 @@ import {
   getMostCommonMachineErrorsAndTheirFrequency,
 } from "../../../../../api/MachineApi";
 import React, { useEffect, useState } from "react";
-import { IProblemMachine } from "../../../../../util/MachinesInterfaces";
+import { IProblemMachine, initialMachine } from "../../../../../util/MachinesInterfaces";
 import TimeSchedule from "../../../../../components/TimeSchuled";
 import { getMachineOverviewByMachineLast24 } from "../../../../../api/MachineApi";
 import { Badge } from "../../../../../components/ui/badge";
@@ -46,7 +46,7 @@ export default function Page({ params }: { params: { slug: number } }) {
   const [lastBreakdown, setLastBreakdown] = useState<IProblemMachine["lastBreakdown"] | undefined>(undefined);
   const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
   const [machineData, setMachineData] = useState({});
-  const { machine } = useMachineContext();
+  const { machine, setMachineId, machineStatistics } = useMachineContext();
 
   const tableData =
     frequentErrors &&
@@ -107,6 +107,14 @@ export default function Page({ params }: { params: { slug: number } }) {
     fetchData();
   }, [params.slug]);
 
+  useEffect(() => {
+    if (machine?.machineName === undefined || machine?.machineName === "") {
+      setMachineId(params.slug);
+    }
+
+    //eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <h1 className="mt-12 mb-2 font-bold" style={{ fontSize: 24 }}>
@@ -129,7 +137,7 @@ export default function Page({ params }: { params: { slug: number } }) {
       <div className="flex gap-2 ">
         <Card className="w-5/12 p-4">
           <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
-          <p>{brekadownCnt} Breakdown(s) in the last 24hr</p>
+          <p>{machineStatistics?.breakdownCount} Breakdown(s) in the last 24hr</p>
           <p>
             Error {lastBreakdown?.statusCode} was last seen{" "}
             {lastBreakdown?.timesince} minutes ago
