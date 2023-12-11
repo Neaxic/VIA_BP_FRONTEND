@@ -185,10 +185,10 @@ export const getMachineErrorHistoryByIdApi = async (id: number) => {
 export const getMachineByIdApi = async (id: number) => {
   reloadToken();
   try {
-    const apiUrl = `${URL}/getMachineById?id=${id}`;
     const response = await axios({
       method: "GET",
-      url: apiUrl,
+      url: `/getMachineById?id=${id}`,
+      baseURL: URL,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${session.replace(/['"]+/g, "")}`,
