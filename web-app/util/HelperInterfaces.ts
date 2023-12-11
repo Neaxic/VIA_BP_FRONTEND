@@ -7,7 +7,7 @@ export interface IThrowError {
 }
 
 export type OeeData = {
-  [batchNo: number]: string | number;
+  [batchNo: number]: number;
 };
 // Definerer en type for den mest hyppige produktfejlstatus
 export type FrequentProductErrorData = {

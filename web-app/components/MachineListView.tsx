@@ -9,22 +9,11 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Card } from "./ui/card";
+import { IMachine } from "../util/MachinesInterfaces";
 
 interface MachineListViewProps {
   totalAmount?: number;
 }
-
-type MachineData = {
-  machineID: string;
-  machineName: string;
-  description: string;
-  status: number;
-  batches?: Array<{
-    batchNo: string;
-    productsMade?: number;
-    batchSize?: number;
-  }>;
-};
 
 export function MachineListView({ totalAmount }: MachineListViewProps) {
   const { machines, setMachine } = useMachineContext();
@@ -80,8 +69,8 @@ export function MachineListView({ totalAmount }: MachineListViewProps) {
   }, [machines]);
 
   const calculateOee = (
-    machine: MachineData,
-    oeeData: Record<string, number>,
+    machine: IMachine,
+    oeeData: Record<number, number>,
     uptimeData: Record<string, number>
   ): number => {
     if (!machine.batches || machine.batches.length === 0) {
@@ -126,20 +115,18 @@ export function MachineListView({ totalAmount }: MachineListViewProps) {
                 <p>Description: {machine.description}</p>
                 <p>
                   Current Quality % :{" "}
-                  {oeeData[machine.batches?.[0]?.batchNo] ?? fail}
+                  {oeeData[machine.batches?.[0]?.batchNo].toFixed(3) ?? fail}
                 </p>
-                <p>Current Uptime % : {uptime[machine.machineID] ?? fail}</p>
-                <p>Current OEE % : {oeereal}</p>
+                <p>Current Uptime % : {uptime[machine.machineID].toFixed(3) ?? fail}</p>
+                <p>Current OEE % : {oeereal.toFixed(3)}</p>
                 <p>
                   Most Frequent Product Error On Batch:{" "}
                   {frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                    ? `${
-                        frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                          .errorLookUpId
-                      } (Count: ${
-                        frequentProductErrorData[machine.batches?.[0]?.batchNo]
-                          .count
-                      })`
+                    ? `${frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                      .errorLookUpId
+                    } (Count: ${frequentProductErrorData[machine.batches?.[0]?.batchNo]
+                      .count
+                    })`
                     : fail}
                 </p>
                 <p>
