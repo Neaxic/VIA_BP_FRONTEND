@@ -60,6 +60,7 @@ export interface IMachineStatistics {
   breakdownCount: number;
   lastBreakdown: { statusCode: number, timesince: number };
   errorCodeFrequency: { subject: string, A: number, fullMark: number }[];
+  productErrorFrequency: { subject: string, A: number, fullMark: number }[];
   historyBatch: [];
   frequentErrors: [];
   machineData: {};

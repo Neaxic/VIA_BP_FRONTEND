@@ -67,7 +67,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <rect width="7" height="7" x="14" y="14" rx="1" />
                 <rect width="7" height="7" x="3" y="14" rx="1" />
               </svg>
-              General Analytics
+              Graphing work (DEV)
             </Button>
           </div>
         </div>
@@ -101,7 +101,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Machine Data
+              Machine Data List
             </Button>
             <Button
               variant={
@@ -128,7 +128,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <path d="M16 6H3" />
                 <path d="M12 18H3" />
               </svg>
-              Machine Downtime
+              Machine Downtime List
             </Button>
           </div>
         </div>

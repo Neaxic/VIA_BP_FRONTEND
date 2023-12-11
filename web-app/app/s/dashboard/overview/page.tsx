@@ -219,32 +219,34 @@ export default function Page() {
         </Card>
         <Card className="w-full p-4">
           <GraphWrapper title="Products produced for entire production last 24hr">
-            <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <BarChart data={productsProduced24hr}>
-                <XAxis
-                  name="Time"
-                  dataKey="Date"
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
-                />
-                <Tooltip />
-                <Bar
-                  dataKey="ProductsMade"
-                  className="fill-primary"
-                  radius={[4, 4, 0, 0]}
-                />
-                {/* <CartesianGrid strokeDasharray="3 3" /> */}
-              </BarChart>
-            </ResponsiveContainer>
+            {productsProduced24hr.length === 0 ? <div className="flex justify-center align-middle h-full">Nothing produced</div> : (
+              <ResponsiveContainer width="100%" className="mt-4" height={350}>
+                <BarChart data={productsProduced24hr}>
+                  <XAxis
+                    name="Time"
+                    dataKey="Date"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `${value}`}
+                  />
+                  <Tooltip />
+                  <Bar
+                    dataKey="ProductsMade"
+                    className="fill-primary"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </GraphWrapper>
         </Card>
       </div>

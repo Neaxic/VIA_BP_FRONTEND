@@ -95,6 +95,7 @@ export default function Page({ params }: { params: { slug: number } }) {
             <p>Loading...</p>
           )}
           <p>A total downtime of {machineStatistics?.downtimePercent.toFixed(2)}%</p>
+          <p>{machine && machine.batches?.length > 0 ? "Produced " + machine.batches[0].productsMade + " of " + machine.batches[0].batchSize : ""}</p>
         </Card>
         <Card className="w-full h-full p-4">
           <h1 style={{ fontSize: 24 }}>Machine Uptime Last 24 Hours</h1>
@@ -109,7 +110,7 @@ export default function Page({ params }: { params: { slug: number } }) {
 
       <div className="flex gap-2 mt-4">
         <Card className="p-4 w-full">
-          <GraphWrapper title={"The latests frequency of errors"}>
+          <GraphWrapper title={"The frequency of machine errors"}>
             <div className="pl-4">
               <Badge className="mr-2 bg-primary">Error frequency</Badge>
               <Badge className="mr-2 bg-blue-500">Avarage</Badge>
@@ -138,6 +139,34 @@ export default function Page({ params }: { params: { slug: number } }) {
             ) : (
               <p>Loading...</p>
             )}
+          </GraphWrapper>
+        </Card>
+        <Card className="p-4 w-full">
+          <GraphWrapper title={"The frequency of product errors"}>
+            <div className="pl-4">
+              <Badge className="mr-2 bg-primary">Error frequency</Badge>
+              <Badge className="mr-2 bg-blue-500">Avarage</Badge>
+            </div>
+            <ResponsiveContainer width="100%" className="mt-4" height={350}>
+              <RadarChart data={machineStatistics?.productErrorFrequency}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis />
+                <Tooltip />
+                <Radar
+                  name="Actual amount"
+                  dataKey="A"
+                  className="fill-primary stroke-primary"
+                  fillOpacity={0.5}
+                />
+                <Radar
+                  name="Avarage"
+                  dataKey="B"
+                  className="fill-blue-500 stroke-blue-500"
+                  fillOpacity={0.2}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
           </GraphWrapper>
         </Card>
       </div >

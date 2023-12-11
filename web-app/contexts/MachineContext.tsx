@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { IMachine, IMachineStatistics, IProblemMachine, initialMachine } from "../util/MachinesInterfaces";
+import { IMachine, IMachineStatistics, IProblemMachine, IProductErrorFreq, initialMachine } from "../util/MachinesInterfaces";
 import { getAllMachines, getMachineByIdApi } from "../api/adminApi";
-import { getCurrentOeeFromBatch, getHistoryBatchData, getLastBreakdown, getMachineOverviewByMachineLast24, getMachineUpTime24HourProcentage, getMostCommonMachineErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getMostProlematicMachine24hr, getNumBreakdowns24hr, getNumBreakdowns24hrByMachineId } from "../api/MachineApi";
+import { getCurrentOeeFromBatch, getHistoryBatchData, getLastBreakdown, getMachineOverviewByMachineLast24, getMachineUpTime24HourProcentage, getMostCommonMachineErrorsAndTheirFrequency, getMostCommonProductErrorsAndTheirFrequency, getMostFrequentStatusForMachine, getMostProlematicMachine24hr, getNumBreakdowns24hr, getNumBreakdowns24hrByMachineId } from "../api/MachineApi";
 
 interface MachineContextInterface {
   machines: IMachine[];
@@ -145,11 +145,26 @@ export default function MachineProvider({
         }
       });
 
+      const productErrorFreqtmp: IProductErrorFreq[] = await getMostCommonProductErrorsAndTheirFrequency(machineId);
+      const calculateAvgProductErrorFeqTmp = productErrorFreqtmp.reduce((acc, curr) => {
+        return acc + curr.frequency;
+      }, 0) / productErrorFreqtmp.length;
+
+      const transformedProduct = productErrorFreqtmp.map((error) => {
+        return {
+          subject: error.productErrorName,
+          A: error.frequency,
+          B: calculateAvgProductErrorFeqTmp,
+          fullMark: 300,
+        }
+      });
+
       return {
         downtimePercent: 100 - +uptime,
         breakdownCount: brekadownCnt,
         lastBreakdown: lastBreakdown[0],
         errorCodeFrequency: transformed,
+        productErrorFrequency: transformedProduct,
         historyBatch: dataBatch,
         frequentErrors: data,
         machineData: machineData,
