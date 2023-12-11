@@ -59,4 +59,8 @@ export interface IMachineStatistics {
   downtimePercent: number;
   breakdownCount: number;
   lastBreakdown: { statusCode: number, timesince: number };
+  errorCodeFrequency: { subject: string, A: number, fullMark: number }[];
+  historyBatch: [];
+  frequentErrors: [];
+  machineData: {};
 }

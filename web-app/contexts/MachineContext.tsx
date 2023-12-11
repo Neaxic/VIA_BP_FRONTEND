@@ -17,6 +17,7 @@ interface MachineContextInterface {
   mostProblematicMachine: IProblemMachine | undefined;
   setMachine: React.Dispatch<React.SetStateAction<IMachine | undefined>>;
   setMachineId: (machineId: number) => void;
+  refreshMachine: () => void;
 }
 
 export const MachineContext = React.createContext<MachineContextInterface>({
@@ -31,6 +32,7 @@ export const MachineContext = React.createContext<MachineContextInterface>({
   mostProblematicMachine: undefined,
   setMachine: () => { },
   setMachineId: () => { },
+  refreshMachine: () => { },
 });
 
 export default function MachineProvider({
@@ -114,52 +116,7 @@ export default function MachineProvider({
     });
   }, [machines]);
 
-  const setMachineId = React.useCallback(async (machineId: number) => {
-    const machinetmp: IMachine = await getMachineByIdApi(machineId);
-    if (machinetmp) {
-      setMachine(machinetmp);
-      if (machines.length > 0) {
-        //Update machine in the array
-        setMachines((machines) => {
-          const index = machines.findIndex(
-            (machine) => machine.machineID === machineId
-          );
-          if (index !== -1) {
-            machines[index] = machinetmp;
-          }
-          return machines;
-        });
-      }
-    }
-  }, [machines]);
 
-  React.useEffect(() => {
-    if (machines.length > 0) {
-      setRunningCount(0);
-      calculateRunningCount();
-    }
-
-    //Hver gang machines liste opdateres
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [machines])
-
-  //Repeately refetch machines in interval
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      loadAllMachines();
-    }, 10000); //10 sek pt
-    return () => clearInterval(interval);
-  }, [loadAllMachines]);
-
-
-  // Fetch everything needed useEffect
-  React.useEffect(() => {
-    loadAllMachines();
-    loadTotalBreakdowns();
-    // loadAllQualityControl()
-
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const fetchMachineStatistics = React.useCallback(async (machineId: number) => {
     try {
@@ -192,6 +149,10 @@ export default function MachineProvider({
         downtimePercent: 100 - +uptime,
         breakdownCount: brekadownCnt,
         lastBreakdown: lastBreakdown[0],
+        errorCodeFrequency: transformed,
+        historyBatch: dataBatch,
+        frequentErrors: data,
+        machineData: machineData,
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -200,19 +161,77 @@ export default function MachineProvider({
     return undefined;
   }, [])
 
-  //Fetcher noget ekstra data til machine view
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (machine?.machineID) {
-        const response: IMachineStatistics | undefined = await fetchMachineStatistics(machine?.machineID);
-        if (response)
-          setMachineStatistics(response);
-      }
-    };
-
-    fetchData();
-
+  const refreshMachine = React.useCallback(async () => {
+    if (machine?.machineID) {
+      const machinetmp = await getMachineByIdApi(machine?.machineID);
+      const response: IMachineStatistics | undefined = await fetchMachineStatistics(machine?.machineID);
+      if (machinetmp)
+        setMachine(machinetmp)
+      if (response)
+        setMachineStatistics(response);
+    }
   }, [fetchMachineStatistics, machine]);
+
+  React.useEffect(() => {
+    if (machines.length > 0) {
+      setRunningCount(0);
+      calculateRunningCount();
+    }
+
+    //Hver gang machines liste opdateres
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [machines])
+
+  const setMachineId = React.useCallback(async (machineId: number) => {
+    const machinetmp: IMachine = await getMachineByIdApi(machineId);
+    if (machinetmp) {
+      setMachine(machinetmp);
+      if (machines.length > 0) {
+        //Update machine in the array
+        setMachines((machines) => {
+          const index = machines.findIndex(
+            (machine) => machine.machineID === machineId
+          );
+          if (index !== -1) {
+            machines[index] = machinetmp;
+          }
+          return machines;
+        });
+      }
+    }
+    setMachineStatistics(await fetchMachineStatistics(machineId));
+  }, [fetchMachineStatistics, machines.length]);
+
+  //Repeately refetch machines in interval
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      loadAllMachines();
+    }, 10000); //10 sek pt
+    return () => clearInterval(interval);
+  }, [loadAllMachines]);
+
+  // Fetch everything needed useEffect
+  React.useEffect(() => {
+    loadAllMachines();
+    loadTotalBreakdowns();
+    // loadAllQualityControl()
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //Fetcher noget ekstra data til machine view
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (machine?.machineID) {
+  //       const response: IMachineStatistics | undefined = await fetchMachineStatistics(machine?.machineID);
+  //       if (response)
+  //         setMachineStatistics(response);
+  //     }
+  //   };
+
+  //   fetchData();
+
+  // }, [fetchMachineStatistics]);
 
   return (
     <MachineContext.Provider
@@ -236,6 +255,7 @@ export default function MachineProvider({
           }
         },
         setMachineId,
+        refreshMachine,
       }}
     >
       {children}

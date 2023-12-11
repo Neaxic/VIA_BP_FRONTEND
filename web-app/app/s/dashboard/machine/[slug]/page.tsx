@@ -39,73 +39,23 @@ const tableColumns1 = [
 ];
 
 export default function Page({ params }: { params: { slug: number } }) {
-  const [frequentErrors, setFrequentErrors] = useState([]);
-  const [historyBatch, sethistoryBatch] = useState([]);
-  const [downtime, setDowntime] = useState(0);
-  const [brekadownCnt, setBreakdownCount] = useState(0);
-  const [lastBreakdown, setLastBreakdown] = useState<IProblemMachine["lastBreakdown"] | undefined>(undefined);
-  const [machineerrorcodefreq, setmachineerrorcodefreq] = useState<{ subject: string, A: number, fullMark: number }[]>([]);
-  const [machineData, setMachineData] = useState({});
-  const { machine, setMachineId, machineStatistics } = useMachineContext();
+  const { machine, refreshMachine, setMachineId, machineStatistics } = useMachineContext();
 
   const tableData =
-    frequentErrors &&
-    frequentErrors.map((item: any, index) => ({
+    machineStatistics && machineStatistics.frequentErrors &&
+    machineStatistics.frequentErrors.map((item: any, index) => ({
       productlookupid: item.productlookupid,
       count: item.count,
     }));
 
   const tableDataForBatch =
-    historyBatch &&
-    historyBatch.map((item: any, index) => ({
+    machineStatistics && machineStatistics.historyBatch &&
+    machineStatistics.historyBatch.map((item: any, index) => ({
       batchNo: item.batchNo,
       oee: item.oee,
       mostFreqent: item.mostFreqent,
       endtime: item.endtime,
     }));
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const uptime = await getMachineUpTime24HourProcentage(params.slug);
-        const data = await getMostFrequentStatusForMachine(params.slug);
-        const dataBatch = await getHistoryBatchData(params.slug);
-        const brekadownCnt = await getNumBreakdowns24hrByMachineId(params.slug);
-        const machineData = await getMachineOverviewByMachineLast24(
-          params.slug
-        );
-        const lastBreakdown: {
-          statusCode: number;
-          timesince: number;
-        }[] =
-          await getLastBreakdown(params.slug);
-        const errorcodefreq: { errorName: string, frequency: number }[] = await getMostCommonMachineErrorsAndTheirFrequency(params.slug);
-        const calculateAvgErrorFeqTmp = errorcodefreq.reduce((acc, curr) => {
-          return acc + curr.frequency;
-        }, 0) / errorcodefreq.length;
-        const transformed = errorcodefreq.map((error) => {
-          return {
-            subject: error.errorName,
-            A: error.frequency,
-            B: calculateAvgErrorFeqTmp,
-            fullMark: 300,
-          }
-        });
-
-        setmachineerrorcodefreq(transformed);
-        setFrequentErrors(data);
-        setMachineData(machineData);
-        sethistoryBatch(dataBatch);
-        setDowntime(100 - +uptime);
-        setBreakdownCount(brekadownCnt);
-        setLastBreakdown(lastBreakdown[0]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [params.slug]);
 
   useEffect(() => {
     if (machine?.machineName === undefined || machine?.machineName === "") {
@@ -114,6 +64,14 @@ export default function Page({ params }: { params: { slug: number } }) {
 
     //eslint-disable-next-line
   }, []);
+
+  //Refresh logic her, grundt useren er her på siden - hvis han forlader stopper useeffecten
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      refreshMachine();
+    }, 10000); //10 sek pt
+    return () => clearInterval(interval);
+  }, [refreshMachine]);
 
   return (
     <>
@@ -138,15 +96,23 @@ export default function Page({ params }: { params: { slug: number } }) {
         <Card className="w-5/12 p-4">
           <h1 style={{ fontSize: 24 }}>Statistics for last 24 hrs</h1>
           <p>{machineStatistics?.breakdownCount} Breakdown(s) in the last 24hr</p>
-          <p>
-            Error {lastBreakdown?.statusCode} was last seen{" "}
-            {lastBreakdown?.timesince} minutes ago
-          </p>
-          <p>A total downtime of {downtime.toFixed(2)}%</p>
+          {machineStatistics ? (
+            <p>
+              Error {machineStatistics.lastBreakdown?.statusCode} was last seen{" "}
+              {machineStatistics.lastBreakdown?.timesince} minutes ago
+            </p>
+          ) : (
+            <p>Loading...</p>
+          )}
+          <p>A total downtime of {machineStatistics?.downtimePercent.toFixed(2)}%</p>
         </Card>
         <Card className="w-full h-full p-4">
           <h1 style={{ fontSize: 24 }}>Machine Uptime Last 24 Hours</h1>
-          <TimeSchedule machineData={machineData} />
+          {machineStatistics ? (
+            <TimeSchedule machineData={machineStatistics?.machineData} />
+          ) : (
+            <p>Loading...</p>
+          )}
         </Card>
       </div>
 
@@ -158,36 +124,40 @@ export default function Page({ params }: { params: { slug: number } }) {
               <Badge className="mr-2 bg-primary">Error frequency</Badge>
               <Badge className="mr-2 bg-blue-500">Avarage</Badge>
             </div>
-            <ResponsiveContainer width="100%" className="mt-4" height={350}>
-              <RadarChart data={machineerrorcodefreq}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
-                <Tooltip />
-                <Radar
-                  name="Actual amount"
-                  dataKey="A"
-                  className="fill-primary stroke-primary"
-                  fillOpacity={0.5}
-                />
-                <Radar
-                  name="Avarage"
-                  dataKey="B"
-                  className="fill-blue-500 stroke-blue-500"
-                  fillOpacity={0.5}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
+            {machineStatistics ? (
+              < ResponsiveContainer width="100%" className="mt-4" height={350}>
+                <RadarChart data={machineStatistics?.errorCodeFrequency}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" />
+                  <PolarRadiusAxis />
+                  <Tooltip />
+                  <Radar
+                    name="Actual amount"
+                    dataKey="A"
+                    className="fill-primary stroke-primary"
+                    fillOpacity={0.5}
+                  />
+                  <Radar
+                    name="Avarage"
+                    dataKey="B"
+                    className="fill-blue-500 stroke-blue-500"
+                    fillOpacity={0.5}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p>Loading...</p>
+            )}
           </GraphWrapper>
         </Card>
-      </div>
+      </div >
       <Card className="p-4 mt-2">
         <h1>All batches and OEE</h1>
-        <Table columns={tableColumns1} data={tableDataForBatch} />
+        <Table columns={tableColumns1} data={tableDataForBatch || []} />
       </Card>
       <Card className="p-4 mt-2">
         <h1>All mistakes</h1>
-        <Table columns={tableColumns} data={tableData} />
+        <Table columns={tableColumns} data={tableData || []} />
       </Card>
     </>
   );
